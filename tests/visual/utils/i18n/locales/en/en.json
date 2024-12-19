@@ -35,6 +35,9 @@
     },
     "loading": {
       "generate": "Working on it"
+    },
+    "suggestion": {
+      "title": "Suggested"
     }
   }
 }

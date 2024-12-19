@@ -19,6 +19,7 @@ import {
 import { ChatError } from '@appflowy-chat/types/error';
 import { ErrorCode } from '@appflowy-chat/types/error';
 import { ChatHttpService } from '@appflowy-chat/types/http_service';
+import { MockChatMessages } from '@appflowy-chat/mock/ChatMessages';
 class MockChat {
   settings: ChatSettings;
   messages: ChatMessage[];
@@ -35,6 +36,17 @@ export class MockChatHttpService extends ChatHttpService {
   // create a map to store the chat id and chat object
   private chatMap: Map<string, MockChat> = new Map();
 
+  constructor() {
+    super();
+
+    this.chatMap.set(
+      'test-1',
+      new MockChat(
+        { metadata: '', name: 'Test 1', rag_ids: [] },
+        MockChatMessages
+      )
+    );
+  }
   nextMessageId(): number {
     return this.message_id_counter++;
   }
@@ -308,7 +320,7 @@ export class MockChatHttpService extends ChatHttpService {
     ];
 
     for (const chunk of streamData) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 200));
       yield chunk;
     }
 

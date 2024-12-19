@@ -1,7 +1,7 @@
-import Logo from "@appflowy-chat/assets/logo.svg?react";
-import { ContentEmptyOptions } from "@appflowy-chat/utils/contentEmptyOptions";
-import { FC } from "react";
-import { useTranslation } from "react-i18next";
+import Logo from '@appflowy-chat/assets/logo.svg?react';
+import { ContentEmptyOptions } from '@appflowy-chat/utils/contentEmptyOptions';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   handleOptionClick: (option: string) => void;
@@ -10,18 +10,18 @@ interface IProps {
 const ContentEmpty: FC<IProps> = ({ handleOptionClick }) => {
   const { t } = useTranslation();
   return (
-    <div className="h-full flex justify-center items-center appflowy-chat-content-wrap">
-      <div className="max-w-[28rem] w-full text-sm">
-        <div className="w-full flex justify-center mb-4">
+    <div className='appflowy-chat-content-wrap flex min-h-min items-center justify-center'>
+      <div className='w-full max-w-[28rem] text-sm'>
+        <div className='mb-4 flex w-full justify-center'>
           <Logo />
         </div>
-        <div className="text-ch-text-title mb-8 text-center">
-          {t("chat.title.greeting")}
+        <div className='mb-8 text-center text-ch-text-title'>
+          {t('chat.title.greeting')}
         </div>
-        <div className="flex flex-col gap-4 items-center">
+        <div className='flex flex-col items-center gap-4'>
           {ContentEmptyOptions.map((option) => (
             <button
-              className="w-fit px-4 py-2 text-sm text-ch-text-caption bg-ch-bg-base transition-colors border border-ch-line-border rounded-2xl shadow-card hover:bg-ch-fill-active"
+              className='w-fit rounded-2xl border border-ch-line-border bg-ch-bg-base px-4 py-2 text-sm text-ch-text-caption shadow-card transition-colors hover:bg-ch-fill-active'
               key={option}
               onClick={() => handleOptionClick(t(option))}
             >

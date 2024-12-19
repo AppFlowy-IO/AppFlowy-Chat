@@ -1,21 +1,21 @@
-import { ChatMessageUser } from "@appflowy-chat/types";
-import { FC } from "react";
-import AvatarUser from "../avatar-user";
+import { FC } from 'react';
+import AvatarUser from '../avatar-user';
+import { ChatMessage } from '@appflowy-chat/types/ai';
 
 interface IProp {
-  message: ChatMessageUser;
+  message: ChatMessage;
   avatar: string | null | undefined;
 }
 
 const MessageUser: FC<IProp> = ({ message, avatar }) => {
   return (
-    <div className="w-full flex justify-end">
-      <div className="flex gap-3 max-w-[25rem]">
-        <div className="px-4 py-2 rounded-2xl bg-ch-fill-card-user text-sm">
-          {message.body}
+    <div className='flex w-full justify-end'>
+      <div className='flex max-w-[25rem] gap-3'>
+        <div className='rounded-2xl bg-ch-fill-card-user px-4 py-2 text-sm'>
+          {message.content}
         </div>
 
-        <AvatarUser url={avatar || ""} />
+        <AvatarUser url={avatar || ''} />
       </div>
     </div>
   );

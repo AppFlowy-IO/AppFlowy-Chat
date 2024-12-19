@@ -14,6 +14,7 @@
   --chat-text-title: #1f2329;
   --chat-text-caption: #666d76;
   --chat-text-content: #171717;
+  --chat-text-secondary: #8f959e;
   --chat-text-placeholder: #bdc2c8;
   --chat-text-disabled: #cfd3d9;
   --chat-primary-dark2: #1f2329;
@@ -40,6 +41,7 @@
   --chat-text-title: #e7e9f2;
   --chat-text-caption: #989aad;
   --chat-text-content: #ffffff;
+  --chat-text-secondary: #8f959e;
   --chat-text-placeholder: #3c3e51;
   --chat-text-disabled: #e7e9f2;
   --chat-primary-dark2: #1f2329;
@@ -49,7 +51,7 @@
   --chat-line-divider: #1f232914;
   --chat-icon: #e7e9f2; /* --/icon/n1 */
   --chat-icon-n2: #666d76; /* --/icon/n2 */
-  --chat-icon-secondary: #8f959e;
+  --chat-icon-secondary: #989aad;
   --chat-icon-blue: #00a1ce;
   --chat-card-user: #f7f8fc;
   --chat-tooltip: #1d2129;

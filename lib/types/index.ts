@@ -19,7 +19,7 @@ export interface WSData {
   status: 'update' | 'end';
 }
 
-export type ChatMessage = ChatMessageAI | ChatMessageUser;
+export type ChatMessageOld = ChatMessageAI | ChatMessageUser;
 
 export type ActionBarAIButtonName =
   | 'copy'

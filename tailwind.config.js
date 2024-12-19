@@ -22,6 +22,7 @@ export default {
           title: 'var(--chat-text-title)',
           caption: 'var(--chat-text-caption)',
           content: 'var(--chat-text-content)',
+          secondary: 'var(--chat-text-secondary)',
           placeholder: 'var(--chat-text-placeholder)',
           disabled: 'var(--chat-text-disabled)',
         },

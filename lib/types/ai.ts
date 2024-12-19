@@ -1,15 +1,15 @@
-import { ChatError } from "./error";
+import { ChatError } from './error';
 
-export const STREAM_METADATA_KEY: string = "0";
-export const STREAM_ANSWER_KEY: string = "1";
+export const STREAM_METADATA_KEY: string = '0';
+export const STREAM_ANSWER_KEY: string = '1';
 
 export type JSONValue =
-    | string
-    | number
-    | boolean
-    | JSONObject
-    | null
-    | Array<JSONValue>;
+  | string
+  | number
+  | boolean
+  | JSONObject
+  | null
+  | Array<JSONValue>;
 
 interface JSONObject {
   [x: string]: JSONValue;
@@ -32,20 +32,14 @@ export interface CreateChatMessageParams {
 }
 
 export type MessageCursor =
-  | { type: "Offset"; value: number } 
-  | { type: "AfterMessageId"; value: number } 
-  | { type: "BeforeMessageId"; value: number } 
-  | { type: "NextBack" }; 
+  | { type: 'Offset'; value: number }
+  | { type: 'AfterMessageId'; value: number }
+  | { type: 'BeforeMessageId'; value: number }
+  | { type: 'NextBack' };
 
 export interface GetChatMessagesParams {
   cursor: MessageCursor;
   limit: number;
-}
-
-
-export interface ChatAuthor {
-  id: string;
-  name: string;
 }
 
 export interface ChatMessage {
@@ -63,12 +57,11 @@ export interface RepeatedChatMessage {
   total: number;
 }
 
-
 export enum ChatAuthorType {
   Unknown = 0,
   Human = 1,
   System = 2,
-  AI = 3
+  AI = 3,
 }
 
 export interface ChatAuthor {
@@ -89,10 +82,9 @@ export interface ChatSettings {
   metadata: JSONValue;
 }
 
-
 // Interface for the values in the stream (Answer or Metadata)
-interface QuestionStreamValue {
-  type: "Answer" | "Metadata";
+export interface QuestionStreamValue {
+  type: 'Answer' | 'Metadata';
   value: JSONValue;
 }
 
@@ -104,7 +96,9 @@ export class QuestionStream {
   }
 
   // Static method to create an instance of QuestionStream from an async iterable iterator
-  static async fromStream(stream: AsyncIterableIterator<JSONValue | ChatError>): Promise<QuestionStream> {
+  static async fromStream(
+    stream: AsyncIterableIterator<JSONValue | ChatError>
+  ): Promise<QuestionStream> {
     return new QuestionStream(stream);
   }
 
@@ -122,20 +116,20 @@ export class QuestionStream {
 
     // Check for metadata in the stream
     if (STREAM_METADATA_KEY in jsonValue) {
-      return { type: "Metadata", value: jsonValue[STREAM_METADATA_KEY] };
+      return { type: 'Metadata', value: jsonValue[STREAM_METADATA_KEY] };
     }
 
     // Check for answer in the stream
     if (STREAM_ANSWER_KEY in jsonValue) {
-      return { type: "Answer", value: jsonValue[STREAM_ANSWER_KEY] };
+      return { type: 'Answer', value: jsonValue[STREAM_ANSWER_KEY] };
     }
 
     // Invalid format case
-    return { message: "Invalid streaming value", code: -1 } as ChatError;
+    return { message: 'Invalid streaming value', code: -1 } as ChatError;
   }
 
   [Symbol.asyncIterator]() {
-    return this.stream; 
+    return this.stream;
   }
 }
 

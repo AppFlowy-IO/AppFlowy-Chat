@@ -1,4 +1,4 @@
-import { AIModelName, ChatMessageAI } from '@appflowy-chat/types';
+import { AIModelName } from '@appflowy-chat/types';
 import { FC, useState } from 'react';
 import MessageResponseContent from '../message-response-content';
 import AvatarAI from '../avatar-ai';
@@ -7,10 +7,11 @@ import {
   ActionBarAIButtonsHoverRes,
   ActionBarAIButtonsLastRes,
 } from '@appflowy-chat/utils/actionBarAIButtons';
+import { ChatMessage } from '@appflowy-chat/types/ai';
 import './index.css';
 
 interface IProp {
-  message: ChatMessageAI;
+  message: ChatMessage;
   isGenerating?: boolean;
   isLastResponse: boolean;
   onAIModelChange: (option: AIModelName) => void;
@@ -38,7 +39,7 @@ const MessageAI: FC<IProp> = ({ message, isLastResponse, onAIModelChange }) => {
 
         <div className='flex flex-col'>
           <div className='pt-2'>
-            <MessageResponseContent body={message.body} />
+            <MessageResponseContent body={message.content} />
           </div>
           {isLastResponse ? (
             <ActionBarAI
