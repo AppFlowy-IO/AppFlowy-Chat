@@ -1,0 +1,22 @@
+.loader-dots {
+  width: 30px;
+  aspect-ratio: 5;
+  /* --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000); */
+  background: no-repeat radial-gradient(circle closest-side, #9327ff 90%, #0000)
+      0% 50%,
+    no-repeat radial-gradient(circle closest-side, #fb006d 90%, #0000) 50% 50%,
+    no-repeat radial-gradient(circle closest-side, #ffce00 90%, #0000) 100% 50%;
+  background-size: calc(100% / 3) 100%;
+  animation: l7 1s infinite linear;
+}
+@keyframes l7 {
+  33% {
+    background-size: calc(100% / 3) 0%, calc(100% / 3) 100%, calc(100% / 3) 100%;
+  }
+  50% {
+    background-size: calc(100% / 3) 100%, calc(100% / 3) 0%, calc(100% / 3) 100%;
+  }
+  66% {
+    background-size: calc(100% / 3) 100%, calc(100% / 3) 100%, calc(100% / 3) 0%;
+  }
+}

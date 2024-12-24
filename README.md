@@ -1,1 +1,1 @@
-# AppFlowy-Chat
+# AppFlowy Web Chat

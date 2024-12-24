@@ -1,0 +1,16 @@
+.appflowy-chat-input-root fieldset {
+  @apply border-none;
+}
+
+.appflowy-chat-input-root .MuiInputBase-root {
+  @apply text-sm px-3 pt-3 pb-1 text-ch-text-content;
+}
+.appflowy-chat-input-root .MuiInputBase-input::placeholder {
+  @apply text-ch-text-placeholder font-normal;
+}
+
+.appflowy-chat-input-wrap[data-format-mode="custom"]
+  .appflowy-chat-input-root
+  .MuiInputBase-root {
+  @apply pt-2 pb-2;
+}

@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@appflowy-chat/*": ["src/chat/*"]
+    },
+    "types": [
+      "react-i18next"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "src/@types",
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "src",
+    "src/types",
+    "tailwind.config.ts",
+    "postcss.config.ts",
+    "vite.config.ts"
+  ],
+  "exclude": ["src/locales/**/*.json"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

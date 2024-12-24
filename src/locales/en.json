@@ -1,0 +1,43 @@
+{
+  "chat": {
+    "title": {
+      "greeting": "HI Vivian! How can I help you today?"
+    },
+    "prompt": {
+      "kanban": "How to use Kanban to manage tasks?",
+      "gtd": "Explain the GTD method",
+      "rust": "Why use Rust?",
+      "recipe": "Recipe with what's in my kitchen"
+    },
+    "input": {
+      "placeholder": "Ask AppFlowy AI",
+      "placeholderFormat": "AI response will generate with the format you define above",
+      "button": {
+        "format": "Format response",
+        "auto": "Auto",
+        "attach": "Attach files"
+      }
+    },
+    "tooltip": {
+      "copy": "Copy",
+      "tryAgain": "Try again",
+      "changeFormat": "Change format",
+      "switchModel": "Switch model",
+      "addToPage": "Add to page",
+      "download": "Download",
+      "imageOnly": "Image only",
+      "imageText": "Image + Text",
+      "paragraph": "Paragraph",
+      "bulletList": "Bullet list",
+      "numList": "Number list",
+      "table": "Table",
+      "regenerate": "Regenerate"
+    },
+    "loading": {
+      "generate": "Working on it"
+    },
+    "suggestion": {
+      "title": "Suggested"
+    }
+  }
+}
