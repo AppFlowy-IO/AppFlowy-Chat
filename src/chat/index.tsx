@@ -1,18 +1,28 @@
-import '@/styles/index.scss';
-import { initI18n, ChatI18nContext } from '@/i18n/config';
-import Chat, { IProp } from './Chat';
+import Main from '@/chat/main';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { ChatI18nContext, getI18n, initI18n } from '@/i18n/config';
+import { ChatProps } from '@/types';
+import { Toaster } from '@/components/ui/toaster';
+import '@/styles/index.scss';
 
-const i18n = initI18n();
+initI18n();
+const i18n = getI18n();
 
-function AppFlowyChat(props: IProp) {
+export function Chat(props: ChatProps) {
   return (
-    <ChatI18nContext.Provider value={i18n}>
-      <TooltipProvider>
-      <Chat {...props} />
-      </TooltipProvider>
-    </ChatI18nContext.Provider>
+    <div
+      id={'appflowy-chat'}
+      className={'w-full h-full overflow-hidden'}
+    >
+      <ChatI18nContext.Provider value={i18n}>
+        <TooltipProvider>
+          <Main {...props} />
+        </TooltipProvider>
+        <Toaster />
+      </ChatI18nContext.Provider>
+    </div>
+
   );
 }
 
-export default AppFlowyChat;
+export default Chat;

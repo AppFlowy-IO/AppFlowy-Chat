@@ -2,124 +2,182 @@
 @tailwind components;
 @tailwind utilities;
 
-.appflowy-chat-content-wrap {
-  max-width: 60rem;
-  @apply mx-auto w-full px-8;
+/* Light variables */
+:root {
+  --z-modal: 50;
+  /* component colors */
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --tooltip: 240 10% 3.9%;
+  --tooltip-foreground: 0 0% 100%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 195 100% 47%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 120 100% 50%;
+  --border: 216, 12%, 83%;
+  --input: 240 5.9% 90%;
+  --ring: 195 100% 47%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --radius: 0.5rem;
+  --icon: 214, 7%, 43%;
+  --gradient1: linear-gradient(233deg, #34BDAF 0%, #B682D5 100%);
+  --gradient2: linear-gradient(180deg, #4CC2CC 0%, #E17570 100%);
+  --gradient3: linear-gradient(180deg, #AF70E1 0%, #ED7196 100%);
+  --gradient4: linear-gradient(180deg, #A348D6 0%, #45A7DF 100%);
+  --gradient5: linear-gradient(56.2deg, #5749CA 0%, #BB4A97 100%);
+  --gradient6: linear-gradient(180deg, #036FFA 0%, #00B8E5 100%);
+  --gradient7: linear-gradient(38.2deg, #F0C6CF 0%, #DECCE2 40.4754%, #CAD3F9 100%);
+  --tint-purple: #E8E0FF;
+  --badge-purple: #AB8DFF;
+  --tint-pink: #FFE7FD;
+  --badge-pink: #FF8EF5;
+  --tint-red: #FFE7EE;
+  --badge-red: #FF85A9;
+  --tint-lime: #F5FFDC;
+  --badge-lime: #C6EC41;
+  --tint-green: #DDFFD6;
+  --badge-green: #74F37D;
+  --tint-aqua: #DEFFF1;
+  --badge-aqua: #40F0D1;
+  --tint-blue: #E1FBFF;
+  --badge-blue: #00C8FF;
+  --tint-orange: #FFEFE3;
+  --badge-orange: #FFBC7E;
+  --tint-yellow: #FFF2CD;
+  --badge-yellow: #FCD86F;
+  --selection: #e0f8ff;
+  /* !shadows */
+  --shadow: 0px 2px 8px 2px rgba(31, 35, 41, 0.02),
+  0px 2px 4px 0px rgba(31, 35, 41, 0.02),
+  0px 1px 2px -2px rgba(31, 35, 41, 0.02);
+  --scrollbar-thumb: #d1d5db;
+
 }
 
-@layer base {
-  /* Light variables */
-  :root {
-    --z-modal: 50;
-    /* component colors */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --tooltip: 240 10% 3.9%;
-    --tooltip-foreground: 0 0% 100%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 195 100% 47%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    /* !colors */
-    --chat-bg-base: #ffffff;
-    --chat-accent: #00bcf0;
-    --chat-text-title: #1f2329;
-    --chat-text-caption: #666d76;
-    --chat-text-content: #171717;
-    --chat-text-secondary: #8f959e;
-    --chat-text-placeholder: #bdc2c8;
-    --chat-text-disabled: #cfd3d9;
-    --chat-primary-dark2: #1f2329;
-    --chat-primary-gray: #cfd3d9;
-    --chat-primary-gray2: #666d76;
-    --chat-line-border: #1f23291f; /* --violet-line-card */
-    --chat-line-divider: #1f232914;
-    --chat-icon: #1f2329; /* --/icon/n1 */
-    --chat-icon-n2: #666d76; /* --/icon/n2 */
-    --chat-icon-secondary: #8f959e;
-    --chat-icon-blue: #00a1ce;
-    --chat-card-user: #f7f8fc;
-    --chat-tooltip: #1d2129;
-    --chat-purple-100: #ebe4ff;
-    /* !shadows */
-    --shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    --chat-shadow-card: 0px 2px 8px 2px rgba(31, 35, 41, 0.02),
-      0px 2px 4px 0px rgba(31, 35, 41, 0.02),
-      0px 1px 2px -2px rgba(31, 35, 41, 0.02);
-  }
-  /* Dark variables */
-  :root[data-dark-mode='true'] {
-    /* component colors */
-    --background: 220 26% 14%;
-    --foreground: 0 0% 98%;
-    --card: 220 26% 14%;
-    --card-foreground: 0 0% 98%;
-    --tooltip: 231 30% 8%;
-    --tooltip-foreground: 0 0% 98%;
-    --popover: 220 26% 14%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 193 100% 47%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 215 28% 23%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 218 30% 31%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    /* !colors */
-    --chat-bg-base: #1b1a22;
-    --chat-text-title: #e7e9f2;
-    --chat-text-caption: #989aad;
-    --chat-text-content: #ffffff;
-    --chat-text-secondary: #8f959e;
-    --chat-text-placeholder: #3c3e51;
-    --chat-text-disabled: #e7e9f2;
-    --chat-primary-dark2: #1f2329;
-    --chat-primary-gray: #cfd3d9;
-    --chat-primary-gray2: #666d76;
-    --chat-line-border: #e7e9f214;
-    --chat-line-divider: #1f232914;
-    --chat-icon: #e7e9f2; /* --/icon/n1 */
-    --chat-icon-n2: #666d76; /* --/icon/n2 */
-    --chat-icon-secondary: #989aad;
-    --chat-icon-blue: #00a1ce;
-    --chat-card-user: #f7f8fc;
-    --chat-tooltip: #1d2129;
-    --chat-purple-100: #ebe4ff;
-    /* !shadows */
-    --shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.3);
+/* Dark variables */
+:root[data-dark-mode="true"] {
+  --background: 220 26% 14%;
+  --foreground: 0 0% 98%;
+  --card: 220 26% 14%;
+  --card-foreground: 0 0% 98%;
+  --tooltip: 231 30% 8%;
+  --tooltip-foreground: 0 0% 98%;
+  --popover: 220 26% 14%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 193 100% 47%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 215 28% 23%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 120 100% 50%;
+  --border: 218 30% 31%;
+  --input: 240 10% 31%;
+  --ring: 193 100% 47%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+  --icon: 214, 7%, 43%;
+  --gradient1: linear-gradient(233deg, #34BDAF 0%, #B682D5 100%);
+  --gradient2: linear-gradient(180deg, #4CC2CC 0%, #E17570 100%);
+  --gradient3: linear-gradient(180deg, #AF70E1 0%, #ED7196 100%);
+  --gradient4: linear-gradient(180deg, #A348D6 0%, #45A7DF 100%);
+  --gradient5: linear-gradient(56.2deg, #5749CA 0%, #BB4A97 100%);
+  --gradient6: linear-gradient(180deg, #036FFA 0%, #00B8E5 100%);
+  --gradient7: linear-gradient(38.2deg, #F0C6CF 0%, #DECCE2 40.4754%, #CAD3F9 100%);
+  --tint-red: #C42A534D;
+  --badge-red: #C42A53;
+  --tint-green: #23CA2E4D;
+  --badge-green: #23CA2E;
+  --tint-purple: #502FD64D;
+  --badge-purple: #502FD6;
+  --tint-blue: #04A9D74D;
+  --badge-blue: #04A9D7;
+  --tint-yellow: #C59A1A4D;
+  --badge-yellow: #C59A1A;
+  --tint-pink: #BF1CC04D;
+  --badge-pink: #BF1CC0;
+  --tint-lime: #A4C8244D;
+  --badge-lime: #A4C824;
+  --tint-aqua: #19CCAC4D;
+  --badge-aqua: #19CCAC;
+  --tint-orange: #D779224D;
+  --badge-orange: #D77922;
+  --selection: #005174;
+  --scrollbar-thumb: #4b5563;
+}
 
-    --chat-shadow-card: 0px 2px 8px 2px rgba(27, 26, 34, 0.16),
-      0px 2px 4px 0px rgba(27, 26, 34, 0.16),
-      0px 1px 2px -2px rgba(27, 26, 34, 0.08);
+@mixin scrollbar-style {
+  ::-webkit-scrollbar, &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &:hover {
+
+    &::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: var(--scrollbar-thumb);
+    }
+  }
+}
+
+@mixin hidden-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.appflowy-scrollbar {
+  @include scrollbar-style;
+}
+
+.appflowy-hidden-scrollbar {
+  @include hidden-scrollbar;
+}
+
+#appflowy-chat {
+  #appflowy-editor > div {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+
+@keyframes dots-loading {
+  20% {
+    background-position: 0% 0%, 50% 50%, 100% 50%;
+  }
+  40% {
+    background-position: 0% 100%, 50% 0%, 100% 50%;
+  }
+  60% {
+    background-position: 0% 50%, 50% 100%, 100% 0%;
+  }
+  80% {
+    background-position: 0% 50%, 50% 50%, 100% 100%;
   }
 }

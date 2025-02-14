@@ -1,3 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 16" fill="none">
-  <path d="M1.7793 5.06004H11.0193C13.3389 5.06004 15.2193 6.94041 15.2193 9.26004C15.2193 11.5796 13.3389 13.46 11.0193 13.46H5.1393M1.7793 5.06004L4.2993 2.54004M1.7793 5.06004L4.2993 7.58004" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="icon / undo / m">
+        <path id="Vector"
+              d="M1.59961 7.16562H13.1496C16.0491 7.16562 18.3996 9.51609 18.3996 12.4156C18.3996 15.3151 16.0491 17.6656 13.1496 17.6656H5.79961M1.59961 7.16562L4.74961 4.01562M1.59961 7.16562L4.74961 10.3156"
+              stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
 </svg>

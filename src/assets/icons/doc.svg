@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 14 15" fill="none">
-  <path d="M12.6654 6.15568V9.42894C12.6654 12.7022 11.532 14.0115 8.6987 14.0115H5.2987C2.46536 14.0115 1.33203 12.7022 1.33203 9.42894V5.50103C1.33203 2.22776 2.46536 0.918457 5.2987 0.918457H8.13203" stroke="currentColor" stroke-width="1.0625" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12.6154 6.07736H10.3487C8.6487 6.07736 8.08203 5.41915 8.08203 3.44452V1.00252C8.08203 0.936833 8.16369 0.906525 8.20654 0.956305L12.6154 6.07736Z" stroke="currentColor" stroke-width="1.0625" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="document">
+        <g id="3">
+            <path id="Vector"
+                  d="M16.0827 7.27114V11.3627C16.0827 15.4543 14.666 17.0909 11.1243 17.0909H6.87435C3.33268 17.0909 1.91602 15.4543 1.91602 11.3627V6.45282C1.91602 2.36124 3.33268 0.724609 6.87435 0.724609H10.416"
+                  stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="Vector_2"
+                  d="M16.0202 7.17293H13.1868C11.0618 7.17293 10.3535 6.35016 10.3535 3.88187V0.877085C10.3535 0.778556 10.476 0.733094 10.5403 0.807763L16.0202 7.17293Z"
+                  stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+    </g>
 </svg>
