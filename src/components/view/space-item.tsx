@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from '@/i18n';
 import { cn, getIcon, renderColor } from '@/lib/utils';
@@ -6,6 +5,7 @@ import { View } from '@/types';
 import ChevronDown from '@/assets/icons/drop_menu_show.svg?react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import DOMPurify from 'dompurify';
+import { Button } from '../ui/button';
 
 function SpaceItem({
   view,
@@ -53,6 +53,25 @@ function SpaceItem({
     /></span>;
   }, [iconSvg, view.extra?.space_icon_color]);
 
+  const ToggleButton = useMemo(() => {
+    return view.children.length > 0 ? (
+      <Button
+        variant={'ghost'}
+        size={'icon'}
+        className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
+      >
+        <ChevronDown
+          className={cn(
+            'transform transition-transform',
+            expanded ? 'rotate-0' : '-rotate-90',
+          )}
+        />
+      </Button>
+    ) : (
+      <div style={{ width: 16, height: 16 }}></div>
+    );
+  }, [expanded]);
+
   const name = view.name || t('view.placeholder');
   return (
     <div
@@ -66,19 +85,7 @@ function SpaceItem({
       >
         <div className={'flex items-center gap-2  w-full overflow-hidden'}>
           <div className={'flex items-center gap-0.5'}>
-            <Button
-              variant={'ghost'}
-              size={'icon'}
-
-              className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
-            >
-              <ChevronDown
-                className={cn(
-                  'transform transition-transform',
-                  expanded ? 'rotate-0' : '-rotate-90',
-                )}
-              />
-            </Button>
+            {ToggleButton}
             {icon}
           </div>
           <TooltipProvider>
