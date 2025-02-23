@@ -1,5 +1,5 @@
 import { useChatContext } from '@/chat/context';
-import { ChatMessage } from '@/types';
+import { ChatMessage, ChatMessageMetadata } from '@/types';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 export interface ChatMessagesContextTypes {
@@ -8,7 +8,7 @@ export interface ChatMessagesContextTypes {
   addMessages: (messages: ChatMessage[]) => void;
   removeMessages: (ids: number[]) => ChatMessage[];
   insertMessage: (message: ChatMessage, index: number) => void;
-  saveMessageContent: (messageId: number, content: string) => void;
+  saveMessageContent: (messageId: number, content: string, metadata: ChatMessageMetadata[]) => void;
 }
 
 export const ChatMessagesContext = createContext<ChatMessagesContextTypes | undefined>(undefined);
@@ -63,12 +63,18 @@ export const ChatMessagesProvider = ({ children }: { children: ReactNode }) => {
     setMessageIds(messagesRef.current.map((message) => message.message_id));
   }, []);
 
-  const saveMessageContent = useCallback((messageId: number, content: string) => {
-    const message = messagesRef.current.find((message) => message.message_id === messageId);
-    if(message) {
-      message.content = content;
-    }
-  }, []);
+  const saveMessageContent = useCallback(
+    (messageId: number, content: string, metadata: ChatMessageMetadata[]) => {
+      const message = messagesRef.current.find(
+        (message) => message.message_id === messageId
+      );
+      if(message) {
+        message.content = content;
+        message.meta_data = [...metadata];
+      }
+    },
+    []
+  );
 
   return (
     <ChatMessagesContext.Provider
