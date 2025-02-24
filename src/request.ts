@@ -302,30 +302,14 @@ export class ChatRequest {
             try {
               const data = JSON.parse(jsonStr);
               Object.entries(data).forEach(([key, value]) => {
-                switch (key) {
-                  case '0': {
-                    if(Array.isArray(value)) {
-                      metadata.push(...value);
-                    }
-                    break;
+                if(key === '0') {
+                  if(Array.isArray(value)) {
+                    metadata.push(...value);
                   }
-                  case '1': {
-                    if(Array.isArray(value)) {
-                      if(value.length > 0) {
-                        text += JSON.stringify(value);
-                      }
-                    } else if(value) {
-                      text += value;
-                    }
-                    break;
-                  }
-                  case '2': {
-                    if(value) {
-                      text += value;
-                    }
-                    break;
-                  }
+                  return;
                 }
+
+                text += value;
               });
 
               onMessage(text, [], false);
