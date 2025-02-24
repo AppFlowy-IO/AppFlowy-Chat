@@ -317,6 +317,13 @@ export class ChatRequest {
                     } else if(value) {
                       text += value;
                     }
+                    break;
+                  }
+                  case '2': {
+                    if(value) {
+                      text += value;
+                    }
+                    break;
                   }
                 }
               });
