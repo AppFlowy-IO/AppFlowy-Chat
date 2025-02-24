@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@appflowyinc/editor':
-    specifier: ^0.1.1
-    version: 0.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0)
+    specifier: ^0.1.2
+    version: 0.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0)
   '@jest/globals':
     specifier: ^29.7.0
     version: 29.7.0
@@ -183,8 +183,8 @@ packages:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
-  /@appflowyinc/editor@0.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0):
-    resolution: {integrity: sha512-KVfOgJ/JaEUrl5DQiLzESBEwRzbU/VbtOiOiTbpNDmSKGqWqVhClmZndkKLR1cFZHVRnJ35LbGzCWWJ10m9Gwg==}
+  /@appflowyinc/editor@0.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0):
+    resolution: {integrity: sha512-Vdq3XsnWzIC24pw+DQ9CzBryUojDQhCwUHDxDqO9RvQh1+k9lSJIMhcEZClM9yT0o8B5MGDQF5vc30rX2bOTSg==}
     peerDependencies:
       i18next: ^22.4.10
       i18next-resources-to-backend: ^1.2.1

@@ -70,7 +70,7 @@ function SpaceItem({
     ) : (
       <div style={{ width: 16, height: 16 }}></div>
     );
-  }, [expanded]);
+  }, [expanded, view.children.length]);
 
   const name = view.name || t('view.placeholder');
   return (

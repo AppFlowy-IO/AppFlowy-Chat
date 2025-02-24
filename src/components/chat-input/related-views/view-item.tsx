@@ -48,7 +48,7 @@ export function ViewItem({ view, children, getCheckStatus, onToggle }: {
     ) : (
       <div style={{ width: 16, height: 16 }}></div>
     );
-  }, [expanded]);
+  }, [expanded, view.children.length]);
 
   return (
     <div className={'flex flex-col'}>

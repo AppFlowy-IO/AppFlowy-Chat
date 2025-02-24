@@ -38,7 +38,7 @@ export function ViewItem({ view, children, onCreateViewWithContent, onInsertCont
     ) : (
       <div style={{ width: 16, height: 16 }}></div>
     );
-  }, [expanded]);
+  }, [expanded, view.children.length]);
 
   return (
     <div className={'flex flex-col'}>

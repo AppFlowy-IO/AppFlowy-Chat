@@ -16,9 +16,7 @@ export const EditorProvider = ({ children }: { children: ReactNode }) => {
   const editorsRef = useRef<Map<number, AppFlowyEditor>>(new Map());
 
   useEffect(() => {
-    return () => {
-      editorsRef.current.clear();
-    };
+    editorsRef.current.clear();
   }, [chatId]);
 
   const getEditor = useCallback((messageId: number) => {

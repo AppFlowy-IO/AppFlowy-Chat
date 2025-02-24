@@ -34,9 +34,10 @@ export const SuggestionsProvider = ({ children }: { children: ReactNode }) => {
   const fetchingMessageIdsRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
+    fetchingMessageIdsRef.current.clear();
+
     return () => {
       setSuggestions(new Map());
-      fetchingMessageIdsRef.current.clear();
     };
   }, [chatId]);
 

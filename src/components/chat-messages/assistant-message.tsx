@@ -61,8 +61,10 @@ export function AssistantMessage({
         await fetchAnswerStream(questionId, responseMode === ChatInputMode.FormatResponse ? {
           output_content: responseFormat.output_content,
           output_layout: responseFormat.output_layout,
-        } : undefined, (text) => {
-          setLoading(false);
+        } : undefined, (text, done) => {
+          if(done || text) {
+            setLoading(false);
+          }
           setContent(text);
         });
         // eslint-disable-next-line
