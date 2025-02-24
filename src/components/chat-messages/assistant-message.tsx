@@ -48,6 +48,7 @@ export function AssistantMessage({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
+  const [done, setDone] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
@@ -65,6 +66,7 @@ export function AssistantMessage({
           if(done || text) {
             setLoading(false);
           }
+          setDone(done || false);
           setContent(text);
         });
         // eslint-disable-next-line
@@ -113,7 +115,7 @@ export function AssistantMessage({
 
       </div>
       {sources && sources.length > 0 ? <MessageSources sources={sources} /> : null}
-      {message?.content && <MessageActions
+      {done && <MessageActions
         id={id}
         isHovered={isHovered}
       />}
