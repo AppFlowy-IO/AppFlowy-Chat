@@ -6,6 +6,7 @@ import { useChatMessagesContext } from '@/provider/messages-provider';
 import { useSuggestionsContext } from '@/provider/suggestions-provider';
 import {
   AuthorType,
+  ChatMessageMetadata,
   GetChatMessagesPayload,
   MessageType,
   OutputContent,
@@ -172,22 +173,30 @@ function useMessagesHandler() {
     }
   }, [insertMessage, currentUser?.uuid, registerAnimation, requestInstance, removeMessages, registerFetchSuggestions, createAssistantMessage, messageIds, toast]);
 
-  const saveAnswer = useCallback(async(questionId: number, content: string) => {
-    try {
-      const answer = await requestInstance.saveAnswer({
-        question_message_id: questionId,
-        content,
-      });
+  const saveAnswer = useCallback(
+    async(
+      questionId: number,
+      content: string,
+      metadata: ChatMessageMetadata[]
+    ) => {
+      try {
+        const answer = await requestInstance.saveAnswer({
+          question_message_id: questionId,
+          content,
+          ...(metadata.length !== 0 && { meta_data : metadata }),
+        });
 
-      saveMessageContent(answer.message_id, content);
-      // eslint-disable-next-line
-    } catch(e: any) {
-      toast({
-        variant: 'destructive',
-        description: e.message,
-      });
-    }
-  }, [requestInstance, saveMessageContent, toast]);
+        saveMessageContent(answer.message_id, content, metadata);
+        // eslint-disable-next-line
+      } catch(e: any) {
+        toast({
+          variant: 'destructive',
+          description: e.message,
+        });
+      }
+    },
+    [requestInstance, saveMessageContent, toast]
+  );
 
   const removeAssistantMessage = useCallback((messageId: number) => {
     removeMessages([messageId]);
@@ -203,13 +212,17 @@ function useMessagesHandler() {
       answerId = questionId + 1;
     }
 
-    const handleMessageProgress = (message: string, done?: boolean) => {
+    const handleMessageProgress = (
+      message: string,
+      metadata: ChatMessageMetadata[],
+      done?: boolean
+    ) => {
       onMessage?.(message, done);
 
       if(done) {
         if(message) {
           void (async() => {
-            await saveAnswer(questionId, message);
+            await saveAnswer(questionId, message, metadata);
             setAnswerApplying(false);
             await startFetchSuggestions();
           })();

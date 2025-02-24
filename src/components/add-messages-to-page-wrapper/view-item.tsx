@@ -6,7 +6,7 @@ import { useTranslation } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { View } from '@/types';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import AddPageIcon from '@/assets/icons/doc-forward.svg?react';
 
 export function ViewItem({ view, children, onCreateViewWithContent, onInsertContentToView }: {
@@ -21,6 +21,25 @@ export function ViewItem({ view, children, onCreateViewWithContent, onInsertCont
   const [isHovering, setIsHovering] = useState(false);
   const name = view.name || t('view.placeholder');
 
+  const ToggleButton = useMemo(() => {
+    return view.children.length > 0 ? (
+      <Button
+        variant={'ghost'}
+        size={'icon'}
+        className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
+      >
+        <ChevronDown
+          className={cn(
+            'transform transition-transform',
+            expanded ? 'rotate-0' : '-rotate-90',
+          )}
+        />
+      </Button>
+    ) : (
+      <div style={{ width: 16, height: 16 }}></div>
+    );
+  }, [expanded]);
+
   return (
     <div className={'flex flex-col'}>
       <div
@@ -31,19 +50,7 @@ export function ViewItem({ view, children, onCreateViewWithContent, onInsertCont
       >
         <div className={'flex items-center gap-2 w-full overflow-hidden'}>
           <div className={'flex items-center gap-0.5'}>
-            <Button
-              variant={'ghost'}
-              size={'icon'}
-
-              className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
-            >
-              <ChevronDown
-                className={cn(
-                  'transform transition-transform',
-                  expanded ? 'rotate-0' : '-rotate-90',
-                )}
-              />
-            </Button>
+            {ToggleButton}
             <PageIcon view={view} />
           </div>
           <TooltipProvider>

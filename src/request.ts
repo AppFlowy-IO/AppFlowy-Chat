@@ -14,6 +14,7 @@ import {
   SendQuestionPayload,
   Suggestions,
   User, View, ViewLayout,
+  ChatMessageMetadata,
 } from '@/types';
 import { EditorData } from '@appflowyinc/editor';
 import { AxiosInstance } from 'axios';
@@ -224,7 +225,7 @@ export class ChatRequest {
   async fetchAnswerStream(payload: {
     question_id: number;
     format: ResponseFormat;
-  }, onMessage: (text: string, done?: boolean) => void) {
+  }, onMessage: (text: string, metadata: ChatMessageMetadata[], done?: boolean) => void) {
     const baseUrl = this.axiosInstance.defaults.baseURL;
     const url = `${baseUrl}/api/chat/${this.workspaceId}/${this.chatId}/answer/stream`;
 
@@ -273,6 +274,7 @@ export class ChatRequest {
       const decoder = new TextDecoder();
       let buffer = '';
       let text = '';
+      const metadata: ChatMessageMetadata[] = [];
 
       try {
         for await (const chunk of readableStreamToAsyncIterator(reader)) {
@@ -299,17 +301,18 @@ export class ChatRequest {
             const jsonStr = buffer.slice(openBraceIndex, closeBraceIndex + 1);
             try {
               const data = JSON.parse(jsonStr);
-              Object.entries(data).forEach(([value]) => {
-                if(Array.isArray(value)) {
-                  if(value.length > 0) {
-                    text += JSON.stringify(value);
+              Object.entries(data).forEach(([key, value]) => {
+                if(key === '0') {
+                  if(Array.isArray(value)) {
+                    metadata.push(...value);
                   }
-                } else if(value) {
-                  text += value;
+                  return;
                 }
+
+                text += value;
               });
 
-              onMessage(text, false);
+              onMessage(text, [], false);
             } catch(e) {
               console.error('Failed to parse JSON:', e);
             }
@@ -318,7 +321,7 @@ export class ChatRequest {
           }
         }
 
-        onMessage(text, true);
+        onMessage(text, metadata, true);
 
       } catch(error) {
         console.error('Stream reading error:', error);
@@ -337,7 +340,8 @@ export class ChatRequest {
 
   async saveAnswer(payload: {
     question_message_id: number;
-    content: string
+    content: string;
+    meta_data?: ChatMessageMetadata[],
   }) {
     const url = `/api/chat/${this.workspaceId}/${this.chatId}/message/answer`;
 
@@ -345,6 +349,7 @@ export class ChatRequest {
       code: number;
       data: ChatMessage;
       message: string;
+      meta_data: ChatMessageMetadata[],
     }>(url, payload);
 
     if(res?.data.code === 0) {
@@ -487,5 +492,4 @@ export class ChatRequest {
 
     return Promise.reject(res?.data);
   }
-
 }

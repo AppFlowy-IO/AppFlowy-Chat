@@ -31,6 +31,25 @@ export function ViewItem({ view, children, getCheckStatus, onToggle }: {
     }
   }, [checkStatus]);
 
+  const ToggleButton = useMemo(() => {
+    return view.children.length > 0 ? (
+      <Button
+        variant={'ghost'}
+        size={'icon'}
+        className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
+      >
+        <ChevronDown
+          className={cn(
+            'transform transition-transform',
+            expanded ? 'rotate-0' : '-rotate-90',
+          )}
+        />
+      </Button>
+    ) : (
+      <div style={{ width: 16, height: 16 }}></div>
+    );
+  }, [expanded]);
+
   return (
     <div className={'flex flex-col'}>
       <div
@@ -39,19 +58,7 @@ export function ViewItem({ view, children, getCheckStatus, onToggle }: {
       >
         <div className={'flex items-center gap-2 w-full overflow-hidden'}>
           <div className={'flex items-center gap-0.5'}>
-            <Button
-              variant={'ghost'}
-              size={'icon'}
-
-              className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
-            >
-              <ChevronDown
-                className={cn(
-                  'transform transition-transform',
-                  expanded ? 'rotate-0' : '-rotate-90',
-                )}
-              />
-            </Button>
+            {ToggleButton}
             <Button
               variant="ghost"
               size="sm"
