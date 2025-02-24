@@ -33,7 +33,7 @@ function Main(props: ChatProps) {
                       className={'w-full relative h-full flex justify-between flex-col overflow-hidden'}
                     >
                       <ChatMessages currentUser={currentUser} />
-                      <div className={'w-full relative flex py-6 justify-center'}>
+                      <div className={'w-full relative flex py-6 justify-center max-sm:hidden'}>
                         <AnimatePresence mode="wait">
                           {!selectionMode && <ChatInput />}
                         </AnimatePresence>

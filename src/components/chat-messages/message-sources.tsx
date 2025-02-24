@@ -42,7 +42,7 @@ function MessageSources({
   }, [getView, sources, t]);
 
   return (
-    <div className={'flex px-10 flex-col pb-2'}>
+    <div className={'flex px-10 flex-col pb-2 max-sm:hidden'}>
       <Button
         onClick={() => setExpanded(!expanded)}
         variant={'link'}

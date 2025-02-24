@@ -95,7 +95,7 @@ export function ChatMessages({ currentUser }: {
         id="messages-scroller"
         ref={scrollContainerRef}
         style={{ flexDirection: 'column-reverse' }}
-        className="flex px-8 py-8 appflowy-scrollbar overflow-x-hidden gap-4 h-full w-full overflow-auto"
+        className="flex px-16 max-md:px-8 max-sm:px-6 py-8 appflowy-scrollbar overflow-x-hidden gap-4 h-full w-full overflow-auto"
       >
         <InfiniteScroll
           dataLength={messageIds.length}

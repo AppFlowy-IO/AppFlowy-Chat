@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from '@/i18n';
+import { convertToAppFlowyFragment } from '@/lib/copy';
 import { convertToPageData } from '@/lib/utils';
 import { useEditorContext } from '@/provider/editor-provider';
 import { useChatMessagesContext } from '@/provider/messages-provider';
@@ -65,25 +66,15 @@ export function MessageActions({
 
       const newJson = convertToPageData(data);
 
-      const clipboardEvent = new ClipboardEvent('copy', {
-        bubbles: true,
-        cancelable: true,
-      });
-      const dataTransfer = new DataTransfer();
-
-      dataTransfer.setData('text/plain', message.content);
       const stringifies = JSON.stringify(newJson, null, 2);
-      dataTransfer.setData('application/json', stringifies);
-
-      Object.defineProperty(clipboardEvent, 'clipboardData', {
-        value: dataTransfer,
-        writable: false,
-      });
 
       document.addEventListener('copy', (e: ClipboardEvent) => {
         e.preventDefault();
         e.clipboardData?.setData('text/plain', message.content);
         e.clipboardData?.setData('application/json', stringifies);
+
+        const { key, value } = convertToAppFlowyFragment(data);
+        e.clipboardData?.setData(key, value);
       }, { once: true });
 
       document.execCommand('copy');
@@ -111,7 +102,7 @@ export function MessageActions({
     <div
       ref={ref}
 
-      className={'flex gap-2 px-10 min-h-[38px]'}
+      className={'flex max-sm:hidden gap-2 px-10 min-h-[38px]'}
     >
       {visible && message && (
         <>

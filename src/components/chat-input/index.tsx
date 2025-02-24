@@ -126,7 +126,7 @@ export function ChatInput() {
       initial="hidden"
       animate="visible"
       exit="hidden"
-      className={'w-full px-8'}
+      className={'w-full px-16 max-md:px-8 max-sm:px-6'}
     >
       <div
         ref={containerRef}
