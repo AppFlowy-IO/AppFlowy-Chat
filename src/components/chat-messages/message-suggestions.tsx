@@ -12,6 +12,14 @@ interface MessageSuggestionsProps {
   suggestions: Suggestions;
 }
 
+const EmptySuggestions = () => {
+  return (
+    <div className={'flex flex-col gap-4 w-full overflow-hidden mr-auto'}>
+      <Label className={'opacity-60'}>No suggestions</Label>
+    </div>
+  );
+};
+
 export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
   const { t } = useTranslation();
   const {
@@ -40,7 +48,7 @@ export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
     >
       <Label className={'opacity-60'}>{t('suggestion.title')}</Label>
       <div className={'flex gap-2 flex-col items-start w-full overflow-hidden'}>
-        {suggestions.items.map((suggestion, index) => (
+        {suggestions.items.length === 0 ? <EmptySuggestions /> : suggestions.items.map((suggestion, index) => (
           <Button
             key={index}
             className={'w-full justify-start overflow-hidden'}
