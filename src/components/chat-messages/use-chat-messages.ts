@@ -11,7 +11,7 @@ interface FetchMessagesParams {
 
 export function useChatMessages() {
   const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const lastMessageId = useRef<number | null>(null);
   const isInitialLoad = useRef(true);
   const loadingRef = useRef(false);

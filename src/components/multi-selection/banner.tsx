@@ -47,7 +47,7 @@ export function Banner({
   if(!selectionMode) return null;
 
   return (
-    <div className={'flex h-12 bg-primary/90 px-6 text-primary-foreground chat-selections-banner items-center gap-2 justify-between'}>
+    <div className={'flex fixed z-[100] left-0 top-0 w-full h-12 bg-primary/90 px-6 text-primary-foreground chat-selections-banner items-center gap-2 justify-between'}>
       <div className={'flex items-center gap-2'}>
         <Button
           variant={'link'}

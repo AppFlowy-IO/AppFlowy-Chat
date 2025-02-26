@@ -20,7 +20,9 @@
     "generating": "Generating response...",
     "errors": {
       "copied": "Error copying to clipboard",
-      "noLimit": "Your workspace has ran out of free AI responses. Please ask your workspace owner to upgrade the workspace plan or purchase AI add-ons."
+      "noLimit": "Your workspace has ran out of free AI responses. Please ask your workspace owner to upgrade the workspace plan or purchase AI add-ons.",
+      "emptyMessage": "Please enter a message",
+      "wait": "Please wait for the current response to finish generating"
     },
     "button": {
       "copyClipboard": "Copy to clipboard",

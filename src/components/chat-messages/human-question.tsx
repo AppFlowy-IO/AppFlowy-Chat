@@ -31,7 +31,7 @@ function HumanQuestion({
   return (
     <div className={`flex gap-2 w-full`}>
       <div className={'flex-1 flex items-center justify-end'}>
-        <div className={'w-fit bg-muted rounded-[16px] px-4 py-2'}>
+        <div className={'w-fit max-w-[83%] bg-muted rounded-[16px] px-4 py-2'}>
           {content}
         </div>
       </div>

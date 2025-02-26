@@ -6,7 +6,7 @@ import { useChatContext } from '@/chat/context';
 interface SuggestionsContextTypes {
   registerFetchSuggestions: (messageId: number) => void;
   unregisterFetchSuggestions: (messageId: number) => void;
-  startFetchSuggestions: () => Promise<void>;
+  startFetchSuggestions: (questionMessageId: number) => Promise<void>;
   getMessageSuggestions: (messageId: number) => Suggestions | undefined;
   clearSuggestions: () => void;
 }
@@ -58,17 +58,13 @@ export const SuggestionsProvider = ({ children }: { children: ReactNode }) => {
     return suggestions.get(messageId);
   }, [suggestions]);
 
-  const startFetchSuggestions = useCallback(async() => {
-    const messageId = Array.from(fetchingMessageIdsRef.current)[0];
-    if(!messageId) {
-      return;
-    }
+  const startFetchSuggestions = useCallback(async(questionMessageId: number) => {
     try {
-      const data = await requestInstance.getSuggestions(messageId);
+      const data = await requestInstance.getSuggestions(questionMessageId);
 
-      setSuggestions(suggestions => {
-        const newSuggestions = new Map(suggestions);
-        newSuggestions.set(messageId, data);
+      setSuggestions(() => {
+        const newSuggestions = new Map();
+        newSuggestions.set(questionMessageId, data);
         return newSuggestions;
       });
 
@@ -79,7 +75,7 @@ export const SuggestionsProvider = ({ children }: { children: ReactNode }) => {
         description: e.message,
       });
     } finally {
-      unregisterFetchSuggestions(messageId);
+      unregisterFetchSuggestions(questionMessageId);
     }
   }, [requestInstance, toast, unregisterFetchSuggestions]);
 

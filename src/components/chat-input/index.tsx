@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import LoadingDots from '@/components/ui/loading-dots';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { toast } from '@/hooks/use-toast';
 import { useTranslation } from '@/i18n';
 import { MESSAGE_VARIANTS } from '@/lib/animations';
 import { useMessagesHandlerContext } from '@/provider/messages-handler-provider';
@@ -90,7 +91,20 @@ export function ChatInput() {
   };
 
   const handleSubmit = async() => {
-    if(!message.trim() || disabled) return;
+    if(!message.trim()) {
+      toast({
+        variant: 'destructive',
+        description: `${t('errors.emptyMessage')}`,
+      });
+      return;
+    }
+    if(questionSending || answerApplying) {
+      toast({
+        variant: 'destructive',
+        description: `${t('errors.wait')}`,
+      });
+      return;
+    }
     setMessage('');
     adjustHeight();
 
@@ -126,7 +140,7 @@ export function ChatInput() {
       initial="hidden"
       animate="visible"
       exit="hidden"
-      className={'w-full px-16 max-md:px-8 max-sm:px-6'}
+      className={'w-full'}
     >
       <div
         ref={containerRef}

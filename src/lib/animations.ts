@@ -98,4 +98,27 @@ export const MESSAGE_VARIANTS = {
       },
     },
   }),
+  getBannerVariants: () => ({
+    initial: {
+      opacity: 0,
+      y: -20,
+      scale: 0.95,
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: ANIMATION_PRESETS.SPRING_GENTLE,
+    },
+    exit: {
+      opacity: 0,
+      y: -20,
+      scale: 0.95,
+      transition: {
+        ...ANIMATION_PRESETS.SPRING_GENTLE,
+        // 调整离开动画的持续时间和缓动函数，使其更平滑
+        opacity: { duration: 0.2 },
+      },
+    },
+  }),
 };

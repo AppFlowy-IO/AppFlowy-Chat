@@ -1,7 +1,10 @@
 import { Banner } from '@/components/multi-selection/banner';
+import { ANIMATION_PRESETS, MESSAGE_VARIANTS } from '@/lib/animations';
+import { cn } from '@/lib/utils';
 import { useChatMessagesContext } from '@/provider/messages-provider';
 import { AuthorType, ChatMessage } from '@/types';
 import { CheckStatus } from '@/types/checkbox';
+import { AnimatePresence, motion } from 'framer-motion';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useChatContext } from '@/chat/context';
 
@@ -86,14 +89,38 @@ export const SelectionModeProvider = ({ children }: { children: ReactNode }) => 
       toggleMessage,
     }}
   >
-    <div className={'flex flex-col h-full w-full'}>
-      <Banner
-        messages={messages}
-        onSelectAll={handleSelectAll}
-        onClearAll={handleUnselectAll}
-        checkStatus={checkStatus}
-      />
-      {children}
+    <div
+      className={cn('h-full w-full  px-1')}
+    >
+      <AnimatePresence mode="wait">
+        {selectionMode && (
+          <motion.div
+            key="banner"
+            variants={MESSAGE_VARIANTS.getBannerVariants()}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="absolute top-0 left-0 right-0 z-10"
+          >
+            <Banner
+              messages={messages}
+              onSelectAll={handleSelectAll}
+              onClearAll={handleUnselectAll}
+              checkStatus={checkStatus}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <motion.div
+        className="h-full w-full relative"
+        animate={{
+          y: selectionMode ? 48 : 0,
+        }}
+        transition={ANIMATION_PRESETS.SPRING_GENTLE}
+      >
+        {children}
+      </motion.div>
+
     </div>
   </SelectionModeContext.Provider>;
 };

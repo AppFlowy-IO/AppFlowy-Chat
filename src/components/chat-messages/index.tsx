@@ -1,13 +1,16 @@
+import { useChatContext } from '@/chat/context';
 import { EmptyMessages } from '@/components/chat-messages/empty-messages';
 import { Message } from '@/components/chat-messages/message';
 import { useChatMessages } from '@/components/chat-messages/use-chat-messages';
 import { Button } from '@/components/ui/button';
 import LoadingDots from '@/components/ui/loading-dots';
 import { useUserLoader } from '@/hooks/use-user-loader';
+import { ANIMATION_PRESETS } from '@/lib/animations';
 import { User } from '@/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ArrowDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const LoadingIndicator = () => (
   <div className="flex items-center justify-center w-full h-[48px]">
@@ -25,6 +28,9 @@ export function ChatMessages({ currentUser }: {
   const {
     fetchMember,
   } = useUserLoader();
+  const {
+    selectionMode,
+  } = useChatContext();
 
   const {
     messageIds,
@@ -90,12 +96,16 @@ export function ChatMessages({ currentUser }: {
   }, [fetchInitialMessages]);
 
   return (
-    <div className="relative w-full flex-1 overflow-hidden">
-      <div
+    <div
+      className="relative w-full flex-1 overflow-hidden"
+    >
+      <motion.div
+        layout
+        transition={ANIMATION_PRESETS.SPRING_GENTLE}
         id="messages-scroller"
         ref={scrollContainerRef}
-        style={{ flexDirection: 'column-reverse' }}
-        className="flex px-16 max-md:px-8 max-sm:px-6 py-8 appflowy-scrollbar overflow-x-hidden gap-4 h-full w-full overflow-auto"
+        style={{ flexDirection: 'column-reverse', paddingBottom: selectionMode ? '72px' : '0px' }}
+        className="flex px-1 relative py-8 appflowy-scrollbar overflow-x-hidden gap-4 h-full w-full overflow-auto"
       >
         <InfiniteScroll
           dataLength={messageIds.length}
@@ -129,7 +139,7 @@ export function ChatMessages({ currentUser }: {
             <EmptyMessages currentUser={currentUser} />
           </div>}
 
-      </div>
+      </motion.div>
       {showScrollButton && (
         <div className={'absolute left-1/2 bottom-2 transform -translate-x-1/2'}>
           <Button

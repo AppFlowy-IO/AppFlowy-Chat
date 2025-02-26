@@ -36,6 +36,10 @@ export function ViewItem({ view, children, getCheckStatus, onToggle }: {
       <Button
         variant={'ghost'}
         size={'icon'}
+        onClick={(e) => {
+          e.stopPropagation();
+          setExpanded(prev => !prev);
+        }}
         className={'!w-4 !h-4 !min-w-4 !min-h-4 hover:bg-muted-foreground/10'}
       >
         <ChevronDown
@@ -53,20 +57,21 @@ export function ViewItem({ view, children, getCheckStatus, onToggle }: {
   return (
     <div className={'flex flex-col'}>
       <div
-        onClick={() => setExpanded(!expanded)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggle(view);
+        }}
         className={'px-1.5 h-[28px] w-full select-none text-sm cursor-pointer rounded-[8px] flex items-center justify-between gap-2 hover:bg-muted'}
       >
         <div className={'flex items-center gap-2 w-full overflow-hidden'}>
-          <div className={'flex items-center gap-0.5'}>
+          <div
+            className={'flex cursor-pointer items-center gap-0.5'}
+          >
             {ToggleButton}
             <Button
               variant="ghost"
               size="sm"
               className="p-0 h-4 w-4 mr-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggle(view);
-              }}
             >
               {CheckboxIcon}
             </Button>

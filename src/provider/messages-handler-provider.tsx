@@ -115,13 +115,14 @@ function useMessagesHandler() {
 
       // insert fake message to show user message
       const fakeMessageId = Date.now();
+      const author = {
+        author_uuid: currentUser?.uuid || '',
+        author_type: AuthorType.Human,
+      };
       insertMessage({
         message_id: fakeMessageId,
         content: message,
-        author: {
-          author_uuid: currentUser?.uuid || '',
-          author_type: AuthorType.Human,
-        },
+        author,
       }, 0);
       registerAnimation(fakeMessageId);
 
@@ -135,7 +136,10 @@ function useMessagesHandler() {
       // remove fake message
       removeMessages([fakeMessageId]);
 
-      insertMessage(question, 0);
+      insertMessage({
+        ...question,
+        author,
+      }, 0);
 
       // clear suggestions and set placeholder for this question
       registerFetchSuggestions(question.message_id);
@@ -177,13 +181,13 @@ function useMessagesHandler() {
     async(
       questionId: number,
       content: string,
-      metadata: ChatMessageMetadata[]
+      metadata: ChatMessageMetadata[],
     ) => {
       try {
         const answer = await requestInstance.saveAnswer({
           question_message_id: questionId,
           content,
-          ...(metadata.length !== 0 && { meta_data : metadata }),
+          ...(metadata.length !== 0 && { meta_data: metadata }),
         });
 
         saveMessageContent(answer.message_id, content, metadata);
@@ -195,7 +199,7 @@ function useMessagesHandler() {
         });
       }
     },
-    [requestInstance, saveMessageContent, toast]
+    [requestInstance, saveMessageContent, toast],
   );
 
   const removeAssistantMessage = useCallback((messageId: number) => {
@@ -215,7 +219,7 @@ function useMessagesHandler() {
     const handleMessageProgress = (
       message: string,
       metadata: ChatMessageMetadata[],
-      done?: boolean
+      done?: boolean,
     ) => {
       onMessage?.(message, done);
 
@@ -224,7 +228,7 @@ function useMessagesHandler() {
           void (async() => {
             await saveAnswer(questionId, message, metadata);
             setAnswerApplying(false);
-            await startFetchSuggestions();
+            await startFetchSuggestions(questionId);
           })();
         } else {
           if(answerId) {

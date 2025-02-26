@@ -8,7 +8,6 @@ import { toast } from '@/hooks/use-toast';
 import { useViewsLoader } from '@/hooks/use-views-loader';
 import { useTranslation } from '@/i18n';
 import { useEditorContext } from '@/provider/editor-provider';
-import { useChatMessagesContext } from '@/provider/messages-provider';
 import { ChatMessage } from '@/types';
 import { useCallback, useState } from 'react';
 
@@ -19,12 +18,8 @@ export function AddMessageToPageWrapper({ onFinished, messages, children }: {
 }) {
 
   const {
-    getMessage,
-    messageIds,
-  } = useChatMessagesContext();
-
-  const {
     openingViewId,
+    chatId,
   } = useChatContext();
 
   const {
@@ -40,7 +35,7 @@ export function AddMessageToPageWrapper({ onFinished, messages, children }: {
   const [searchValue, setSearchValue] = useState('');
 
   const getData = useCallback(() => {
-    return messages.flatMap(item => {
+    return messages.reverse().flatMap(item => {
       const editor = getEditor(item.message_id);
       return editor?.getData() || [];
     });
@@ -48,10 +43,9 @@ export function AddMessageToPageWrapper({ onFinished, messages, children }: {
 
   const handleCreateViewWithContent = useCallback(async(parentViewId: string) => {
     const data = getData();
-    const index = messageIds.indexOf(messages[0].message_id) - 1;
-    const questionId = messageIds[index];
-    const question = questionId ? getMessage(questionId) : undefined;
-    const name = `Messages extracted from "${question?.content}"`;
+    const chat = await getView(chatId, false);
+
+    const name = `Messages extracted from "${chat?.name || 'Untitled'}"`;
 
     try {
       await createViewWithContent(parentViewId, name, data);
@@ -69,18 +63,18 @@ export function AddMessageToPageWrapper({ onFinished, messages, children }: {
         description: e.message,
       });
     }
-  }, [onFinished, createViewWithContent, getData, getMessage, messageIds, messages, t]);
+  }, [getData, getView, chatId, createViewWithContent, t, onFinished]);
 
   const handleInsertContentToView = useCallback(async(viewId: string) => {
     const data = getData();
-    const view = await getView(viewId, false);
+    const chat = await getView(chatId, false);
 
     try {
       await insertContentToView(viewId, data);
       toast({
         variant: 'success',
         description: t('success.addMessageToPage', {
-          name: view?.name || t('view.placeholder'),
+          name: chat?.name || t('view.placeholder'),
         }),
       });
       onFinished?.();
@@ -91,7 +85,7 @@ export function AddMessageToPageWrapper({ onFinished, messages, children }: {
         description: e.message,
       });
     }
-  }, [onFinished, getData, getView, insertContentToView, t]);
+  }, [getData, getView, chatId, insertContentToView, t, onFinished]);
 
   if(openingViewId) {
     return <div

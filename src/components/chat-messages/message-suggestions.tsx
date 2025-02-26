@@ -60,9 +60,7 @@ export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
             }
             variant={'ghost'}
           >
-            <span className={'truncate '}>{suggestion.content}</span>
-
-
+            <span className={'truncate !text-foreground/85'}>{suggestion.content}</span>
           </Button>
         ))}
       </div>

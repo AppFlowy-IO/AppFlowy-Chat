@@ -2,10 +2,18 @@ import Chat from '@/chat';
 import { ChatRequest } from '@/request';
 import { User } from '@/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 function AIChat() {
   const { workspaceId, chatId } = useParams();
+  const [search, setSearch] = useSearchParams();
+  const selectionMode = search.get('selectable') === 'true';
+  const handleCloseSelectionMode = useCallback(() => {
+    return setSearch(prev => {
+      prev.delete('selectable');
+      return prev;
+    });
+  }, [setSearch]);
   const [currentUser, setCurrentUser] = useState<User>();
   const requestInstance = useMemo(() => {
     if(!workspaceId || !chatId) {
@@ -27,27 +35,24 @@ function AIChat() {
 
     void fetchCurrentUser();
   }, [requestInstance]);
-  const [selectionMode, setSelectionMode] = useState(false);
-  const handleOpenSelectionMode = useCallback(() => {
-    setSelectionMode(true);
-  }, []);
-
-  const handleCloseSelectionMode = useCallback(() => {
-    setSelectionMode(false);
-  }, []);
 
   if(!requestInstance || !chatId) {
     return null;
   }
   return (
-    <Chat
-      requestInstance={requestInstance}
-      chatId={chatId}
-      selectionMode={selectionMode}
-      onOpenSelectionMode={handleOpenSelectionMode}
-      onCloseSelectionMode={handleCloseSelectionMode}
-      currentUser={currentUser}
-    />
+    <div className={'flex transform w-full justify-center'}>
+      <div className={'max-w-full w-[988px] px-24'}>
+        <Chat
+          requestInstance={requestInstance}
+          chatId={chatId}
+          selectionMode={selectionMode}
+          onCloseSelectionMode={handleCloseSelectionMode}
+          currentUser={currentUser}
+        />
+      </div>
+
+    </div>
+
   );
 }
 
