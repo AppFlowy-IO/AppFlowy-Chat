@@ -1,43 +1,67 @@
 {
   "chat": {
-    "title": {
-      "greeting": "HI Vivian! How can I help you today?"
-    },
-    "prompt": {
-      "kanban": "How to use Kanban to manage tasks?",
-      "gtd": "Explain the GTD method",
-      "rust": "Why use Rust?",
-      "recipe": "Recipe with what's in my kitchen"
-    },
+    "placeholder": "Hi {{name}}, how can I help you today?",
+    "dear": "Dear",
     "input": {
       "placeholder": "Ask AppFlowy AI",
       "placeholderFormat": "AI response will generate with the format you define above",
       "button": {
         "format": "Format response",
         "auto": "Auto",
-        "attach": "Attach files"
+        "text": "Text",
+        "textWithImage": "Text and image",
+        "imageOnly": "Image only",
+        "paragraph": "Paragraph",
+        "bulletList": "Bullet list",
+        "numberedList": "Numbered list",
+        "table": "Table"
       }
     },
-    "tooltip": {
-      "copy": "Copy",
+    "generating": "Generating response...",
+    "errors": {
+      "copied": "Error copying to clipboard",
+      "noLimit": "Your workspace has ran out of free AI responses. Please ask your workspace owner to upgrade the workspace plan or purchase AI add-ons.",
+      "emptyMessage": "Please enter a message",
+      "wait": "Please wait for the current response to finish generating"
+    },
+    "button": {
+      "copyClipboard": "Copy to clipboard",
       "tryAgain": "Try again",
       "changeFormat": "Change format",
-      "switchModel": "Switch model",
-      "addToPage": "Add to page",
-      "download": "Download",
-      "imageOnly": "Image only",
-      "imageText": "Image + Text",
-      "paragraph": "Paragraph",
-      "bulletList": "Bullet list",
-      "numList": "Number list",
-      "table": "Table",
-      "regenerate": "Regenerate"
+      "addToPage": "Add message to page",
+      "regenerateWithNewFormat": "Regenerate with this format",
+      "addTo": "Add to..."
     },
-    "loading": {
-      "generate": "Working on it"
+    "success": {
+      "copied": "Copied to clipboard",
+      "addMessageToPage": "Message added to '{{name}}'"
     },
     "suggestion": {
       "title": "Suggested"
+    },
+    "sources": {
+      "label": "{{sourceCount}} sources found"
+    },
+    "search": {
+      "label": "Search",
+      "noSpacesFound": "No spaces found"
+    },
+    "view": {
+      "placeholder": "Untitled"
+    },
+    "addMessageToPage": {
+      "placeholder": "Add message to...",
+      "createNewPage": "Create new page",
+      "selectMsg": "Select messages",
+      "selectedCount": "{{count}} selected"
+    },
+    "questions": {
+      "one": "How to use Kanban to manage tasks",
+      "two": "Explain the GTD method",
+      "three": "Why use Rust",
+      "four": "Recipe with what's in my kitchen",
+      "five": "Create an illustration for my page",
+      "six": "Draw up a to-do list for my upcoming week"
     }
   }
 }

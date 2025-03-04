@@ -15,17 +15,17 @@ function copyLocalesPlugin() {
       const srcDir = resolve(__dirname, 'src/locales');
       const destDir = resolve(__dirname, 'dist/locales');
 
-      if (!existsSync(destDir)) {
+      if(!existsSync(destDir)) {
         mkdirSync(destDir, { recursive: true });
       }
 
       readdir(srcDir, (err, files) => {
-        if (err) {
+        if(err) {
           console.error(err);
           return;
         }
         files.forEach((file) => {
-          if (file.endsWith('.json')) {
+          if(file.endsWith('.json')) {
             copyFileSync(resolve(srcDir, file), resolve(destDir, file));
           }
         });
@@ -42,15 +42,15 @@ export default defineConfig(({ command }) => {
       react(),
       svgr(),
       !isServe &&
-        dts({
-          insertTypesEntry: true,
-          include: ['src'],
-        }),
+      dts({
+        insertTypesEntry: true,
+        include: ['src'],
+      }),
       copyLocalesPlugin(),
       process.env.ANALYZE_MODE
         ? visualizer({
-            emitFile: true,
-          })
+          emitFile: true,
+        })
         : undefined,
 
       removeConsole(),
@@ -58,44 +58,46 @@ export default defineConfig(({ command }) => {
     build: isServe
       ? undefined
       : {
-          lib: {
-            entry: resolve(__dirname, 'src/index.ts'),
-            name: 'Chat',
-            formats: ['es', 'cjs'],
-            fileName: (format: string) =>
-              `index.${format === 'es' ? 'mjs' : 'js'}`,
-          },
-          cssCodeSplit: true,
-          rollupOptions: {
-            external: [
-              'react',
-              'react-dom',
-              'i18next',
-              'react-i18next',
-              'i18next-resources-to-backend',
-              '@appflowyinc/editor'
-            ],
-            output: {
-              globals: {
-                react: 'React',
-                'react-dom': 'ReactDOM',
-                i18next: 'i18next',
-                'react-i18next': 'reactI18next',
-                '@appflowyinc/editor': 'Editor',
-              },
+        lib: {
+          entry: resolve(__dirname, 'src/index.ts'),
+          name: 'Chat',
+          formats: ['es', 'cjs'],
+          fileName: (format: string) =>
+            `index.${format === 'es' ? 'mjs' : 'js'}`,
+        },
+        cssCodeSplit: true,
+        rollupOptions: {
+          external: [
+            'react',
+            'react-dom',
+            'i18next',
+            'react-i18next',
+            'i18next-resources-to-backend',
+            '@appflowyinc/editor',
+            'axios',
+            'dompurify',
+          ],
+          output: {
+            globals: {
+              react: 'React',
+              'react-dom': 'ReactDOM',
+              i18next: 'i18next',
+              'react-i18next': 'reactI18next',
+              '@appflowyinc/editor': 'Editor',
             },
           },
-          sourcemap: false,
-          minify: false,
         },
+        sourcemap: false,
+        minify: false,
+      },
     server: {
-      port: 5173,
+      port: 3001,
     },
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
-        '@appflowy-chat': resolve(__dirname, 'src', 'chat'),
       },
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
     },
   };
 });
