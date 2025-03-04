@@ -39,17 +39,17 @@ AppFlowy Web Chat will use dark mode when `document.documentelement.dataset.dark
 
 ### `ChatProps`
 
-| Prop                 | Type                       | Default | Description                                                     |
-| -------------------- | -------------------------- | ------- | --------------------------------------------------------------- |
-| chatId               | `string`                   | -       | The id of the chat                                              |
-| requestInstance      | `ChatRequest`              | -       | ChatRequest which handles chat-related API requests             |
-| currentUser          | `User`                     | -       | Current user in the chat, determines the sender                 |
-| openingViewId        | `string`                   | -       | id of the currently-opened view                                 |
-| onOpenView           | `(viewId: string) => void` | -       | Callback when clicking on a view link in the chat               |
-| onCloseView          | `() => void`               | -       | Callback when closing an opened view                            |
-| selectionMode        | `boolean`                  | -       | When true, disable input and allows selecting multiple messages |
-| onOpenSelectionMode  | `() => void`               | -       | Callback when turning on selection mode                         |
-| onCloseSelectionMode | `() => void`               | -       | Callback when turning off selection mode                        |
+| Prop                 | Type                                  | Default | Description                                                     |
+| -------------------- | ------------------------------------- | ------- | --------------------------------------------------------------- |
+| chatId               | `string`                              | -       | The id of the chat                                              |
+| requestInstance      | `ChatRequest`                         | -       | ChatRequest which handles chat-related API requests             |
+| currentUser          | `User` (optional)                     | -       | Current user in the chat, determines the sender                 |
+| openingViewId        | `string` (optional)                   | -       | id of the currently-opened view                                 |
+| onOpenView           | `(viewId: string) => void` (optional) | -       | Callback when clicking on a view link in the chat               |
+| onCloseView          | `() => void` (optional)               | -       | Callback when closing an opened view                            |
+| selectionMode        | `boolean` (optional)                  | -       | When true, disable input and allows selecting multiple messages |
+| onOpenSelectionMode  | `() => void` (optional)               | -       | Callback when turning on selection mode                         |
+| onCloseSelectionMode | `() => void` (optional)               | -       | Callback when turning off selection mode                        |
 
 ### `ChatRequest`
 
