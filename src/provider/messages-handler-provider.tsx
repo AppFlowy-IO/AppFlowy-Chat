@@ -3,6 +3,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ERROR_CODE_NO_LIMIT } from '@/lib/const';
 import { useMessageAnimation } from '@/provider/message-animation-provider';
 import { useChatMessagesContext } from '@/provider/messages-provider';
+import { useResponseFormatContext } from '@/provider/response-format-provider';
 import { useSuggestionsContext } from '@/provider/suggestions-provider';
 import {
   AuthorType,
@@ -18,7 +19,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, u
 interface MessagesHandlerContextTypes {
   fetchMessages: (payload?: GetChatMessagesPayload) => Promise<RepeatedChatMessage>;
   submitQuestion: (message: string) => Promise<void>;
-  regenerateAnswer: (questionId: number, format?: ResponseFormat) => Promise<void>;
+  regenerateAnswer: (questionId: number) => Promise<void>;
   fetchAnswerStream: (questionId: number, format?: ResponseFormat, onMessage?: (text: string, done?: boolean) => void) => Promise<void>;
   cancelAnswerStream: () => void;
   questionSending: boolean;
@@ -44,11 +45,14 @@ function useMessagesHandler() {
   } = useChatMessagesContext();
 
   const {
+    setResponseFormatWithId,
+  } = useResponseFormatContext();
+
+  const {
     toast,
   } = useToast();
   const { registerAnimation } = useMessageAnimation();
   const { registerFetchSuggestions, startFetchSuggestions } = useSuggestionsContext();
-  const tempResponseFormat = useRef<ResponseFormat>();
   const [questionSending, setQuestionSending] = useState(false);
   const [answerApplying, setAnswerApplying] = useState(false);
   const cancelStreamRef = useRef<() => void>();
@@ -57,7 +61,6 @@ function useMessagesHandler() {
     return () => {
       setQuestionSending(false);
       setAnswerApplying(false);
-      tempResponseFormat.current = undefined;
       cancelStreamRef.current = undefined;
     };
   }, [chatId]);
@@ -94,11 +97,9 @@ function useMessagesHandler() {
 
   }, [insertMessage, registerAnimation]);
 
-  const regenerateAnswer = useCallback(async(questionId: number, format?: ResponseFormat) => {
+  const regenerateAnswer = useCallback(async(questionId: number) => {
     const question = getMessage(questionId);
     const answerId = question?.reply_message_id || questionId + 1;
-
-    tempResponseFormat.current = format;
 
     const newMessages = removeMessages([answerId]);
 
@@ -207,13 +208,15 @@ function useMessagesHandler() {
   }, [removeMessages]);
 
   const fetchAnswerStream = useCallback(async(questionId: number, format?: ResponseFormat, onMessage?: (text: string, done?: boolean) => void) => {
-    const currentFormat = tempResponseFormat.current || format;
-    tempResponseFormat.current = undefined;
 
     const question = getMessage(questionId);
     let answerId = question?.reply_message_id;
     if(!answerId) {
       answerId = questionId + 1;
+    }
+
+    if(format) {
+      setResponseFormatWithId(answerId, format);
     }
 
     const handleMessageProgress = (
@@ -245,7 +248,7 @@ function useMessagesHandler() {
       setAnswerApplying(true);
       const { cancel, streamPromise } = await requestInstance.fetchAnswerStream({
         question_id: questionId,
-        format: currentFormat || {
+        format: format || {
           output_layout: OutputLayout.Paragraph,
           output_content: OutputContent.TEXT,
         },
@@ -272,7 +275,7 @@ function useMessagesHandler() {
       return Promise.reject(e);
 
     }
-  }, [getMessage, saveAnswer, startFetchSuggestions, removeAssistantMessage, requestInstance, toast]);
+  }, [getMessage, setResponseFormatWithId, saveAnswer, startFetchSuggestions, removeAssistantMessage, requestInstance, toast]);
 
   const cancelAnswerStream = useCallback(() => {
     if(cancelStreamRef.current) {
