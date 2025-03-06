@@ -2,7 +2,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useEditorContext } from '@/provider/editor-provider';
 import { Editor, useEditor } from '@appflowyinc/editor';
 import { useEffect } from 'react';
-import '@appflowyinc/editor/style';
 
 import { ErrorBoundary } from 'react-error-boundary';
 
