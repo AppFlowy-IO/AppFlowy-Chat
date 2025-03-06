@@ -18,8 +18,8 @@ export function FormatGroup({
   setOutputContent,
   setOutputLayout,
 }: {
-  outputContent: OutputContent;
-  outputLayout: OutputLayout;
+  outputContent?: OutputContent;
+  outputLayout?: OutputLayout;
   setOutputContent: (content: OutputContent) => void;
   setOutputLayout: (layout: OutputLayout) => void;
 }) {

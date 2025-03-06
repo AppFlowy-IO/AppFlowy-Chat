@@ -1,16 +1,17 @@
+import RegenerateIcon from '@/assets/icons/change-font.svg?react';
+import ChevronIcon from '@/assets/icons/chevron.svg?react';
+import RegenerateCircleIcon from '@/assets/icons/regenerate-circle.svg?react';
+import TryAgainIcon from '@/assets/icons/undo.svg?react';
 import { FormatGroup } from '@/components/chat-input/format-group';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import RegenerateIcon from '@/assets/icons/change-font.svg?react';
 import { useTranslation } from '@/i18n';
 import { useMessagesHandlerContext } from '@/provider/messages-handler-provider';
 import { useChatMessagesContext } from '@/provider/messages-provider';
-import { OutputContent, OutputLayout, ResponseFormat } from '@/types';
+import { useResponseFormatContext } from '@/provider/response-format-provider';
+import { OutputContent, OutputLayout } from '@/types';
 import { useCallback, useState } from 'react';
-import RegenerateCircleIcon from '@/assets/icons/regenerate-circle.svg?react';
-import TryAgainIcon from '@/assets/icons/undo.svg?react';
-import ChevronIcon from '@/assets/icons/chevron.svg?react';
 
 export function Regenerations({ id }: {
   id: number;
@@ -19,12 +20,17 @@ export function Regenerations({ id }: {
   const {
     messageIds,
   } = useChatMessagesContext();
+  const {
+    setResponseFormat,
+    getMessageResponseFormat,
+  } = useResponseFormatContext();
 
   const { regenerateAnswer } = useMessagesHandlerContext();
 
-  const [outputContent, setOutputContent] = useState<OutputContent>(OutputContent.TEXT);
-  const [outputLayout, setOutputLayout] = useState<OutputLayout>(OutputLayout.BulletList);
-  const regenerate = useCallback((format?: ResponseFormat) => {
+  const [outputContent, setOutputContent] = useState<OutputContent | undefined>(getMessageResponseFormat(id)?.output_content);
+  const [outputLayout, setOutputLayout] = useState<OutputLayout | undefined>(getMessageResponseFormat(id)?.output_layout);
+
+  const regenerate = useCallback(() => {
     const index = messageIds.indexOf(id);
     if(index < 0) {
       return;
@@ -32,7 +38,7 @@ export function Regenerations({ id }: {
 
     const questionId = id - 1;
 
-    void regenerateAnswer(questionId, format);
+    void regenerateAnswer(questionId);
   }, [id, messageIds, regenerateAnswer]);
   return (
     <>
@@ -108,7 +114,10 @@ export function Regenerations({ id }: {
           <FormatGroup
             outputContent={outputContent}
             outputLayout={outputLayout}
-            setOutputContent={setOutputContent}
+            setOutputContent={content => {
+              setOutputContent(content);
+              setOutputLayout(OutputLayout.Paragraph);
+            }}
             setOutputLayout={setOutputLayout}
           />
           <Tooltip>
@@ -116,11 +125,17 @@ export function Regenerations({ id }: {
               <Button
                 variant={'link'}
                 size={'icon'}
+                disabled={(outputContent === undefined) || (outputLayout === undefined)}
                 onClick={() => {
-                  void regenerate({
+                  if(outputContent === undefined || outputLayout === undefined) {
+                    return;
+                  }
+
+                  setResponseFormat({
                     output_content: outputContent,
                     output_layout: outputLayout,
                   });
+                  void regenerate();
                 }}
               >
                 <RegenerateCircleIcon
