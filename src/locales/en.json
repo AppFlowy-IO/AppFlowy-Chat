@@ -62,6 +62,14 @@
       "four": "Recipe with what's in my kitchen",
       "five": "Create an illustration for my page",
       "six": "Draw up a to-do list for my upcoming week"
+    },
+    "writer": {
+      "improve": "Improve writing",
+      "askAI": "Ask AI Anything",
+      "fixSpelling": "Fix spelling & grammar",
+      "explain": "Explain",
+      "makeLonger": "Make longer",
+      "makeShorter": "Make shorter"
     }
   }
 }
