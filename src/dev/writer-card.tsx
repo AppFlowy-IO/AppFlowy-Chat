@@ -5,9 +5,9 @@ import { Label } from '@/components/ui/label';
 import { AIWriterMenu, useAIWriter } from '@/writer';
 
 export function WriterCard() {
-  const { contextPlaceholder } = useAIWriter();
+  const { contextPlaceholder, setInputContext } = useAIWriter();
 
-  return <Card className="w-[350px]">
+  return <div className={'flex flex-col gap-2'}><Card className="w-[350px]">
     <CardHeader>
       <CardTitle>AI Writer</CardTitle>
       <CardDescription>
@@ -22,18 +22,34 @@ export function WriterCard() {
             <Input
               id="input-context"
               placeholder="Context string"
+              onChange={e => setInputContext(e.target.value)}
             />
           </div>
         </div>
       </form>
     </CardContent>
-    <CardFooter className="flex justify-between">
-      <Button variant="outline">Cancel</Button>
-      <AIWriterMenu>
-        <Button>Run</Button>
-      </AIWriterMenu>
+    <CardFooter className="flex flex-col gap-2 items-start">
+      <div className={'flex justify-between w-full'}>
+        <Button variant="outline">Cancel</Button>
+        <AIWriterMenu>
+          <Button>Run</Button>
+        </AIWriterMenu>
+      </div>
 
     </CardFooter>
-    {contextPlaceholder}
-  </Card>;
+
+
+  </Card>
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Output Content</CardTitle>
+        <CardDescription>
+          The generated content will be displayed here.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {contextPlaceholder}
+      </CardContent>
+    </Card>
+  </div>;
 }

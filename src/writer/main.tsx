@@ -1,5 +1,5 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useWriterContext } from '@/writer/provider';
+import { useWriterContext } from '@/provider/ai-assistant-provider';
 import { Editor, useEditor } from '@appflowyinc/editor';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -11,6 +11,7 @@ export function Main() {
   const editor = useEditor();
 
   useEffect(() => {
+    console.log('applyMarkdown', placeholderContent);
     editor.applyMarkdown(placeholderContent || '');
   }, [placeholderContent, editor]);
 

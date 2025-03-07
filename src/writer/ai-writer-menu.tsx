@@ -1,6 +1,7 @@
 import { AiWriterMenuContent } from '@/components/ai-writer-menu/ai-writer-menu-content';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChatI18nContext, getI18n, initI18n } from '@/i18n/config';
+import { useState } from 'react';
 
 initI18n();
 
@@ -13,13 +14,18 @@ interface AIWriterMenuProps {
 export function AIWriterMenu({
   children,
 }: AIWriterMenuProps) {
-  return <Popover modal>
+  const [open, setOpen] = useState(false);
+  return <Popover
+    open={open}
+    onOpenChange={setOpen}
+    modal
+  >
     <PopoverTrigger asChild={true}>
       {children}
     </PopoverTrigger>
     <PopoverContent>
       <ChatI18nContext.Provider value={i18n}>
-        <AiWriterMenuContent />
+        <AiWriterMenuContent onClicked={() => setOpen(false)} />
       </ChatI18nContext.Provider>
     </PopoverContent>
   </Popover>;

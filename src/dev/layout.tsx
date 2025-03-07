@@ -117,7 +117,7 @@ function Layout() {
             <Separator />
             <Button
               onClick={() => {
-                navigate('writer');
+                navigate(`/${workspaceId}/${chatId}/writer`);
               }}
             >
               AI Writer
