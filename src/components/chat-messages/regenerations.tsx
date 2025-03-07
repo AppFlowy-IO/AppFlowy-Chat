@@ -2,7 +2,7 @@ import RegenerateIcon from '@/assets/icons/change-font.svg?react';
 import ChevronIcon from '@/assets/icons/chevron.svg?react';
 import RegenerateCircleIcon from '@/assets/icons/regenerate-circle.svg?react';
 import TryAgainIcon from '@/assets/icons/undo.svg?react';
-import { FormatGroup } from '@/components/chat-input/format-group';
+import { FormatGroup } from '@/components/ui/format-group';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';

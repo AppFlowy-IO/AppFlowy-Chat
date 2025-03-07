@@ -1,9 +1,18 @@
 import { ContextPlaceholder } from '@/writer/context-placeholder';
-import { useWriterContext } from '@/writer/provider';
+import { useWriterContext } from '@/provider/ai-assistant-provider';
 import { useMemo } from 'react';
 
 export function useAIWriter() {
-  const context = useWriterContext();
+  const {
+    continueWriting,
+    askAIAnything,
+    improveWriting,
+    explain,
+    makeLonger,
+    makeShorter,
+    fixSpelling,
+    setInputContext,
+  } = useWriterContext();
 
   const contextPlaceholder = useMemo(() => {
     return <ContextPlaceholder />;
@@ -11,5 +20,13 @@ export function useAIWriter() {
 
   return {
     contextPlaceholder,
+    continueWriting,
+    askAIAnything,
+    improveWriting,
+    explain,
+    makeLonger,
+    makeShorter,
+    fixSpelling,
+    setInputContext,
   };
 }

@@ -1,5 +1,5 @@
 import Chat from '@/chat';
-import { ChatRequest } from '@/request';
+import { ChatRequest } from '@/request/chat-request';
 import { User } from '@/types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';

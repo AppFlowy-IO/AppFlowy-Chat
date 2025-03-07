@@ -15,7 +15,7 @@ export default function App() {
           element={<AiChat />}
         />
         <Route
-          path={'writer'}
+          path={':workspaceId/:chatId/writer'}
           element={<AIWriter />}
         />
       </Route>
