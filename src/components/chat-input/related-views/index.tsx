@@ -49,7 +49,7 @@ export function RelatedViews() {
     <Popover modal>
       <PopoverTrigger asChild={true}>
         <Button
-          className={'text-sm'}
+          className={'text-sm h-7 p-1.5'}
           startIcon={
             <span className={'text-foreground'}><DocIcon /></span>
           }
