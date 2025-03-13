@@ -1,6 +1,7 @@
 import { useChatContext } from '@/chat/context';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from '@/i18n';
 import { MESSAGE_VARIANTS } from '@/lib/animations';
 import { useMessagesHandlerContext } from '@/provider/messages-handler-provider';
@@ -22,20 +23,18 @@ const EmptySuggestions = () => {
 
 export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
   const { t } = useTranslation();
-  const {
-    selectionMode,
-  } = useChatContext();
+  const { selectionMode } = useChatContext();
   const { submitQuestion } = useMessagesHandlerContext();
 
-  const handleClick = async(content: string) => {
+  const handleClick = async (content: string) => {
     try {
       await submitQuestion(content);
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   };
 
-  if(selectionMode) {
+  if (selectionMode) {
     return null;
   }
 
@@ -47,24 +46,34 @@ export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
       className={'flex flex-col gap-4 w-full overflow-hidden mr-auto'}
     >
       <Label className={'opacity-60'}>{t('suggestion.title')}</Label>
-      <div className={'flex gap-2 flex-col items-start w-full overflow-hidden'}>
-        {suggestions.items.length === 0 ? <EmptySuggestions /> : suggestions.items.map((suggestion, index) => (
-          <Button
-            key={index}
-            className={'w-full justify-start overflow-hidden'}
-            onClick={() => handleClick(suggestion.content)}
-            startIcon={
-              <span className={'text-primary'}>
-              <ChatIcon />
-            </span>
-            }
-            variant={'ghost'}
-          >
-            <span className={'truncate !text-foreground/85'}>{suggestion.content}</span>
-          </Button>
-        ))}
-      </div>
+      <TooltipProvider>
+        <div className={'flex gap-2 flex-col items-start w-full overflow-hidden'}>
+          {suggestions.items.length === 0 ? (
+            <EmptySuggestions />
+          ) : (
+            suggestions.items.map((suggestion, index) => (
+              <Tooltip disableHoverableContent={true}>
+                <TooltipTrigger asChild>
+                  <Button
+                    key={index}
+                    className={'w-full justify-start overflow-hidden'}
+                    onClick={() => handleClick(suggestion.content)}
+                    startIcon={
+                      <span className={'text-primary'}>
+                        <ChatIcon />
+                      </span>
+                    }
+                    variant={'ghost'}
+                  >
+                    <span className={'truncate !text-foreground/85'}>{suggestion.content}</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{suggestion.content}</TooltipContent>
+              </Tooltip>
+            ))
+          )}
+        </div>
+      </TooltipProvider>
     </motion.div>
   );
 }
-
