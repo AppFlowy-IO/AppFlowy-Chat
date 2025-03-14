@@ -13,4 +13,5 @@ export interface ChatProps {
   selectionMode?: boolean;
   onOpenSelectionMode?: () => void;
   onCloseSelectionMode?: () => void;
+  onUpdateHasMessages?: (hasMessages: boolean) => void;
 }

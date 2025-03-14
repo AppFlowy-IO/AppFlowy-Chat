@@ -1,5 +1,5 @@
 import { useChatContext } from '@/chat/context';
-import { ChatMessage, ChatMessageMetadata } from '@/types';
+import { AuthorType, ChatMessage, ChatMessageMetadata } from '@/types';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 export interface ChatMessagesContextTypes {
@@ -16,16 +16,14 @@ export const ChatMessagesContext = createContext<ChatMessagesContextTypes | unde
 export function useChatMessagesContext() {
   const context = useContext(ChatMessagesContext);
 
-  if(!context) {
+  if (!context) {
     throw new Error('useMessagesManager: useMessagesManager must be used within a ChatMessagesProvider');
   }
   return context;
 }
 
 export const ChatMessagesProvider = ({ children }: { children: ReactNode }) => {
-  const {
-    chatId,
-  } = useChatContext();
+  const { chatId, onUpdateHasMessages } = useChatContext();
   const [messageIds, setMessageIds] = useState<number[]>([]);
   const messagesRef = useRef<ChatMessage[]>([]);
 
@@ -40,13 +38,19 @@ export const ChatMessagesProvider = ({ children }: { children: ReactNode }) => {
     return messagesRef.current.find((message) => message.message_id === id);
   }, []);
 
-  const addMessages = useCallback((messages: ChatMessage[]) => {
-    for(const message of messages) {
-      messagesRef.current.push(message);
-    }
+  const addMessages = useCallback(
+    (messages: ChatMessage[]) => {
+      for (const message of messages) {
+        messagesRef.current.push(message);
+      }
 
-    setMessageIds(messagesRef.current.map((message) => message.message_id));
-  }, []);
+      if (messages.find((m) => m.author.author_type === AuthorType.AI)) {
+        onUpdateHasMessages?.(true);
+      }
+      setMessageIds(messagesRef.current.map((message) => message.message_id));
+    },
+    [onUpdateHasMessages],
+  );
 
   const removeMessages = useCallback((ids: number[]) => {
     messagesRef.current = messagesRef.current.filter((message) => !ids.includes(message.message_id));
@@ -56,25 +60,26 @@ export const ChatMessagesProvider = ({ children }: { children: ReactNode }) => {
     return messagesRef.current;
   }, []);
 
-  const insertMessage = useCallback((message: ChatMessage, index: number) => {
-    const newMessage = [...messagesRef.current];
-    newMessage.splice(index, 0, message);
-    messagesRef.current = newMessage;
-    setMessageIds(messagesRef.current.map((message) => message.message_id));
-  }, []);
-
-  const saveMessageContent = useCallback(
-    (messageId: number, content: string, metadata: ChatMessageMetadata[]) => {
-      const message = messagesRef.current.find(
-        (message) => message.message_id === messageId
-      );
-      if(message) {
-        message.content = content;
-        message.meta_data = [...metadata];
+  const insertMessage = useCallback(
+    (message: ChatMessage, index: number) => {
+      const newMessages = [...messagesRef.current];
+      newMessages.splice(index, 0, message);
+      messagesRef.current = newMessages;
+      if (newMessages.some((m) => m.author.author_type === AuthorType.AI)) {
+        onUpdateHasMessages?.(true);
       }
+      setMessageIds(messagesRef.current.map((message) => message.message_id));
     },
-    []
+    [onUpdateHasMessages],
   );
+
+  const saveMessageContent = useCallback((messageId: number, content: string, metadata: ChatMessageMetadata[]) => {
+    const message = messagesRef.current.find((message) => message.message_id === messageId);
+    if (message) {
+      message.content = content;
+      message.meta_data = [...metadata];
+    }
+  }, []);
 
   return (
     <ChatMessagesContext.Provider
