@@ -70,7 +70,7 @@ export function ChatInput() {
 
     // adjust container height
     if(containerRef.current) {
-      containerRef.current.style.height = `${newHeight + (responseMode === ChatInputMode.FormatResponse ? 54 + 24 : 30 + 16)}px`; // 32px padding
+      containerRef.current.style.height = `${newHeight + (responseMode === ChatInputMode.FormatResponse ? 54 + 20 : 30 + 16)}px`; // 32px padding
     }
   }, [responseMode]);
 
@@ -178,7 +178,7 @@ export function ChatInput() {
             setFocused(false);
           }}
           rows={1}
-          className={'resize-none caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none'}
+          className={'resize-none caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none text-[14px]'}
         />
 
         <div className={'flex justify-between items-center gap-4'}>
