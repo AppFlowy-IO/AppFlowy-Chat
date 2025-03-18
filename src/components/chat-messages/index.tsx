@@ -148,7 +148,7 @@ export function ChatMessages({ currentUser }: {
             onClick={() => {
               scrollToBottom();
             }}
-            className="w-8 h-8 rounded-full shadow-md"
+            className="w-8 h-8 rounded-full shadow-menu"
           >
             <ArrowDown size={24} />
           </Button>

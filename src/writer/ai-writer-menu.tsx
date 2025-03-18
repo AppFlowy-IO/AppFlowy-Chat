@@ -1,32 +1,45 @@
-import { AiWriterMenuContent } from '@/components/ai-writer-menu/ai-writer-menu-content';
+import { AiWriterMenuContent } from '@/components/ai-writer/ai-writer-menu-content';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ChatI18nContext, getI18n, initI18n } from '@/i18n/config';
-import { useState } from 'react';
-
-initI18n();
-
-const i18n = getI18n();
+import { AIAssistantType } from '@/types';
 
 interface AIWriterMenuProps {
   children?: React.ReactNode;
+  onItemClicked?: (type: AIAssistantType) => void;
+  isFilterOut?: (type: AIAssistantType) => boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  input: string;
 }
 
 export function AIWriterMenu({
   children,
+  open,
+  onOpenChange,
+  ...props
 }: AIWriterMenuProps) {
-  const [open, setOpen] = useState(false);
   return <Popover
     open={open}
-    onOpenChange={setOpen}
     modal
+    onOpenChange={onOpenChange}
   >
-    <PopoverTrigger asChild={true}>
+    <PopoverTrigger
+      asChild={true}
+    >
       {children}
     </PopoverTrigger>
-    <PopoverContent>
-      <ChatI18nContext.Provider value={i18n}>
-        <AiWriterMenuContent onClicked={() => setOpen(false)} />
-      </ChatI18nContext.Provider>
+    <PopoverContent
+      onOpenAutoFocus={e => e.preventDefault()}
+      onCloseAutoFocus={e => e.preventDefault()}
+      className={'min-w-[240px] !p-2'}
+    >
+      <AiWriterMenuContent
+        {...props}
+        onClicked={(type) => {
+          props.onItemClicked?.(type);
+          onOpenChange?.(false);
+        }}
+      />
+
     </PopoverContent>
   </Popover>;
 }

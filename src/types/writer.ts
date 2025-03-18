@@ -7,3 +7,14 @@ export enum AIAssistantType {
   Explain = 6,
   AskAIAnything = 7
 }
+
+export enum CompletionRole {
+  AI = 'ai',
+  Human = 'human'
+}
+
+export interface CompletionResult {
+  role: CompletionRole;
+  content: string;
+}
+

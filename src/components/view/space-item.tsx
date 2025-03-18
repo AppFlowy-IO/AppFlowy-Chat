@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTranslation } from '@/i18n';
-import { cn, getIcon, renderColor } from '@/lib/utils';
+import { cn, getIcon, renderColor, stringToColor } from '@/lib/utils';
 import { View } from '@/types';
 import ChevronDown from '@/assets/icons/drop_menu_show.svg?react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
@@ -11,13 +11,17 @@ function SpaceItem({
   view,
   extraNode,
   children,
+  getInitialExpand,
 }: {
   view: View;
   extraNode?: ReactNode;
   children?: ReactNode;
+  getInitialExpand?: (viewId: string) => boolean;
 }) {
   const { t } = useTranslation();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(() => {
+    return getInitialExpand?.(view.view_id) || false;
+  });
 
   const [iconSvg, setIconSvg] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -39,19 +43,19 @@ function SpaceItem({
 
     const cleanSvg = iconSvg ? DOMPurify.sanitize(iconSvg.replace('black', 'white').replace('<svg', '<svg width="100%" height="100%"'), {
       USE_PROFILES: { svg: true, svgFilters: true },
-    }) : '';
+    }) : null;
 
     return <span
       style={{
-        backgroundColor: view.extra?.space_icon_color ? renderColor(view.extra?.space_icon_color) : undefined,
+        backgroundColor: view.extra?.space_icon_color ? renderColor(view.extra?.space_icon_color) : stringToColor(view.name),
       }}
       className={cn('flex w-[18px] h-[18px] p-1 rounded-md items-center justify-center')}
-    ><span
+    >{cleanSvg ? <span
       dangerouslySetInnerHTML={{
         __html: cleanSvg,
       }}
-    /></span>;
-  }, [iconSvg, view.extra?.space_icon_color]);
+    /> : <span className={'text-primary-foreground'}>{view.name.slice(0, 1)}</span>}</span>;
+  }, [iconSvg, view.extra?.space_icon_color, view.name]);
 
   const ToggleButton = useMemo(() => {
     return view.children.length > 0 ? (

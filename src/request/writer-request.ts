@@ -4,7 +4,15 @@ import {
   readableStreamToAsyncIterator,
   requestInterceptor,
 } from '@/lib/requets';
-import { AIAssistantType, OutputContent, OutputLayout, ResponseFormat } from '@/types';
+import {
+  AIAssistantType,
+  CompletionResult,
+  OutputContent,
+  OutputLayout,
+  ResponseFormat,
+  StreamType,
+  View,
+} from '@/types';
 import { AxiosInstance } from 'axios';
 
 export class WriterRequest {
@@ -30,9 +38,10 @@ export class WriterRequest {
     assistantType: AIAssistantType;
     format?: ResponseFormat;
     ragIds: string[];
-  }, onMessage: (text: string, done?: boolean) => void) => {
+    completionHistory: CompletionResult[]
+  }, onMessage: (text: string, comment: string, done?: boolean) => void) => {
     const baseUrl = this.axiosInstance.defaults.baseURL;
-    const url = `${baseUrl}/api/ai/${this.workspaceId}/complete/stream`;
+    const url = `${baseUrl}/api/ai/${this.workspaceId}/v2/complete/stream`;
 
     const token = getAccessToken(); // Assume this function returns a valid token
 
@@ -41,7 +50,6 @@ export class WriterRequest {
     const cancel = () => {
       reader?.cancel();
       reader?.releaseLock();
-      console.log('Stream canceled');
     };
 
     const response = await fetch(url, {
@@ -61,6 +69,7 @@ export class WriterRequest {
           object_id: this.viewId,
           workspace_id: this.workspaceId,
           rag_ids: payload.ragIds.length === 0 ? [this.viewId] : payload.ragIds,
+          completion_history: payload.completionHistory,
         },
       }),
     });
@@ -86,17 +95,58 @@ export class WriterRequest {
         throw new Error('Failed to get reader');
       }
       const decoder = new TextDecoder();
+      let buffer = '';
       let text = '';
+      let comment = '';
 
       try {
         for await (const chunk of readableStreamToAsyncIterator(reader)) {
-          const chunkText = decoder.decode(chunk, { stream: true });
-          text += chunkText;
+          buffer += decoder.decode(chunk, { stream: true });
 
-          onMessage(text, false);
+          while(buffer.length > 0) {
+            const openBraceIndex = buffer.indexOf('{');
+            if(openBraceIndex === -1) break;
+
+            let closeBraceIndex = -1;
+            let depth = 0;
+
+            for(let i = openBraceIndex; i < buffer.length; i++) {
+              if(buffer[i] === '{') depth++;
+              if(buffer[i] === '}') depth--;
+              if(depth === 0) {
+                closeBraceIndex = i;
+                break;
+              }
+            }
+
+            if(closeBraceIndex === -1) break;
+
+            const jsonStr = buffer.slice(openBraceIndex, closeBraceIndex + 1);
+            try {
+              const data = JSON.parse(jsonStr);
+              Object.entries(data).forEach(([key, value]) => {
+                if(key === StreamType.META_DATA || key === StreamType.KEEP_ALIVE_KEY) {
+                  return;
+                }
+
+                if(key === StreamType.COMMENT) {
+                  comment += value;
+                  return;
+                }
+
+                text += value;
+              });
+
+              onMessage(text, comment, false);
+            } catch(e) {
+              console.error('Failed to parse JSON:', e);
+            }
+
+            buffer = buffer.slice(closeBraceIndex + 1);
+          }
         }
 
-        onMessage(text, true);
+        onMessage(text, comment, true);
 
       } catch(error) {
         console.error('Stream reading error:', error);
@@ -111,5 +161,21 @@ export class WriterRequest {
     })();
 
     return { cancel, streamPromise };
+  };
+
+  fetchViews = async() => {
+    const url = `/api/workspace/${this.workspaceId}/folder?depth=10`;
+
+    const res = await this.axiosInstance.get<{
+      code: number;
+      data: View;
+      message: string;
+    }>(url);
+
+    if(res?.data.code === 0) {
+      return res.data.data;
+    }
+
+    return Promise.reject(res?.data);
   };
 }

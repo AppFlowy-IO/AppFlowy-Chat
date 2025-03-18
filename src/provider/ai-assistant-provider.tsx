@@ -1,123 +1,354 @@
+import { ConfirmDiscard } from '@/components/ai-writer/confirm-discard';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { toast } from '@/hooks/use-toast';
+import { useTranslation } from '@/i18n';
+import { ChatI18nContext, getI18n, initI18n } from '@/i18n/config';
 import { WriterRequest } from '@/request';
-import { AIAssistantType } from '@/types/writer';
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
+import {
+  AIAssistantType,
+  ChatInputMode,
+  CompletionResult,
+  CompletionRole,
+  OutputContent,
+  OutputLayout,
+  ResponseFormat,
+} from '@/types';
+import { ApplyingState, WriterContext } from '@/writer/context';
+import { EditorData } from '@appflowyinc/editor';
+import { findLast } from 'lodash-es';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
-interface WriterContextTypes {
-  // generate a new answer markdown string
-  placeholderContent?: string;
-  setPlaceholderContent: (content: string) => void;
+initI18n();
 
-  // generating a new answer
-  isFetching: boolean;
-  assistantType: AIAssistantType;
-  setInputContext: (content: string) => void;
-  improveWriting: (content?: string) => void;
-  askAIAnything: (content?: string) => void;
-  continueWriting: (content?: string) => void;
-  explain: (content?: string) => void;
-  fixSpelling: (content?: string) => void;
-  makeLonger: (content?: string) => void;
-  makeShorter: (content?: string) => void;
+const i18n = getI18n();
 
-}
-
-const WriterContext = createContext<WriterContextTypes | undefined>(undefined);
-
-export function useWriterContext() {
-  const context = useContext(WriterContext);
-
-  if(!context) {
-    throw new Error('useWriterContext must be used within a WriterProvider');
-  }
-
-  return context;
-}
-
-export const AIAssistantProvider = ({ request, children }: { children: ReactNode; request: WriterRequest }) => {
-  const [inputContext, setInputContext] = useState<string>('');
+export const AIAssistantProvider = ({
+  isGlobalDocument,
+  viewId,
+  request,
+  children,
+  onReplace,
+  onInsertBelow,
+  onExit,
+  scrollContainer,
+}: {
+  viewId: string,
+  children: ReactNode;
+  request: WriterRequest;
+  onInsertBelow?: (data: EditorData) => void;
+  onReplace?: (data: EditorData) => void;
+  onExit?: () => void;
+  isGlobalDocument?: boolean;
+  scrollContainer?: HTMLElement;
+}) => {
+  const { t } = useTranslation();
+  const completionHistoryRef = useRef<CompletionResult[]>([]);
   const [placeholderContent, setPlaceholderContent] = useState<string>('');
-  const [assistantType, setAssistantType] = useState<AIAssistantType>(AIAssistantType.AskAIAnything);
+  const [comment, setComment] = useState<string>('');
+  const [error, setError] = useState<{
+    code: number;
+    message: string;
+  } | null>(null);
+  const [editorData, setEditorData] = useState<EditorData>();
+  const [assistantType, setAssistantType] = useState<AIAssistantType | undefined>(undefined);
+  const lastAssistantTypeRef = useRef<AIAssistantType | undefined>(undefined);
   const [isFetching, setFetching] = useState<boolean>(false);
-  const [isApplying, setApplying] = useState<boolean>(false);
+  const [responseMode, setResponseMode] = useState<ChatInputMode>(ChatInputMode.Auto);
+  const [responseFormat, setResponseFormat] = useState<ResponseFormat>({
+    output_layout: OutputLayout.BulletList,
+    output_content: OutputContent.TEXT,
+  });
 
-  const handleMessageChange = useCallback((text: string, done?: boolean) => {
+  const [openDiscard, setOpenDiscard] = useState<boolean>(false);
+  const [ragIds, setRagIds] = useState<string[]>([]);
+  const [applyingState, setApplyingState] = useState<ApplyingState>(ApplyingState.idle);
+  const isApplying = applyingState === ApplyingState.applying;
+  const cancelRef = useRef<(() => void) | undefined>();
+  const initialScrollTopRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if(!assistantType) {
+      cancelRef.current = undefined;
+      completionHistoryRef.current = [];
+      setResponseMode(ChatInputMode.Auto);
+      setError(null);
+      setResponseFormat({
+        output_layout: OutputLayout.BulletList,
+        output_content: OutputContent.TEXT,
+      });
+    }
+  }, [assistantType]);
+
+  const scrollToView = useCallback(() => {
+    if(!initialScrollTopRef.current) {
+      return;
+    }
+
+    const rect = document.getElementById('appflowy-ai-writer')?.getBoundingClientRect();
+
+    if(rect && rect.top < 100) {
+      scrollContainer?.scrollTo({
+        top: initialScrollTopRef.current,
+      });
+    }
+
+    initialScrollTopRef.current = null;
+  }, [scrollContainer]);
+
+  const handleMessageChange = useCallback((text: string, comment: string, done?: boolean) => {
     setFetching(false);
 
     setPlaceholderContent(text);
+    setComment(comment);
+    setApplyingState(ApplyingState.applying);
 
+    if(initialScrollTopRef.current === null) {
+      initialScrollTopRef.current = scrollContainer?.scrollTop || null;
+    }
     if(done) {
-      setApplying(false);
+      cancelRef.current = undefined;
+      setApplyingState(ApplyingState.completed);
+      completionHistoryRef.current.push({
+        role: CompletionRole.AI,
+        content: text,
+      });
     }
 
-  }, []);
-  const improveWriting = useCallback(async(content?: string) => {
-    setAssistantType(AIAssistantType.ImproveWriting);
+  }, [scrollContainer]);
+
+  const fetchRequest = useCallback(async(assistantType: AIAssistantType, content: string) => {
+    // Do not change assistant type if there is already an AI response
+    if(!completionHistoryRef.current.some(item => {
+      return item.role === CompletionRole.AI;
+    })) {
+      lastAssistantTypeRef.current = assistantType;
+      setAssistantType(assistantType);
+    }
+
     setFetching(true);
-    const inputText = content || inputContext;
-    if(content) {
-      setInputContext(content);
+    setError(null);
+    try {
+      setApplyingState(ApplyingState.analyzing);
+      const { cancel, streamPromise } = await request.fetchAIAssistant({
+        inputText: content,
+        assistantType: lastAssistantTypeRef.current || assistantType,
+        format: responseMode === ChatInputMode.FormatResponse ? responseFormat : undefined,
+        ragIds,
+        completionHistory: completionHistoryRef.current,
+      }, handleMessageChange);
+
+      completionHistoryRef.current.push({
+        role: CompletionRole.Human,
+        content,
+      });
+
+      cancelRef.current = cancel;
+      await streamPromise;
+      return cancel;
+      // eslint-disable-next-line
+    } catch(e: any) {
+      setError(e);
+      setApplyingState(ApplyingState.failed);
+    } finally {
+      setFetching(false);
     }
 
-    await request.fetchAIAssistant({
-      inputText,
-      assistantType: AIAssistantType.ImproveWriting,
-      ragIds: [],
-    }, handleMessageChange);
-  }, [handleMessageChange, inputContext, request]);
+    return () => undefined;
 
-  const askAIAnything = useCallback(() => {
+  }, [handleMessageChange, ragIds, request, responseFormat, responseMode]);
+
+  const improveWriting = useCallback(async(content: string) => {
+    return fetchRequest(AIAssistantType.ImproveWriting, content);
+  }, [fetchRequest]);
+
+  const askAIAnything = useCallback((content: string) => {
+    completionHistoryRef.current.push({
+      role: CompletionRole.Human,
+      content,
+    });
     setAssistantType(AIAssistantType.AskAIAnything);
-
   }, []);
 
-  const continueWriting = useCallback(async() => {
-    setAssistantType(AIAssistantType.ContinueWriting);
-    setFetching(true);
+  const askAIAnythingWithRequest = useCallback((content: string) => {
+    setApplyingState(ApplyingState.idle);
+    setPlaceholderContent('');
+    setComment('');
+    setEditorData(undefined);
+    scrollToView();
+    return fetchRequest(AIAssistantType.AskAIAnything, content);
+  }, [scrollToView, fetchRequest]);
 
+  const continueWriting = useCallback(async(content: string) => {
+    return fetchRequest(AIAssistantType.ContinueWriting, content);
+  }, [fetchRequest]);
+
+  const explain = useCallback((content: string) => {
+    return fetchRequest(AIAssistantType.Explain, content);
+  }, [fetchRequest]);
+
+  const fixSpelling = useCallback((content: string) => {
+    return fetchRequest(AIAssistantType.FixSpelling, content);
+  }, [fetchRequest]);
+
+  const makeLonger = useCallback((content: string) => {
+    return fetchRequest(AIAssistantType.MakeLonger, content);
+  }, [fetchRequest]);
+
+  const makeShorter = useCallback((content: string) => {
+    return fetchRequest(AIAssistantType.MakeShorter, content);
+  }, [fetchRequest]);
+
+  const stop = useCallback(() => {
+    cancelRef.current?.();
+    setApplyingState(ApplyingState.idle);
   }, []);
 
-  const explain = useCallback(() => {
-    setAssistantType(AIAssistantType.Explain);
-    setFetching(true);
+  const exit = useCallback((scrollLocked?: boolean) => {
+    cancelRef.current?.();
+    setApplyingState(ApplyingState.idle);
+    cancelRef.current = undefined;
+    completionHistoryRef.current = [];
 
-  }, []);
+    setTimeout(() => {
+      lastAssistantTypeRef.current = undefined;
+      setAssistantType(undefined);
+      setPlaceholderContent('');
+      if(!scrollLocked) {
+        scrollToView();
+      }
+      setComment('');
+      setEditorData(undefined);
+      onExit?.();
+    }, 0);
 
-  const fixSpelling = useCallback(() => {
-    setAssistantType(AIAssistantType.FixSpelling);
-    setFetching(true);
+  }, [onExit, scrollToView]);
 
-  }, []);
+  const keep = useCallback(() => {
+    if(!editorData) {
+      return;
+    }
+    completionHistoryRef.current = [];
 
-  const makeLonger = useCallback(() => {
-    setAssistantType(AIAssistantType.MakeLonger);
-    setFetching(true);
+    if(isGlobalDocument) {
+      onReplace?.(editorData);
+    } else {
+      onInsertBelow?.(editorData);
+    }
+    exit(true);
 
-  }, []);
+  }, [editorData, isGlobalDocument, exit, onReplace, onInsertBelow]);
 
-  const makeShorter = useCallback(() => {
-    setAssistantType(AIAssistantType.MakeShorter);
-    setFetching(true);
+  const accept = useCallback(() => {
+    if(!editorData) {
+      return;
+    }
+    completionHistoryRef.current = [];
+    onReplace?.(editorData);
+    exit(true);
 
+  }, [editorData, onReplace, exit]);
+
+  const rewrite = useCallback(() => {
+    if(!assistantType) {
+      toast({
+        variant: 'destructive',
+        description: t('writer.errors.noAssistantType'),
+      });
+      return;
+    }
+
+    setApplyingState(ApplyingState.idle);
+    setPlaceholderContent('');
+    setComment('');
+    setEditorData(undefined);
+    scrollToView();
+    const content = findLast(completionHistoryRef.current, item => {
+      return item.role === CompletionRole.Human;
+    })?.content || '';
+
+    switch(assistantType) {
+      case AIAssistantType.ImproveWriting:
+        return improveWriting(content);
+      case AIAssistantType.AskAIAnything:
+        return askAIAnythingWithRequest(content);
+      case AIAssistantType.ContinueWriting:
+        return continueWriting(content);
+      case AIAssistantType.Explain:
+        return explain(content);
+      case AIAssistantType.FixSpelling:
+        return fixSpelling(content);
+      case AIAssistantType.MakeLonger:
+        return makeLonger(content);
+      case AIAssistantType.MakeShorter:
+        return makeShorter(content);
+    }
+  }, [scrollToView, assistantType, t, improveWriting, askAIAnythingWithRequest, continueWriting, explain, fixSpelling, makeLonger, makeShorter]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if(e.ctrlKey && e.key === 'c') {
+        stop();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [exit, stop]);
+
+  const hasAIAnswer = useCallback(() => {
+    return completionHistoryRef.current.some((item) => item.role === CompletionRole.AI);
   }, []);
 
   return (
     <WriterContext.Provider
       value={{
+        viewId,
+        fetchViews: request.fetchViews,
         placeholderContent,
-        setPlaceholderContent,
+        comment,
         improveWriting,
         assistantType,
         isFetching,
+        isApplying,
         askAIAnything,
         continueWriting,
         explain,
         fixSpelling,
         makeLonger,
         makeShorter,
-        setInputContext,
+        askAIAnythingWithRequest,
+        setOpenDiscard,
+        applyingState,
+        setRagIds,
+        exit,
+        setEditorData,
+        keep,
+        accept,
+        rewrite,
+        stop,
+        responseMode,
+        setResponseMode,
+        responseFormat,
+        setResponseFormat,
+        isGlobalDocument,
+        error,
+        scrollContainer,
+        hasAIAnswer,
       }}
     >
-      {children}
+
+      <ChatI18nContext.Provider value={i18n}>
+        <TooltipProvider>
+          {children}
+          <ConfirmDiscard
+            open={openDiscard}
+            onClose={() => setOpenDiscard(false)}
+          />
+        </TooltipProvider>
+      </ChatI18nContext.Provider>
     </WriterContext.Provider>
   );
 };
