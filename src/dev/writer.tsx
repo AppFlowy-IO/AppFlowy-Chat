@@ -10,9 +10,13 @@ export function AIWriter() {
     return new WriterRequest(workspaceId, chatId);
   }, [chatId, workspaceId]);
 
+  if(!chatId) return null;
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <AIAssistantProvider request={request}>
+      <AIAssistantProvider
+        viewId={chatId}
+        request={request}
+      >
         <WriterCard />
       </AIAssistantProvider>
     </div>
