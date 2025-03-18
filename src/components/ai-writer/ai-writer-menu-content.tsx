@@ -7,11 +7,15 @@ import FixSpellingIcon from '@/assets/icons/fix-spelling.svg?react';
 import ExplainIcon from '@/assets/icons/explain.svg?react';
 import MakeLongerIcon from '@/assets/icons/make-longer.svg?react';
 import MakeShorterIcon from '@/assets/icons/make-shorter.svg?react';
-import { useWriterContext } from '@/writer';
+import ContinueWritingIcon from '@/assets/icons/continue-writing.svg?react';
+import { AIAssistantType } from '@/types';
+import { useWriterContext } from '@/writer/context';
 import { useMemo } from 'react';
 
-export function AiWriterMenuContent({ onClicked }: {
-  onClicked: () => void;
+export function AiWriterMenuContent({ input, onClicked, isFilterOut }: {
+  onClicked: (type: AIAssistantType) => void;
+  isFilterOut?: (type: AIAssistantType) => boolean;
+  input?: string;
 }) {
   const { t } = useTranslation();
   const {
@@ -21,40 +25,56 @@ export function AiWriterMenuContent({ onClicked }: {
     explain,
     makeLonger,
     makeShorter,
+    continueWriting,
   } = useWriterContext();
 
   const actions = useMemo(() => [{
+    icon: ContinueWritingIcon,
+    label: t('writer.continue'),
+    key: AIAssistantType.ContinueWriting,
+    onClick: continueWriting,
+  }, {
     icon: ImproveWritingIcon,
     label: t('writer.improve'),
-    onClick: improveWriting,
+    key: AIAssistantType.ImproveWriting,
+    onClick: () => improveWriting(input),
   },
     {
+      key: AIAssistantType.AskAIAnything,
       icon: AskAIIcon,
       label: t('writer.askAI'),
       onClick: askAIAnything,
     },
     {
+      key: AIAssistantType.FixSpelling,
       icon: FixSpellingIcon,
       label: t('writer.fixSpelling'),
       onClick: fixSpelling,
     },
     {
+      key: AIAssistantType.Explain,
       icon: ExplainIcon,
       label: t('writer.explain'),
       onClick: explain,
     },
-  ], [askAIAnything, explain, fixSpelling, improveWriting, t]);
+  ].filter(item => {
+    return !isFilterOut || !isFilterOut(item.key);
+  }), [askAIAnything, continueWriting, explain, fixSpelling, improveWriting, input, isFilterOut, t]);
 
   const otherActions = useMemo(() => [{
     icon: MakeLongerIcon,
     label: t('writer.makeLonger'),
     onClick: makeLonger,
+    key: AIAssistantType.MakeLonger,
   },
     {
       icon: MakeShorterIcon,
       label: t('writer.makeShorter'),
       onClick: makeShorter,
-    }], [makeLonger, makeShorter, t]);
+      key: AIAssistantType.MakeShorter,
+    }].filter(item => {
+    return !isFilterOut || !isFilterOut(item.key);
+  }), [makeLonger, makeShorter, t, isFilterOut]);
 
   return <div className="flex flex-col gap-1 p-0.5">
     {actions.map((action, index) => (
@@ -62,26 +82,30 @@ export function AiWriterMenuContent({ onClicked }: {
         key={index}
         onClick={() => {
           action.onClick();
-          onClicked();
+          onClicked(action.key);
         }}
-        className={'w-full justify-start text-foreground/80 !font-normal'}
+        className={'w-full justify-start !text-foreground/80 !font-normal'}
         variant={'ghost'}
+        onMouseDown={e => e.preventDefault()}
         startIcon={<action.icon />}
       >{action.label}
       </Button>
     ))}
-    <Separator />
+    {otherActions.length > 0 && <Separator />}
+
     {
       otherActions.map((action, index) => (
         <Button
           onClick={() => {
             action.onClick();
-            onClicked();
+            onClicked(action.key);
           }}
           key={index}
-          className={'w-full justify-start text-foreground/80 !font-normal'}
+          className={'w-full justify-start !text-foreground/80 !font-normal'}
           variant={'ghost'}
           startIcon={<action.icon />}
+          onMouseDown={e => e.preventDefault()}
+
         >{action.label}
         </Button>
       ))

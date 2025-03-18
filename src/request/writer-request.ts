@@ -4,7 +4,7 @@ import {
   readableStreamToAsyncIterator,
   requestInterceptor,
 } from '@/lib/requets';
-import { AIAssistantType, OutputContent, OutputLayout, ResponseFormat } from '@/types';
+import { AIAssistantType, OutputContent, OutputLayout, ResponseFormat, View } from '@/types';
 import { AxiosInstance } from 'axios';
 
 export class WriterRequest {
@@ -111,5 +111,21 @@ export class WriterRequest {
     })();
 
     return { cancel, streamPromise };
+  };
+
+  fetchViews = async() => {
+    const url = `/api/workspace/${this.workspaceId}/folder?depth=10`;
+
+    const res = await this.axiosInstance.get<{
+      code: number;
+      data: View;
+      message: string;
+    }>(url);
+
+    if(res?.data.code === 0) {
+      return res.data.data;
+    }
+
+    return Promise.reject(res?.data);
   };
 }

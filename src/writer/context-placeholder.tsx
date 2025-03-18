@@ -1,26 +1,26 @@
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { ChatI18nContext, getI18n, initI18n } from '@/i18n/config';
+import { AIAssistant } from '@/components/ai-writer';
+import { RenderEditor } from '@/components/ai-writer/render-editor';
 import { Toaster } from '@/components/ui/toaster';
-import { Main } from '@/writer/main';
+import { AIAssistantType } from '@/types';
+import { useWriterContext } from '@/writer/context';
 import { EditorProvider } from '@appflowyinc/editor';
 
-initI18n();
-
-const i18n = getI18n();
-
 export function ContextPlaceholder() {
+  const {
+    assistantType,
+  } = useWriterContext();
+
+  if(assistantType === undefined) return null;
 
   return <div
     id={'appflowy-ai-writer'}
     className={'w-full h-full overflow-hidden'}
   >
-    <ChatI18nContext.Provider value={i18n}>
-      <TooltipProvider>
-        <EditorProvider>
-          <Main />
-        </EditorProvider>
-      </TooltipProvider>
-      <Toaster />
-    </ChatI18nContext.Provider>
+    <AIAssistant>
+      {assistantType === AIAssistantType.Explain ? <div /> : <EditorProvider>
+        <RenderEditor />
+      </EditorProvider>}
+    </AIAssistant>
+    <Toaster />
   </div>;
 }

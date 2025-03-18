@@ -1,22 +1,24 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useWriterContext } from '@/provider/ai-assistant-provider';
+
+import { useWriterContext } from '@/writer/context';
 import { Editor, useEditor } from '@appflowyinc/editor';
 import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-export function Main() {
+export function RenderEditor() {
   const {
     placeholderContent,
+    setEditorData,
   } = useWriterContext();
   const editor = useEditor();
 
   useEffect(() => {
-    console.log('applyMarkdown', placeholderContent);
     editor.applyMarkdown(placeholderContent || '');
-  }, [placeholderContent, editor]);
+    setEditorData(editor.getData());
+  }, [placeholderContent, editor, setEditorData]);
 
   return (
-    <div className={'relative w-full h-full'}>
+    <div className={'relative text-left w-full h-full'}>
       <ErrorBoundary
         fallback={<Alert variant={'destructive'}>
           <AlertDescription>
@@ -24,10 +26,10 @@ export function Main() {
           </AlertDescription>
         </Alert>}
       >
-        {placeholderContent && <Editor readOnly />}
+        {placeholderContent &&
+          <Editor readOnly />}
 
       </ErrorBoundary>
-      <div className={'absolute'}></div>
     </div>
   );
 }

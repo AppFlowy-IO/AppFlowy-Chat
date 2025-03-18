@@ -70,3 +70,4 @@ function PageIcon({ view }: {
 }
 
 export default PageIcon;
+

@@ -24,7 +24,7 @@
   --accent-foreground: 240 5.9% 10%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
-  --success: 120 100% 50%;
+  --success: 136, 57%, 35%;
   --border: 216, 12%, 83%;
   --input: 240 5.9% 90%;
   --ring: 195 100% 47%;
@@ -159,7 +159,8 @@
   @include hidden-scrollbar;
 }
 
-#appflowy-chat {
+
+#appflowy-chat, #ai-assistant {
   #appflowy-editor > div {
     padding-left: 4px;
     padding-right: 4px;

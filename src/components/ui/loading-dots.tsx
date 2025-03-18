@@ -1,12 +1,13 @@
 export default function LoadingDots({
   className,
   colors = ['#00b5ff', '#e3006d', '#f7931e'],
+  ...props
 }: {
   className?: string;
   colors?: [string, string, string];
-}) {
+} & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={className}>
+    <div className={className} {...props}>
       <div
         style={{
           width: `30px`,

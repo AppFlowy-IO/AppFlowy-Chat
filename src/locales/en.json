@@ -64,12 +64,34 @@
       "six": "Draw up a to-do list for my upcoming week"
     },
     "writer": {
+      "continue": "Continue writing",
       "improve": "Improve writing",
       "askAI": "Ask AI Anything",
       "fixSpelling": "Fix spelling & grammar",
       "explain": "Explain",
       "makeLonger": "Make longer",
-      "makeShorter": "Make shorter"
+      "makeShorter": "Make shorter",
+      "discard": "Discard",
+      "confirm-discard": "Are you sure you want to discard the AI generated response?",
+      "current-page": "Current Page",
+      "editing": "Editing....",
+      "analyzing": "Analyzing....",
+      "button": {
+        "discard": "Discard",
+        "cancel": "Cancel",
+        "keep": "Keep",
+        "rewrite": "Rewrite",
+        "more": "More",
+        "insert-below": "Insert Below",
+        "accept": "Accept",
+        "try-again": "Try Again",
+        "close": "Close",
+        "retry": "Retry."
+      },
+      "errors": {
+        "noAssistantType": "No assistant type selected",
+        "connection": "Connection lost. Please check your internet and"
+      }
     }
   }
 }

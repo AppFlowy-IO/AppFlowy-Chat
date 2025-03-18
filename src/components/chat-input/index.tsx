@@ -43,7 +43,6 @@ export function ChatInput() {
 
   const {
     chatId,
-
   } = useChatContext();
 
   const disabled = questionSending;
@@ -178,7 +177,7 @@ export function ChatInput() {
             setFocused(false);
           }}
           rows={1}
-          className={'resize-none caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none'}
+          className={'resize-none !text-sm caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none'}
         />
 
         <div className={'flex justify-between items-center gap-4'}>

@@ -73,7 +73,7 @@ export function RelatedViews() {
               onToggle={
                 (view: View) => {
                   const ids = toggleNode(view);
-                  handleToggle(Array.from(ids));
+                  void handleToggle(Array.from(ids));
                 }
               }
             />
