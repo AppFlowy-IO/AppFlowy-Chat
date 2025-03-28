@@ -3,7 +3,7 @@ import AutoTextIcon from '@/assets/icons/auto-text.svg?react';
 import ImageTextIcon from '@/assets/icons/image-text.svg?react';
 import StopIcon from '@/assets/icons/stop.svg?react';
 import { useChatContext } from '@/chat/context';
-import { FormatGroup } from '@/components/chat-input/format-group';
+import { FormatGroup } from '@/components/ui/format-group';
 import { RelatedViews } from '@/components/chat-input/related-views';
 import { Button } from '@/components/ui/button';
 import LoadingDots from '@/components/ui/loading-dots';
@@ -43,7 +43,6 @@ export function ChatInput() {
 
   const {
     chatId,
-
   } = useChatContext();
 
   const disabled = questionSending;
@@ -178,7 +177,7 @@ export function ChatInput() {
             setFocused(false);
           }}
           rows={1}
-          className={'resize-none caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none text-[14px]'}
+          className={'resize-none !text-sm caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none'}
         />
 
         <div className={'flex justify-between items-center gap-4'}>

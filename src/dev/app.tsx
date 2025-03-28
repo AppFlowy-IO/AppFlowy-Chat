@@ -1,18 +1,24 @@
 import AiChat from '@/dev/chat';
 import Layout from '@/dev/layout';
+import { AIWriter } from '@/dev/writer';
 import { Routes, Route } from 'react-router-dom';
-import '@appflowyinc/editor/style';
 
 export default function App() {
-  return <Routes>
-    <Route
-      path={'/'}
-      element={<Layout />}
-    >
+  return (
+    <Routes>
       <Route
-        path={'/:workspaceId/:chatId'}
-        element={<AiChat />}
-      />
-    </Route>
-  </Routes>;
+        path="/"
+        element={<Layout />}
+      >
+        <Route
+          path={':workspaceId/:chatId'}
+          element={<AiChat />}
+        />
+        <Route
+          path={':workspaceId/:chatId/writer'}
+          element={<AIWriter />}
+        />
+      </Route>
+    </Routes>
+  );
 }

@@ -1,15 +1,18 @@
 export default function LoadingDots({
   className,
   colors = ['#00b5ff', '#e3006d', '#f7931e'],
+  size = 30,
+  ...props
 }: {
   className?: string;
+  size?: number;
   colors?: [string, string, string];
-}) {
+} & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={className}>
+    <div className={className} {...props}>
       <div
         style={{
-          width: `30px`,
+          width: size + 'px',
           aspectRatio: '2',
           background: `
             radial-gradient(circle closest-side, ${colors[0]} 90%, transparent) 0% 50%,

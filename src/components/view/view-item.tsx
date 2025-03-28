@@ -9,13 +9,16 @@ import { CheckStatus } from '@/types/checkbox';
 import { CheckSquare, Minus, Square } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-export function ViewItem({ view, children, getCheckStatus, onToggle }: {
+export function ViewItem({ view, children, getCheckStatus, onToggle, getInitialExpand }: {
   view: View;
   children?: React.ReactNode;
   getCheckStatus: (view: View) => CheckStatus;
   onToggle: (view: View) => void;
+  getInitialExpand: (viewId: string) => boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(() => {
+    return getInitialExpand(view.view_id);
+  });
   const { t } = useTranslation();
 
   const name = view.name || t('view.placeholder');

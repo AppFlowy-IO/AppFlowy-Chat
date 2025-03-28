@@ -17,6 +17,26 @@ export function findView(views: View[], id: string): View | undefined {
   return undefined;
 }
 
+export function findAncestors(data: View[], targetId: string, currentPath: View[] = []): View[] | null {
+  for(const item of data) {
+    const newPath = [...currentPath, item];
+
+    if(item.view_id === targetId) {
+      return newPath;
+    }
+
+    if(item.children && item.children.length > 0) {
+      const result = findAncestors(item.children, targetId, newPath);
+
+      if(result) {
+        return result;
+      }
+    }
+  }
+
+  return null;
+}
+
 export function filterDocumentViews(views: View[]): View[] {
   return views
     .filter(view => view.layout === ViewLayout.Document)

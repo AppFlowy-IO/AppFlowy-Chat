@@ -1,11 +1,22 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useCallback, useEffect, useState } from 'react';
-import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import {
+  Outlet,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 
 const languages = ['en'];
 
@@ -17,14 +28,14 @@ function Layout() {
   const [chatId, setChatId] = useState<string>();
   const [search, setSearch] = useSearchParams();
   const handleOpenSelectionMode = useCallback(() => {
-    return setSearch(prev => {
+    return setSearch((prev) => {
       prev.set('selectable', 'true');
       return prev;
     });
   }, [setSearch]);
 
   const handleCloseSelectionMode = useCallback(() => {
-    return setSearch(prev => {
+    return setSearch((prev) => {
       prev.delete('selectable');
       return prev;
     });
@@ -103,6 +114,15 @@ function Layout() {
                 ))}
               </SelectContent>
             </Select>
+            <Separator />
+            <Button
+              onClick={() => {
+                navigate(`/${workspaceId}/${chatId}/writer`);
+              }}
+            >
+              AI Writer
+            </Button>
+            <Separator />
             <div className={'flex items-center gap-2'}>
               <Switch
                 checked={search.get('selectable') === 'true'}
@@ -122,7 +142,7 @@ function Layout() {
                 <Label>Token</Label>
                 <Input
                   value={token}
-                  onChange={e => {
+                  onChange={(e) => {
                     setToken(e.target.value);
                   }}
                 />
@@ -131,7 +151,7 @@ function Layout() {
                 <Label>Workspace ID</Label>
                 <Input
                   value={workspaceId}
-                  onChange={e => {
+                  onChange={(e) => {
                     setWorkspaceId(e.target.value);
                   }}
                 />
@@ -140,20 +160,22 @@ function Layout() {
                 <Label>Chat ID</Label>
                 <Input
                   value={chatId}
-                  onChange={e => {
+                  onChange={(e) => {
                     setChatId(e.target.value);
                   }}
                 />
               </div>
-
             </div>
             <Button
               variant={'default'}
               onClick={onSumit}
-            >Submit</Button>
+            >
+              Submit
+            </Button>
+
+
           </div>
         </div>
-
 
         <Outlet />
       </div>

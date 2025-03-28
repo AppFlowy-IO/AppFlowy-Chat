@@ -30,6 +30,7 @@ export default {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          background: 'var(--secondary-background)',
         },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
@@ -43,20 +44,31 @@ export default {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
+        button: {
+          disabled: 'hsl(var(--button-disabled))',
+        },
+        placeholder: {
+          DEFAULT: 'hsl(var(--placeholder))',
+        },
         success: {
           DEFAULT: 'hsl(var(--success))',
         },
         icon: 'hsl(var(--icon))',
         border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
+        input: {
+          DEFAULT: 'hsl(var(--input))',
+          background: 'var(--input-background)',
+        },
         ring: 'hsl(var(--ring))',
         tooltip: {
           DEFAULT: 'hsl(var(--tooltip))',
           foreground: 'hsl(var(--tooltip-foreground))',
         },
       },
-      shadows: {
-        md: 'var(--shadow)',
+      boxShadow: {
+        DEFAULT: 'var(--shadows-sm)',
+        'menu': 'var(--shadows-sm)',
+        'toast': 'var(--shadows-md)',
       },
     },
   },

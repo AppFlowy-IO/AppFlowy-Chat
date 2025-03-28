@@ -1,15 +1,28 @@
+import { findAncestors } from '@/lib/views';
 import { View } from '@/types';
 import { CheckStatus } from '@/types/checkbox';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-export const useCheckboxTree = (initialSelected: string[] = []) => {
+export const useCheckboxTree = (initialSelected: string[] = [], source: View[]) => {
   const [selected, setSelected] = useState<Set<string>>(
     new Set(initialSelected),
   );
 
+  const initialExpandViewIds = useRef(new Set<string>());
+
   useEffect(() => {
     setSelected(new Set(initialSelected));
   }, [initialSelected]);
+
+  useEffect(() => {
+
+    initialSelected.forEach(id => {
+      findAncestors(source, id)?.forEach(ancestor => {
+        initialExpandViewIds.current.add(ancestor.view_id);
+      });
+    });
+
+  }, [source, initialSelected]);
 
   // Get all descendant IDs of a view
   const getDescendantIds = useCallback((view: View): string[] => {
@@ -32,14 +45,17 @@ export const useCheckboxTree = (initialSelected: string[] = []) => {
       getCheckStatus(child),
     );
 
-    if(childrenStatuses.every(status => status === 'unchecked')) {
-      if(isCurrentSelected) {
-        setSelected(prev => {
-          const next = new Set(prev);
-          next.delete(view.view_id);
-          return next;
-        });
-      }
+    // if(childrenStatuses.every(status => status === 'unchecked')) {
+    //   if(isCurrentSelected) {
+    //     setSelected(prev => {
+    //       const next = new Set(prev);
+    //       next.delete(view.view_id);
+    //       return next;
+    //     });
+    //   }
+    //   return CheckStatus.Unchecked;
+    // }
+    if(!isCurrentSelected) {
       return CheckStatus.Unchecked;
     }
 
@@ -89,9 +105,14 @@ export const useCheckboxTree = (initialSelected: string[] = []) => {
     return Array.from(selected);
   }, [selected]);
 
+  const getInitialExpand = useCallback((id: string) => {
+    return initialExpandViewIds.current.has(id);
+  }, []);
+
   return {
     selected,
     getCheckStatus,
+    getInitialExpand,
     toggleNode,
     selectAll,
     unselectAll,

@@ -1,4 +1,4 @@
-import { ViewItem } from '@/components/chat-input/related-views/view-item';
+import { ViewItem } from '@/components/view/view-item';
 import { View } from '@/types';
 import { CheckStatus } from '@/types/checkbox';
 
@@ -6,10 +6,12 @@ export function ViewChildren({
   item,
   getCheckStatus,
   onToggle,
+  getInitialExpand,
 }: {
   item: View;
   getCheckStatus: (view: View) => CheckStatus;
   onToggle: (view: View) => void;
+  getInitialExpand: (viewId: string) => boolean;
 }) {
   if(!item.children || item.children.length === 0) {
     return null;
@@ -24,11 +26,13 @@ export function ViewChildren({
             view={view}
             getCheckStatus={getCheckStatus}
             onToggle={onToggle}
+            getInitialExpand={getInitialExpand}
           >
             <ViewChildren
               item={view}
               getCheckStatus={getCheckStatus}
               onToggle={onToggle}
+              getInitialExpand={getInitialExpand}
             />
           </ViewItem>
         );

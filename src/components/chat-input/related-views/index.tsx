@@ -1,3 +1,4 @@
+import LoadingDots from '@/components/ui/loading-dots';
 import { SearchInput } from '@/components/ui/search-input';
 import { Spaces } from '@/components/chat-input/related-views/spaces';
 import { Button } from '@/components/ui/button';
@@ -6,6 +7,8 @@ import DocIcon from '@/assets/icons/doc.svg?react';
 import { Separator } from '@/components/ui/separator';
 import { useChatSettingsLoader } from '@/hooks/use-chat-settings-loader';
 import { useCheckboxTree } from '@/hooks/use-checkbox-tree';
+import { useViewsLoader } from '@/hooks/use-views-loader';
+import { searchViews } from '@/lib/views';
 import { View } from '@/types';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -30,10 +33,35 @@ export function RelatedViews() {
   }, [fetchChatSettings]);
 
   const {
+    fetchViews,
+    viewsLoading,
+  } = useViewsLoader();
+
+  const [folder, setFolder] = useState<View | null>(null);
+
+  useEffect(() => {
+    void (async() => {
+      const data = await fetchViews();
+      if(!data) return;
+      setFolder(data);
+    })();
+  }, [fetchViews]);
+
+  const filteredSpaces = useMemo(() => {
+    const spaces = folder?.children.filter(view => view.extra?.is_space);
+    return searchViews(spaces || [], searchValue);
+  }, [folder, searchValue]);
+
+  const views = useMemo(() => {
+    return folder?.children || [];
+  }, [folder]);
+
+  const {
     getSelected,
     getCheckStatus,
     toggleNode,
-  } = useCheckboxTree(viewIds);
+    getInitialExpand,
+  } = useCheckboxTree(viewIds, views);
 
   const length = getSelected().length;
 
@@ -49,6 +77,7 @@ export function RelatedViews() {
     <Popover modal>
       <PopoverTrigger asChild={true}>
         <Button
+          disabled={viewsLoading}
           className={'text-sm h-7 p-1.5'}
           startIcon={
             <span className={'text-foreground'}><DocIcon /></span>
@@ -56,7 +85,8 @@ export function RelatedViews() {
           variant={'ghost'}
         >
           {length}
-          <ChevronDown className={'w-3 h-3'} />
+          {viewsLoading ? <LoadingDots size={12} /> : <ChevronDown className={'!w-2 !h-2'} />}
+
         </Button>
       </PopoverTrigger>
       <PopoverContent>
@@ -68,12 +98,14 @@ export function RelatedViews() {
           <Separator />
           <div className={'overflow-x-hidden overflow-y-auto flex-1 appflowy-scrollbar'}>
             <Spaces
-              searchValue={searchValue}
+              getInitialExpand={getInitialExpand}
+              spaces={filteredSpaces}
+              viewsLoading={viewsLoading}
               getCheckStatus={getCheckStatus}
               onToggle={
                 (view: View) => {
                   const ids = toggleNode(view);
-                  handleToggle(Array.from(ids));
+                  void handleToggle(Array.from(ids));
                 }
               }
             />

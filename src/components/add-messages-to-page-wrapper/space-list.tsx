@@ -57,7 +57,6 @@ export function SpaceList({
     <div className={'flex flex-col gap-1 w-full h-full'}>
       {filteredSpaces.map((view: View) => {
         return (
-
           <SpaceItem
             key={view.view_id}
             view={view}
