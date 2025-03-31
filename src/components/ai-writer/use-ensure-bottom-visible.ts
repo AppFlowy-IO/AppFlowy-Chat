@@ -21,14 +21,19 @@ function useEnsureBottomVisible() {
     applyingState,
   } = useWriterContext();
 
+  const enableAutoScroll = useCallback(() => {
+    isUserScrollingRef.current = false;
+    setIsAutoScrollEnabled(true);
+  }, []);
+
   const applyingStateRef = useRef(applyingState);
 
   useEffect(() => {
     applyingStateRef.current = applyingState;
     if(applyingState === ApplyingState.idle) {
-      setIsAutoScrollEnabled(true);
+      enableAutoScroll();
     }
-  }, [applyingState]);
+  }, [applyingState, enableAutoScroll]);
 
   const getTarget = useCallback(() => {
     return document.querySelector('.writer-anchor');
@@ -75,11 +80,6 @@ function useEnsureBottomVisible() {
     }
 
   }, [getTarget, isAutoScrollEnabled]);
-
-  const enableAutoScroll = useCallback(() => {
-    isUserScrollingRef.current = false;
-    setIsAutoScrollEnabled(true);
-  }, []);
 
   useEffect(() => {
     if(!isAutoScrollEnabled) return;
