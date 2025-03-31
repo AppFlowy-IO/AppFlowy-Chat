@@ -155,3 +155,11 @@ export interface View {
   children: View[];
   is_private: boolean;
 }
+
+export enum StreamType {
+  META_DATA = '0',
+  TEXT = '1',
+  IMAGE = '2',
+  KEEP_ALIVE_KEY = '3',
+  COMMENT = '4',
+}

@@ -14,7 +14,7 @@ import {
   SendQuestionPayload,
   Suggestions,
   User, View, ViewLayout,
-  ChatMessageMetadata,
+  ChatMessageMetadata, StreamType,
 } from '@/types';
 import { EditorData } from '@appflowyinc/editor';
 import { AxiosInstance } from 'axios';
@@ -302,7 +302,7 @@ export class ChatRequest {
             try {
               const data = JSON.parse(jsonStr);
               Object.entries(data).forEach(([key, value]) => {
-                if(key === '0') {
+                if(key === StreamType.META_DATA) {
                   if(Array.isArray(value)) {
                     metadata.push(...value);
                   }

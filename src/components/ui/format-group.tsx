@@ -85,7 +85,7 @@ export function FormatGroup({
             variant={'ghost'}
             size={'icon'}
             onClick={onClick}
-            className={`${(outputContent === key && !isLayout) || (outputLayout === key && isLayout) ? 'bg-accent text-accent-foreground' : ''} w-7 h-7 !p-0`}
+            className={`${(outputContent === key && !isLayout) || (outputLayout === key && isLayout) ? 'bg-accent' : ''} w-7 h-7 !p-0`}
           >
             <Icon
               style={{
