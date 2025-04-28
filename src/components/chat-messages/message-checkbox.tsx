@@ -32,7 +32,7 @@ function MessageCheckbox({ id }: {
 
         toggleMessage?.(message);
       }}
-      className={'w-4 h-4 ml-2'}
+      className={'w-4 h-4 ml-2 p-3'}
       variant={'link'}
     >
       {selected ? <CheckSquare

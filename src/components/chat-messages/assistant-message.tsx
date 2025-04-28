@@ -1,4 +1,3 @@
-import { AiMessageAvatar } from '@/components/chat-messages/ai-message-avatar';
 import { AnswerMd } from '@/components/chat-messages/answer-md';
 import { MessageActions } from '@/components/chat-messages/message-actions';
 import MessageSources from '@/components/chat-messages/message-sources';
@@ -92,7 +91,6 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
       ) : (
         <div ref={ref} className={`flex gap-2 w-full  overflow-hidden`}>
           <div className={`flex gap-2 ${loading ? 'items-center' : ''}`}>
-            <AiMessageAvatar id={id} />
             {loading && <span className={'text-foreground opacity-60 text-xs'}>{t('generating')}</span>}
             {loading && <LoadingDots />}
           </div>
