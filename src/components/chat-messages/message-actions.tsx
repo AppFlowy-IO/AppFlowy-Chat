@@ -102,7 +102,7 @@ export function MessageActions({
     <div
       ref={ref}
 
-      className={'flex max-sm:hidden gap-2 px-10 min-h-[38px]'}
+      className={'flex max-sm:hidden gap-2 min-h-[38px]'}
     >
       {visible && message && (
         <>
