@@ -98,7 +98,7 @@ export function ChatMessages({ currentUser }: {
 
   return (
     <div
-      className="relative w-full flex-1 overflow-hidden"
+      className="relative w-full flex-1 overflow-x-hidden"
     >
       <motion.div
         layout
@@ -126,7 +126,6 @@ export function ChatMessages({ currentUser }: {
             <div
               onMouseMove={() => setHoveredId(id)}
               key={id}
-              className={'overflow-x-hidden'}
             >
               <Message
                 id={id}
