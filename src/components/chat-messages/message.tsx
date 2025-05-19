@@ -38,24 +38,6 @@ export const Message = ({
 
   const { selectionMode } = useChatContext();
 
-  const className = useMemo(() => {
-    if (!message) {
-      return '';
-    }
-    
-    const classList = [];
-    
-    if (message.author.author_type === AuthorType.Human || selectionMode) {
-      classList.push('mb-9');
-    }
-    
-    if (selected) {
-      classList.push('bg-primary/5');
-    }
-
-    return classList.join(' ');
-  }, [message, selected, selectionMode]);
-
   const renderMessage = useCallback(() => {
     if(!message) {
       return null;
@@ -95,11 +77,14 @@ export const Message = ({
       onAnimationComplete={() => shouldAnimate && completeAnimation(id)}
       className={cn(
         'flex rounded-[8px] message flex-col',
-        className,
+        message &&
+          (message.author.author_type === AuthorType.Human || selectionMode)
+          ? 'mb-9'
+          : '',
+        message && selected ? 'bg-primary/5' : '',
       )}
     >
       {renderMessage()}
     </motion.div>
   );
 };
-
