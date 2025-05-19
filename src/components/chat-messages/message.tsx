@@ -39,7 +39,9 @@ export const Message = ({
   const { selectionMode } = useChatContext();
 
   const className = useMemo(() => {
-    if (!message) return '';
+    if (!message) {
+      return '';
+    }
     
     const classList = [];
     
