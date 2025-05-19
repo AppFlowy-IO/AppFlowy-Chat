@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 const LoadingIndicator = () => (
   <div className="flex items-center justify-center w-full h-[48px]">
@@ -104,8 +105,11 @@ export function ChatMessages({ currentUser }: {
         transition={ANIMATION_PRESETS.SPRING_GENTLE}
         id="messages-scroller"
         ref={scrollContainerRef}
-        style={{ flexDirection: 'column-reverse', paddingBottom: selectionMode ? '72px' : '0px' }}
-        className="flex px-1 relative py-8 appflowy-scrollbar overflow-x-hidden gap-4 h-full w-full overflow-auto"
+        style={{ flexDirection: 'column-reverse' }}
+        className={cn(
+          "flex px-1 relative pt-8 appflowy-scrollbar overflow-x-hidden gap-4 h-full w-full overflow-auto",
+          selectionMode ? 'pb-9' : 'pb-2',
+        )}
       >
         <InfiniteScroll
           dataLength={messageIds.length}
@@ -141,7 +145,10 @@ export function ChatMessages({ currentUser }: {
 
       </motion.div>
       {showScrollButton && (
-        <div className={'absolute left-1/2 bottom-2 transform -translate-x-1/2'}>
+        <div className={cn(
+          'absolute left-1/2 transform -translate-x-1/2',
+          selectionMode ? 'bottom-12' : 'bottom-6',
+        )}>
           <Button
             variant={'outline'}
             size={'icon'}

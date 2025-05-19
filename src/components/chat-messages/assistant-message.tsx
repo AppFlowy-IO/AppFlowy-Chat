@@ -13,17 +13,20 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { EditorProvider } from '@appflowyinc/editor';
 import Error from '@/assets/icons/error.svg?react';
+import MessageCheckbox from './message-checkbox';
+import { cn } from '@/lib/utils';
 
 export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boolean }) {
   const isInitialLoad = useRef(true);
-  const { getMessage } = useChatMessagesContext();
+  const { getMessage, messageIds } = useChatMessagesContext();
   const { responseFormat, responseMode } = useResponseFormatContext();
   const { fetchAnswerStream } = useMessagesHandlerContext();
 
   const { getMessageSuggestions } = useSuggestionsContext();
 
   const message = getMessage(id);
-  const ref = useRef<HTMLDivElement>(null);
+
+  const isLast = messageIds.indexOf(id) === 0;
   const questionId = id - 1;
   const sources = message?.meta_data;
 
@@ -72,7 +75,13 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
   }, [questionId, getMessageSuggestions]);
 
   return (
-    <div className={'assistant-message overflow-hidden transform transition-transform flex flex-col w-full gap-1'}>
+    <div
+      className={cn(
+        'assistant-message overflow-hidden transform transition-transform flex flex-col w-full gap-1',
+        error || loading ? 'mb-9' : '',
+        !done || isLast ? 'mb-9' : 'mb-5',
+      )}
+    >
       {error ? (
         <div className={`flex items-center w-full justify-center`}>
           <div className="max-w-[480px]">
@@ -88,25 +97,25 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
             </Alert>
           </div>
         </div>
-      ) : (
-        <div ref={ref} className={`flex gap-2 w-full  overflow-hidden`}>
-          <div className={`flex gap-2 ${loading ? 'items-center' : ''}`}>
-            {loading && <span className={'text-foreground opacity-60 text-xs'}>{t('generating')}</span>}
-            {loading && <LoadingDots />}
+      ) : loading
+        ? (
+          <div className={`flex gap-2 overflow-hidden items-center`}>
+            <span className={'text-foreground opacity-60 text-sm'}>{t('generating')}</span>
+            <LoadingDots />
           </div>
-
-          <div className={'flex-1 w-full overflow-hidden'}>
-            {content && (
-              <EditorProvider>
-                <AnswerMd id={id} mdContent={content} />
-              </EditorProvider>
-            )}
+        ) :
+        content && (
+          <div className={'flex gap-2 w-full overflow-hidden py-1'}>
+            <MessageCheckbox id={id} />
+            <EditorProvider>
+              <AnswerMd id={id} mdContent={content} />
+            </EditorProvider>
           </div>
-        </div>
-      )}
+        )
+      }
       {sources && sources.length > 0 ? <MessageSources sources={sources} /> : null}
       {done && <MessageActions id={id} isHovered={isHovered} />}
-      {suggestions && <MessageSuggestions suggestions={suggestions} />}
+      {suggestions && suggestions.items.length > 0 ? <MessageSuggestions suggestions={suggestions} /> : null}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useChatContext } from '@/chat/context';
 import { AIAnswer } from '@/components/chat-messages/ai-answer';
 import { AssistantMessage } from '@/components/chat-messages/assistant-message';
 import HumanQuestion from '@/components/chat-messages/human-question';
@@ -35,6 +36,24 @@ export const Message = ({
 
   const message = useMemo(() => getMessage(id), [id, getMessage]);
 
+  const { selectionMode } = useChatContext();
+
+  const className = useMemo(() => {
+    if (!message) return '';
+    
+    const classList = [];
+    
+    if (message.author.author_type === AuthorType.Human || selectionMode) {
+      classList.push('mb-9');
+    }
+    
+    if (selected) {
+      classList.push('bg-primary/5');
+    }
+
+    return classList.join(' ');
+  }, [message, selected, selectionMode]);
+
   const renderMessage = useCallback(() => {
     if(!message) {
       return null;
@@ -60,7 +79,6 @@ export const Message = ({
           fetchMember={fetchMember}
           userId={message.author.author_uuid}
           content={message.content}
-
         />;
     }
 
@@ -74,8 +92,8 @@ export const Message = ({
       variants={MESSAGE_VARIANTS.getMessageVariants()}
       onAnimationComplete={() => shouldAnimate && completeAnimation(id)}
       className={cn(
-        'flex rounded-[8px] message flex-col py-2 overflow-hidden',
-        selected ? 'bg-primary/5' : '',
+        'flex rounded-[8px] message flex-col',
+        className,
       )}
     >
       {renderMessage()}
