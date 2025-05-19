@@ -99,13 +99,13 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
         </div>
       ) : loading
         ? (
-          <div className={`flex gap-2 overflow-hidden items-center`}>
+          <div className={`flex gap-2 overflow-hidden items-center pl-0.5`}>
             <span className={'text-foreground opacity-60 text-sm'}>{t('generating')}</span>
             <LoadingDots />
           </div>
         ) :
         content && (
-          <div className={'flex gap-2 w-full overflow-hidden py-1'}>
+          <div className={'flex gap-2 w-full overflow-hidden py-1 pl-0.5'}>
             <MessageCheckbox id={id} />
             <EditorProvider>
               <AnswerMd id={id} mdContent={content} />

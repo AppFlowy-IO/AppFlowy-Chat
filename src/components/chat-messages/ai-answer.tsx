@@ -21,7 +21,7 @@ export function AIAnswer({
   const isLast = messageIds.indexOf(id) === 0;
   
   return (
-    <div className={`chat-message flex flex-col w-full ${isLast ? 'mb-9' : 'mb-0.5'}`}>
+    <div className={`chat-message flex flex-col w-full pl-0.5 ${isLast ? 'mb-9' : 'mb-0.5'}`}>
       <div className={'flex gap-2 w-full overflow-hidden py-1'}>
         <MessageCheckbox id={id} />
         <EditorProvider>
