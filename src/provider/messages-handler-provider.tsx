@@ -231,7 +231,9 @@ function useMessagesHandler() {
           void (async() => {
             await saveAnswer(questionId, message, metadata);
             setAnswerApplying(false);
-            await startFetchSuggestions(questionId);
+            if (answerId && messageIds.indexOf(answerId) === 0) {
+              await startFetchSuggestions(questionId);
+            }
           })();
         } else {
           if(answerId) {
