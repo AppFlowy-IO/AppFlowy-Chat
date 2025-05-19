@@ -79,7 +79,7 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
       className={cn(
         'assistant-message overflow-hidden transform transition-transform flex flex-col w-full gap-1',
         error || loading ? 'mb-9' : '',
-        !done || isLast ? 'mb-9' : 'mb-5',
+        !done || isLast ? 'mb-9' : 'mb-0.5',
       )}
     >
       {error ? (
