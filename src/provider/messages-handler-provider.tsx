@@ -277,7 +277,7 @@ function useMessagesHandler() {
       return Promise.reject(e);
 
     }
-  }, [getMessage, setResponseFormatWithId, saveAnswer, startFetchSuggestions, removeAssistantMessage, requestInstance, toast]);
+  }, [getMessage, setResponseFormatWithId, saveAnswer, messageIds, startFetchSuggestions, removeAssistantMessage, requestInstance, toast]);
 
   const cancelAnswerStream = useCallback(() => {
     if(cancelStreamRef.current) {

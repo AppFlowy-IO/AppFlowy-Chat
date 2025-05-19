@@ -98,7 +98,7 @@ export function ChatMessages({ currentUser }: {
 
   return (
     <div
-      className="relative w-full flex-1 overflow-x-hidden"
+      className="relative w-full flex-1 overflow-hidden"
     >
       <motion.div
         layout

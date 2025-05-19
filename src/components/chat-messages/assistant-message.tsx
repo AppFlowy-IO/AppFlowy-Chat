@@ -14,11 +14,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { EditorProvider } from '@appflowyinc/editor';
 import Error from '@/assets/icons/error.svg?react';
 import MessageCheckbox from './message-checkbox';
-import { cn } from '@/lib/utils';
 
 export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boolean }) {
   const isInitialLoad = useRef(true);
-  const { getMessage, messageIds } = useChatMessagesContext();
+  const { getMessage } = useChatMessagesContext();
   const { responseFormat, responseMode } = useResponseFormatContext();
   const { fetchAnswerStream } = useMessagesHandlerContext();
 
@@ -26,7 +25,6 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
 
   const message = getMessage(id);
 
-  const isLast = messageIds.indexOf(id) === 0;
   const questionId = id - 1;
   const sources = message?.meta_data;
 
@@ -76,11 +74,9 @@ export function AssistantMessage({ id, isHovered }: { id: number; isHovered: boo
 
   return (
     <div
-      className={cn(
-        'assistant-message transform transition-transform flex flex-col w-full gap-1',
-        error || loading ? 'mb-9' : '',
-        !done || isLast ? 'mb-9' : 'mb-0.5',
-      )}
+      className={
+        'assistant-message transform transition-transform flex flex-col w-full gap-1 relative'
+      }
     >
       {error ? (
         <div className={`flex items-center w-full justify-center`}>

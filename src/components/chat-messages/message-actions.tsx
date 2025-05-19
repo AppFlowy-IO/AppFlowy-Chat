@@ -105,7 +105,7 @@ export function MessageActions({
         "flex max-sm:hidden gap-2 min-w-0 w-fit mt-2",
         isLast
           ? `min-h-[28px]`
-          : `min-h-[34px] ml-0.5 ${isHovered ? 'p-0.5 border border-border rounded-[8px] shadow-md' : ''}`
+          : `min-h-[34px] ml-0.5 absolute -bottom-[34px] ${isHovered ? 'p-0.5 border border-border rounded-[8px] shadow-md' : ''}`
       )}
     >
       {visible && message && (

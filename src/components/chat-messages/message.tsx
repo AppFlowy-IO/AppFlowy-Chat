@@ -1,4 +1,3 @@
-import { useChatContext } from '@/chat/context';
 import { AIAnswer } from '@/components/chat-messages/ai-answer';
 import { AssistantMessage } from '@/components/chat-messages/assistant-message';
 import HumanQuestion from '@/components/chat-messages/human-question';
@@ -35,8 +34,6 @@ export const Message = ({
   }), [id, messages]);
 
   const message = useMemo(() => getMessage(id), [id, getMessage]);
-
-  const { selectionMode } = useChatContext();
 
   const renderMessage = useCallback(() => {
     if(!message) {
@@ -75,14 +72,7 @@ export const Message = ({
       animate="visible"
       variants={MESSAGE_VARIANTS.getMessageVariants()}
       onAnimationComplete={() => shouldAnimate && completeAnimation(id)}
-      className={cn(
-        'flex rounded-[8px] message flex-col',
-        message &&
-          (message.author.author_type === AuthorType.Human || selectionMode)
-          ? 'mb-9'
-          : '',
-        message && selected ? 'bg-primary/5' : '',
-      )}
+      className={`mb-9 ${message && selected ? 'bg-primary/5' : ''}`}
     >
       {renderMessage()}
     </motion.div>

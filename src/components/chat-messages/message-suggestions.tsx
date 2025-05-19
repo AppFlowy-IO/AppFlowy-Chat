@@ -42,7 +42,7 @@ export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
       initial={'hidden'}
       animate="visible"
       variants={MESSAGE_VARIANTS.getSuggestionsVariants()}
-      className={'flex flex-col gap-4 w-full overflow-hidden mr-auto'}
+      className={'flex flex-col gap-4 w-full overflow-hidden mr-auto mt-9'}
     >
       <Label className={'opacity-60'}>{t('suggestion.title')}</Label>
       <div className={'flex gap-2 flex-col items-start w-full overflow-hidden'}>
