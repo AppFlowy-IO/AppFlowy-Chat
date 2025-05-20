@@ -2,7 +2,6 @@ import { AIAnswer } from '@/components/chat-messages/ai-answer';
 import { AssistantMessage } from '@/components/chat-messages/assistant-message';
 import HumanQuestion from '@/components/chat-messages/human-question';
 import { MESSAGE_VARIANTS } from '@/lib/animations';
-import { cn } from '@/lib/utils';
 import { useMessageAnimation } from '@/provider/message-animation-provider';
 import { useChatMessagesContext } from '@/provider/messages-provider';
 import { useSelectionModeContext } from '@/provider/selection-mode-provider';
