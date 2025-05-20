@@ -2,6 +2,7 @@ import { AIAnswer } from '@/components/chat-messages/ai-answer';
 import { AssistantMessage } from '@/components/chat-messages/assistant-message';
 import HumanQuestion from '@/components/chat-messages/human-question';
 import { MESSAGE_VARIANTS } from '@/lib/animations';
+import { cn } from '@/lib/utils';
 import { useMessageAnimation } from '@/provider/message-animation-provider';
 import { useChatMessagesContext } from '@/provider/messages-provider';
 import { useSelectionModeContext } from '@/provider/selection-mode-provider';
@@ -71,7 +72,10 @@ export const Message = ({
       animate="visible"
       variants={MESSAGE_VARIANTS.getMessageVariants()}
       onAnimationComplete={() => shouldAnimate && completeAnimation(id)}
-      className={`mb-9 ${message && selected ? 'bg-primary/5' : ''}`}
+      className={cn(
+        'message rounded-[8px] mb-9',
+        selected ? 'bg-primary/5' : '',
+      )}
     >
       {renderMessage()}
     </motion.div>
