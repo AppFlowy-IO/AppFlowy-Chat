@@ -1,6 +1,7 @@
 import { EditorData, EditorNode } from '@appflowyinc/editor';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { AiPrompt, AiPromptCategory } from '@/types/prompt';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -10,17 +11,17 @@ export function stringToColor(string: string, colorArray?: string[]) {
   let hash = 0;
   let i;
 
-  for(i = 0; i < string.length; i += 1) {
+  for (i = 0; i < string.length; i += 1) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  if(colorArray) {
+  if (colorArray) {
     return colorArray[string.slice(0, 1).charCodeAt(0) % colorArray.length];
   }
 
   let color = '#';
 
-  for(i = 0; i < 3; i += 1) {
+  for (i = 0; i < 3; i += 1) {
     const value = (hash >> (i * 8)) & 0xff;
 
     color += `00${value.toString(16)}`.slice(-2);
@@ -32,7 +33,7 @@ export function stringToColor(string: string, colorArray?: string[]) {
 const icon: Map<string, string> = new Map();
 
 export async function getIcon(id: string) {
-  if(icon.has(id)) {
+  if (icon.has(id)) {
     return icon.get(id);
   }
 
@@ -40,7 +41,7 @@ export async function getIcon(id: string) {
 
   const res = await fetch(url);
 
-  if(!res.ok) {
+  if (!res.ok) {
     return '';
   }
 
@@ -58,7 +59,7 @@ function argbToRgba(color: string): string {
 
   const hasAlpha = hex.length === 8;
 
-  if(!hasAlpha) {
+  if (!hasAlpha) {
     return color.replace('0x', '#');
   }
 
@@ -95,7 +96,7 @@ export const colorMap = {
 };
 
 export function renderColor(color: string) {
-  if(colorMap[color as ColorEnum]) {
+  if (colorMap[color as ColorEnum]) {
     return colorMap[color as ColorEnum];
   }
 
@@ -117,3 +118,33 @@ export function convertToPageData(data: EditorData) {
 
   return data.map(traverse);
 }
+
+interface RawPromptData {
+  id: string;
+  name: string;
+  category?: string;
+  content: string;
+  example?: string;
+  isFeatured?: boolean;
+  isCustom?: boolean;
+}
+
+export const parsePromptData = (rawData: RawPromptData[]): AiPrompt[] => {
+  return rawData.map((raw) => {
+    const category: AiPromptCategory =
+      raw.category &&
+      (Object.values(AiPromptCategory) as string[]).includes(raw.category)
+        ? (raw.category as AiPromptCategory)
+        : AiPromptCategory.Others;
+
+    return {
+      id: raw.id,
+      name: raw.name,
+      category: category,
+      content: raw.content,
+      example: raw.example ?? '',
+      isFeatured: raw.isFeatured ?? false,
+      isCustom: raw.isCustom ?? false,
+    };
+  });
+};

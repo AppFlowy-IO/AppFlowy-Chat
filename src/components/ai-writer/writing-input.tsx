@@ -167,7 +167,7 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
         }}
         className={cn(
           noBorder ? '' : 'shadow-menu',
-          'border bg-input-background w-full relative justify-between gap-1 flex flex-col border-border py-1 px-2 focus:border-primary w-full rounded-[12px]',
+          'border bg-input-background w-full relative justify-between gap-1 flex flex-col border-border py-1 px-2 focus:border-primary rounded-[12px]',
           noBorder ? 'ring-0' : 'ring-[0.5px] ring-input')}
       >
         {responseMode === ChatInputMode.FormatResponse &&
