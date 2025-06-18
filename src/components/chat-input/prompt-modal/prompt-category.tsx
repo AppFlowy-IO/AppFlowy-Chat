@@ -53,7 +53,7 @@ export function PromptCategory({
             setSelectedCategory(null);
           }}
           className={cn(
-            'flex justify-start !text-text-primary',
+            'flex justify-start',
             isFeaturedSelected ? 'bg-fill-theme-select' : '',
           )}
         >
@@ -67,7 +67,7 @@ export function PromptCategory({
             setSelectedCategory(null);
           }}
           className={cn(
-            'flex justify-start !text-text-primary',
+            'flex justify-start',
             isCustomSelected ? 'bg-fill-theme-select' : '',
           )}
         >
@@ -84,7 +84,7 @@ export function PromptCategory({
             setIsFeaturedSelected(false);
           }}
           className={cn(
-            'flex flex-shrink-0 justify-start !text-text-primary',
+            'flex flex-shrink-0 justify-start',
             isAllSelected && 'bg-fill-theme-select',
           )}
         >
@@ -100,7 +100,7 @@ export function PromptCategory({
               setIsCustomSelected(false);
             }}
             className={cn(
-              'flex flex-shrink-0 justify-start !text-text-primary',
+              'flex flex-shrink-0 justify-start',
               selectedCatecory === category ? 'bg-fill-theme-select' : '',
             )}
           >

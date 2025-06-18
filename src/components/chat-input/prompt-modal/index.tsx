@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from '@/i18n';
 import { cn } from '@/lib/utils';
@@ -74,9 +74,9 @@ export const PromptModal = forwardRef<
         className='max-h-[800px] max-w-[1200px] flex flex-col gap-3 min-h-0'
         ref={ref}
       >
-        <div className='flex items-center justify-between gap-1.5 text-text-primary font-bold'>
+        <DialogTitle className='text-md text-text-primary font-bold'>
           {t('customPrompt.browsePrompts')}
-        </div>
+        </DialogTitle>
         <div className='flex-1 flex min-h-0 w-full'>
           <div className='w-[17%] flex flex-col min-h-0'>
             <PromptCategory

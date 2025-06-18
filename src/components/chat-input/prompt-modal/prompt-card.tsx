@@ -69,7 +69,7 @@ export function PromptCard({
         onMouseDown={(e) => e.preventDefault()}
         onClick={handleClick}
       >
-        <span className='truncate'>{prompt.name}</span>
+        <span className='truncate text-sm'>{prompt.name}</span>
         <span className='text-xs text-gray-500 line-clamp-2'>
           {prompt.content}
         </span>

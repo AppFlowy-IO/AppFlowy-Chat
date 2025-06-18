@@ -1,7 +1,7 @@
+import newColors from './tailwind/new-colors.cjs';
+
 export default {
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   implements: '#appflowy-chat',
   darkMode: ['class'],
   theme: {
@@ -13,6 +13,7 @@ export default {
       },
 
       colors: {
+        ...newColors,
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -54,7 +55,10 @@ export default {
           DEFAULT: 'hsl(var(--success))',
         },
         icon: 'hsl(var(--icon))',
-        border: 'hsl(var(--border))',
+        border: {
+          DEFAULT: 'hsl(var(--border))',
+          ...newColors['border'],
+        },
         input: {
           DEFAULT: 'hsl(var(--input))',
           background: 'var(--input-background)',
@@ -67,8 +71,8 @@ export default {
       },
       boxShadow: {
         DEFAULT: 'var(--shadows-sm)',
-        'menu': 'var(--shadows-sm)',
-        'toast': 'var(--shadows-md)',
+        menu: 'var(--shadows-sm)',
+        toast: 'var(--shadows-md)',
       },
     },
   },

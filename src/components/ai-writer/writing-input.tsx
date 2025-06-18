@@ -11,9 +11,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { toast } from '@/hooks/use-toast';
 import { useTranslation } from '@/i18n';
 import { cn } from '@/lib/utils';
+import { usePromptModal } from '@/provider/prompt-modal-provider';
 import { ChatInputMode } from '@/types';
+import { AiPrompt } from '@/types/prompt';
 import { useWriterContext } from '@/writer/context';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PromptModal } from '../chat-input/prompt-modal';
 
 const MAX_HEIGHT = 200;
 // Prevent focus on page load and cause the page to scroll
@@ -40,6 +43,8 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
     hasAIAnswer,
     scrollContainer,
   } = useWriterContext();
+  const { openModal, currentPromptId, updateCurrentPromptId } =
+    usePromptModal();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -152,6 +157,23 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
       });
     }, FOCUS_DELAY);
   }, [scrollContainer]);
+  
+  useEffect(() => {
+    adjustHeight();
+  }, [adjustHeight, currentPromptId]);
+
+  const handleUsePrompt = useCallback(
+    (prompt: AiPrompt) => {
+      updateCurrentPromptId(prompt.id);
+      setResponseMode(ChatInputMode.Auto);
+      setMessage(prompt.content);
+      if (textareaRef) {
+        textareaRef.current?.focus();
+        setFocused(true);
+      }
+    },
+    [setResponseMode, updateCurrentPromptId],
+  );
 
   const formatTooltip = responseMode === ChatInputMode.FormatResponse ? t('input.button.auto') : t('input.button.format');
   const FormatIcon = responseMode === ChatInputMode.FormatResponse ? AutoTextIcon : ImageTextIcon;
@@ -205,35 +227,58 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
         />
 
         <div className={'flex justify-between items-center gap-4'}>
-          {!noSwitchMode ?
+          <div className='flex items-center'>
+            {!noSwitchMode ?
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    onMouseDown={e => {
+                      e.preventDefault();
+                    }}
+                    variant={'ghost'}
+                    size={'icon'}
+                    className={'w-7 h-7'}
+                    onClick={() => {
+                      setResponseMode(responseMode === ChatInputMode.FormatResponse ? ChatInputMode.Auto : ChatInputMode.FormatResponse);
+                    }}
+                  >
+                    <FormatIcon
+                      style={{
+                        width: 20,
+                        height: 20,
+                      }}
+                    />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent
+                  align={'center'}
+                  side={'right'}
+                >
+                  {formatTooltip}
+                </TooltipContent>
+              </Tooltip> : <div />}
+            
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  onMouseDown={e => {
+                  onMouseDown={(e) => {
                     e.preventDefault();
                   }}
                   variant={'ghost'}
-                  size={'icon'}
-                  className={'w-7 h-7'}
-                  onClick={() => {
-                    setResponseMode(responseMode === ChatInputMode.FormatResponse ? ChatInputMode.Auto : ChatInputMode.FormatResponse);
-                  }}
+                  className={'h-7 text-xs'}
+                  onClick={openModal}
                 >
-                  <FormatIcon
-                    style={{
-                      width: 20,
-                      height: 20,
-                    }}
-                  />
+                  {t('customPrompt.browsePrompts')}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent
-                align={'center'}
-                side={'right'}
-              >
-                {formatTooltip}
+              <TooltipContent align={'center'} side={'right'}>
+                {t('customPrompt.browsePrompts')}
               </TooltipContent>
-            </Tooltip> : <div />}
+            </Tooltip>
+  
+            <PromptModal onUsePrompt={handleUsePrompt} />
+          </div>
+          
           <div className={'flex gap-1 items-center'}>
             <ViewTree />
             {!hasAIAnswer() && <WritingMore input={message} />}

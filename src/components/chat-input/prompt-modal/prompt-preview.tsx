@@ -32,7 +32,7 @@ export function PromptPreview({
   return (
     <>
       <div className='flex items-center justify-between gap-1.5'>
-        <span className='text-lg'>{prompt?.name}</span>
+        <span className='text-2xl'>{prompt?.name}</span>
         <Button onClick={onUsePrompt} className='px-4 py-1.5'>
           {t('customPrompt.usePrompt')}
         </Button>
@@ -40,14 +40,14 @@ export function PromptPreview({
       <div className='flex flex-col gap-4 overflow-y-scroll'>
         <div className='flex flex-col gap-1'>
           <span className=''>{t('customPrompt.prompt')}</span>
-          <span className='text-sm p-3 rounded-[8px] bg-surface-container-layer01 whitespace-pre-wrap'>
+          <span className='text-sm p-3 rounded-[8px] bg-surface-container-layer-01 whitespace-pre-wrap'>
             {formattedContent}
           </span>
         </div>
         {prompt?.example && (
           <div className='flex flex-col gap-1'>
             <span className=''>{t('customPrompt.promptExample')}</span>
-            <span className='text-sm p-3 rounded-[8px] bg-surface-container-layer01 whitespace-pre-wrap'>
+            <span className='text-sm p-3 rounded-[8px] bg-surface-container-layer-01 whitespace-pre-wrap'>
               {prompt?.example}
             </span>
           </div>
