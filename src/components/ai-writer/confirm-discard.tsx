@@ -34,7 +34,7 @@ export const ConfirmDiscard = React.forwardRef<HTMLDivElement, {
       </DialogHeader>
       <DialogFooter>
         <Button
-          variant={'secondary'}
+          variant={'outline'}
           onClick={onClose}
         >{t('writer.button.cancel')}</Button>
         <Button
