@@ -227,7 +227,7 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
         />
 
         <div className={'flex justify-between items-center gap-4'}>
-          <div className='flex items-center'>
+          <div className='flex items-center gap-1'>
             {!noSwitchMode ?
               <Tooltip>
                 <TooltipTrigger asChild>

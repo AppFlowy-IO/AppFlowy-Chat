@@ -5,7 +5,6 @@ import useEnsureBottomVisible from '@/components/ai-writer/use-ensure-bottom-vis
 import { AIAssistantType } from '@/types';
 import { useWriterContext } from '@/writer/context';
 import { EditorProvider } from '@appflowyinc/editor';
-import { PromptModalProvider } from '@/provider/prompt-modal-provider';
 
 export function ContextPlaceholder() {
   const {
@@ -24,16 +23,14 @@ export function ContextPlaceholder() {
     id={'appflowy-ai-writer'}
     className={'w-full select-none scroll-mb-[48px] relative h-full flex flex-col overflow-hidden'}
   >
-    <PromptModalProvider>
-      <AIAssistant>
-        {assistantType === AIAssistantType.Explain ? <div /> : <EditorProvider>
-          <RenderEditor
-            content={placeholderContent || ''}
-            onDataChange={setEditorData}
-          />
-        </EditorProvider>}
-      </AIAssistant>
-    </PromptModalProvider>
+    <AIAssistant>
+      {assistantType === AIAssistantType.Explain ? <div /> : <EditorProvider>
+        <RenderEditor
+          content={placeholderContent || ''}
+          onDataChange={setEditorData}
+        />
+      </EditorProvider>}
+    </AIAssistant>
     
     <Toaster />
   </div>;

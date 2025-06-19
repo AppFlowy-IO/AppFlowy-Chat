@@ -115,6 +115,8 @@ export function ChatInput() {
       await submitQuestion(message);
     } catch (e) {
       console.error(e);
+    } finally {
+      updateCurrentPromptId(null);
     }
   };
 
@@ -210,7 +212,7 @@ export function ChatInput() {
         />
 
         <div className={'flex justify-between items-center gap-4'}>
-          <div className={'flex items-center gap-2'}>
+          <div className={'flex items-center gap-1'}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
