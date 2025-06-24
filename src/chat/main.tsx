@@ -34,7 +34,7 @@ function Main(props: ChatProps) {
                       <ChatMessages currentUser={currentUser} />
                       <motion.div
                         layout
-                        className={cn('w-full relative flex py-6 justify-center max-sm:hidden')}
+                        className={cn('w-full relative flex pb-6 justify-center max-sm:hidden')}
                       >
                         <AnimatePresence mode="wait">
                           {!selectionMode && <ChatInput />}

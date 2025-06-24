@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from '@/i18n';
 import { convertToAppFlowyFragment } from '@/lib/copy';
-import { convertToPageData } from '@/lib/utils';
+import { cn, convertToPageData } from '@/lib/utils';
 import { useEditorContext } from '@/provider/editor-provider';
 import { useChatMessagesContext } from '@/provider/messages-provider';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -101,8 +101,12 @@ export function MessageActions({
   return (
     <div
       ref={ref}
-
-      className={'flex max-sm:hidden gap-2 min-h-[38px]'}
+      className={cn(
+        "flex max-sm:hidden gap-2 min-w-0 w-fit",
+        isLast
+          ? `min-h-[28px] mt-2`
+          : `min-h-[34px] ml-0.5 absolute -bottom-[34px] ${isHovered ? 'p-0.5 border border-border rounded-[8px] shadow-popover' : ''}`
+      )}
     >
       {visible && message && (
         <>
@@ -135,7 +139,6 @@ export function MessageActions({
           </Tooltip>
           <Regenerations id={id} />
           <AddMessageTo id={id} />
-
         </>
       )}
     </div>

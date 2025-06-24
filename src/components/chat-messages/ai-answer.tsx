@@ -17,8 +17,8 @@ export function AIAnswer({
   isHovered: boolean;
 }) {
   return (
-    <div className={'chat-message flex flex-col w-full gap-1'}>
-      <div className={'flex gap-2 w-full overflow-hidden'}>
+    <div className={`chat-message flex flex-col w-full pl-0.5 relative`}>
+      <div className={'flex gap-2 w-full overflow-hidden py-1'}>
         <MessageCheckbox id={id} />
         <EditorProvider>
           <AnswerMd id={id} mdContent={content} />

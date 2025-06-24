@@ -60,7 +60,6 @@ export const Message = ({
           fetchMember={fetchMember}
           userId={message.author.author_uuid}
           content={message.content}
-
         />;
     }
 
@@ -74,7 +73,7 @@ export const Message = ({
       variants={MESSAGE_VARIANTS.getMessageVariants()}
       onAnimationComplete={() => shouldAnimate && completeAnimation(id)}
       className={cn(
-        'flex rounded-[8px] message flex-col py-2 overflow-hidden',
+        'message rounded-[8px] mb-9',
         selected ? 'bg-primary/5' : '',
       )}
     >
@@ -82,4 +81,3 @@ export const Message = ({
     </motion.div>
   );
 };
-
