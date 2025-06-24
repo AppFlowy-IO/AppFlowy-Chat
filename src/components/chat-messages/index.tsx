@@ -126,6 +126,7 @@ export function ChatMessages({ currentUser }: {
             <div
               onMouseMove={() => setHoveredId(id)}
               key={id}
+              className={'overflow-x-hidden'}
             >
               <Message
                 id={id}
