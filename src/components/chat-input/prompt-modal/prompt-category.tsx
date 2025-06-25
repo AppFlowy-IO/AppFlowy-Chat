@@ -54,7 +54,7 @@ export function PromptCategory({
           }}
           className={cn(
             'flex justify-start',
-            isFeaturedSelected ? 'bg-fill-theme-select' : '',
+            isFeaturedSelected ? '!bg-fill-theme-select' : '',
           )}
         >
           {t('customPrompt.featured')}
@@ -68,7 +68,7 @@ export function PromptCategory({
           }}
           className={cn(
             'flex justify-start',
-            isCustomSelected ? 'bg-fill-theme-select' : '',
+            isCustomSelected ? '!bg-fill-theme-select' : '',
           )}
         >
           {t('customPrompt.custom')}
@@ -85,7 +85,7 @@ export function PromptCategory({
           }}
           className={cn(
             'flex flex-shrink-0 justify-start',
-            isAllSelected && 'bg-fill-theme-select',
+            isAllSelected && '!bg-fill-theme-select',
           )}
         >
           {t('customPrompt.all')}
@@ -101,7 +101,7 @@ export function PromptCategory({
             }}
             className={cn(
               'flex flex-shrink-0 justify-start',
-              selectedCatecory === category ? 'bg-fill-theme-select' : '',
+              selectedCatecory === category ? '!bg-fill-theme-select' : '',
             )}
           >
             {t(`customPrompt.${category}`, category)}
