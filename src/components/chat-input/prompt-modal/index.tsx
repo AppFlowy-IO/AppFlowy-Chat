@@ -69,7 +69,15 @@ export const PromptModal = forwardRef<
   }, [selectedPreviewPromptId, visiblePrompts]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          setFilter('');
+          closeModal();
+        }
+      }}
+    >
       <DialogContent
         className='max-h-[800px] w-[1200px] flex flex-col gap-3 min-h-0 sm:max-w-[calc(100%-2rem)]'
         ref={ref}
@@ -126,6 +134,7 @@ export const PromptModal = forwardRef<
                     }}
                     onUsePrompt={() => {
                       onUsePrompt(prompt);
+                      setFilter('');
                       closeModal();
                     }}
                   />
@@ -147,6 +156,7 @@ export const PromptModal = forwardRef<
                 prompt={selectedPrompt}
                 onUsePrompt={() => {
                   onUsePrompt(selectedPrompt);
+                  setFilter('');
                   closeModal();
                 }}
               />
