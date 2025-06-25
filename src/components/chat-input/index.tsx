@@ -284,7 +284,7 @@ export function ChatInput() {
                 onClick={handleSubmit}
                 size={'icon'}
                 variant={'link'}
-                className={'w-7 h-7 text-primary'}
+                className={'w-7 h-7 text-primary !p-0.5'}
                 disabled={!message.trim() || disabled}
               >
                 {questionSending ? (
