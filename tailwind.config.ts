@@ -14,7 +14,10 @@ export default {
 
       colors: {
         ...newColors,
-        background: 'hsl(var(--background))',
+        background: {
+          DEFAULT: 'hsl(var(--background))',
+          ...newColors['background'],
+        },
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
@@ -54,7 +57,10 @@ export default {
         success: {
           DEFAULT: 'hsl(var(--success))',
         },
-        icon: 'hsl(var(--icon))',
+        icon: {
+          DEFAULT: 'hsl(var(--icon))',
+          ...newColors['icon'],
+        },
         border: {
           DEFAULT: 'hsl(var(--border))',
           ...newColors['border'],
