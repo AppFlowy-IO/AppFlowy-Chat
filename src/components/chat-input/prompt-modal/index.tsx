@@ -81,6 +81,10 @@ export const PromptModal = forwardRef<
       <DialogContent
         className='max-h-[800px] w-[1200px] flex flex-col gap-3 min-h-0 sm:max-w-[calc(100%-2rem)]'
         ref={ref}
+        onEscapeKeyDown={(_e) => {
+          setFilter('');
+          closeModal();
+        }}
       >
         <DialogTitle className='text-md text-text-primary font-bold'>
           {t('customPrompt.browsePrompts')}

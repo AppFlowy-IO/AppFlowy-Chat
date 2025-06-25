@@ -1,3 +1,4 @@
+import { usePromptModal } from '@/chat';
 import { ConfirmDiscard } from '@/components/ai-writer/confirm-discard';
 import { Error } from '@/components/ai-writer/error';
 import { Loading } from '@/components/ai-writer/loading';
@@ -35,6 +36,10 @@ export function AIAssistant({
   } = useWriterContext();
   const open = Boolean(assistantType);
   const [openModal, setOpenModal] = useState(false);
+  
+  const {
+    isOpen
+  } = usePromptModal();
 
   const Tool = useMemo(() => {
     if(error) return <Error />;
@@ -106,6 +111,16 @@ export function AIAssistant({
           e.stopPropagation();
         }}
         onEscapeKeyDown={e => {
+          if (isOpen) {
+            e.preventDefault();
+            return;
+          }
+          if (openModal) {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpenModal(false);
+            return;
+          }
           if(hasAIAnswer()) {
             e.preventDefault();
             e.stopPropagation();
