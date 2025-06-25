@@ -283,16 +283,15 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
             <ViewTree />
             {!hasAIAnswer() && <WritingMore input={message} />}
 
-            <span
-              onMouseDown={e => {
-                e.preventDefault();
-              }}
-            ><Button
+           <Button
               onClick={handleSubmit}
               size={'icon'}
               variant={'link'}
-              className={'w-7 h-7 text-primary'}
+              className={'w-7 h-7 text-fill-theme-thick !p-0.5'}
               disabled={!message.trim() || isFetching}
+              onMouseDown={e => {
+                e.preventDefault();
+              }}
             >
               {isFetching ? <LoadingDots /> : <SendIcon
                 style={{
@@ -300,9 +299,8 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
                   height: 24,
                 }}
               />}
-
+  
             </Button>
-          </span>
 
           </div>
 

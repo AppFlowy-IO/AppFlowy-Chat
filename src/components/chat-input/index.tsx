@@ -271,6 +271,7 @@ export function ChatInput() {
                 onClick={cancelAnswerStream}
                 size={'icon'}
                 variant={'link'}
+                className={'w-7 h-7 text-fill-theme-thick !p-0.5'}
               >
                 <StopIcon
                   style={{
@@ -284,7 +285,7 @@ export function ChatInput() {
                 onClick={handleSubmit}
                 size={'icon'}
                 variant={'link'}
-                className={'w-7 h-7 text-primary !p-0.5'}
+                className={'w-7 h-7 text-fill-theme-thick !p-0.5'}
                 disabled={!message.trim() || disabled}
               >
                 {questionSending ? (
