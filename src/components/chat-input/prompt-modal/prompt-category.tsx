@@ -43,71 +43,73 @@ export function PromptCategory({
   }, [t]);
 
   return (
-    <>
-      <div className='flex flex-col pr-3'>
+    <div className='flex flex-col pr-3 overflow-auto justify-between'>
+      <div className='sticky top-0 z-10 bg-background-primary mb-2 flex flex-col'>
         <Button
           variant={'ghost'}
+          onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
             setIsFeaturedSelected(true);
             setIsCustomSelected(false);
             setSelectedCategory(null);
           }}
           className={cn(
-            'flex justify-start',
+            'flex flex-shrink-0 justify-start',
             isFeaturedSelected ? '!bg-fill-theme-select' : '',
           )}
         >
           {t('customPrompt.featured')}
         </Button>
         {/* <Button
-          variant={'ghost'}
-          onClick={() => {
-            setIsCustomSelected(true);
-            setIsFeaturedSelected(false);
-            setSelectedCategory(null);
-          }}
-          className={cn(
-            'flex justify-start',
-            isCustomSelected ? '!bg-fill-theme-select' : '',
-          )}
-        >
-          {t('customPrompt.custom')}
-        </Button> */}
+            variant={'ghost'}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => {
+              setIsCustomSelected(true);
+              setIsFeaturedSelected(false);
+              setSelectedCategory(null);
+            }}
+            className={cn(
+              'flex justify-start',
+              isCustomSelected ? '!bg-fill-theme-select' : '',
+            )}
+          >
+            {t('customPrompt.custom')}
+          </Button> */}
         <Separator className='mt-2' />
       </div>
-      <div className='flex flex-1 flex-col overflow-auto pt-2 justify-between pr-3'>
+      <Button
+        onMouseDown={(e) => e.preventDefault()}
+        variant={'ghost'}
+        onClick={() => {
+          setSelectedCategory(null);
+          setIsCustomSelected(false);
+          setIsFeaturedSelected(false);
+        }}
+        className={cn(
+          'flex flex-shrink-0 justify-start',
+          isAllSelected && '!bg-fill-theme-select',
+        )}
+      >
+        {t('customPrompt.all')}
+      </Button>
+      {categoryList.map((category) => (
         <Button
+          key={category ?? 'all'}
           variant={'ghost'}
+          onMouseDown={(e) => e.preventDefault()}
           onClick={() => {
-            setSelectedCategory(null);
-            setIsCustomSelected(false);
+            setSelectedCategory(category as AiPromptCategory | null);
             setIsFeaturedSelected(false);
+            setIsCustomSelected(false);
           }}
           className={cn(
             'flex flex-shrink-0 justify-start',
-            isAllSelected && '!bg-fill-theme-select',
+            selectedCatecory === category ? '!bg-fill-theme-select' : '',
           )}
         >
-          {t('customPrompt.all')}
+          {t(`customPrompt.${category}`, category)}
         </Button>
-        {categoryList.map((category) => (
-          <Button
-            key={category ?? 'all'}
-            variant={'ghost'}
-            onClick={() => {
-              setSelectedCategory(category as AiPromptCategory | null);
-              setIsFeaturedSelected(false);
-              setIsCustomSelected(false);
-            }}
-            className={cn(
-              'flex flex-shrink-0 justify-start',
-              selectedCatecory === category ? '!bg-fill-theme-select' : '',
-            )}
-          >
-            {t(`customPrompt.${category}`, category)}
-          </Button>
-        ))}
-      </div>
-    </>
+      ))}
+    </div>
   );
 }

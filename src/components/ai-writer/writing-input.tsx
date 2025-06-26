@@ -7,7 +7,11 @@ import { Button } from '@/components/ui/button';
 import { FormatGroup } from '@/components/ui/format-group';
 import LoadingDots from '@/components/ui/loading-dots';
 import { Textarea } from '@/components/ui/textarea';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { toast } from '@/hooks/use-toast';
 import { useTranslation } from '@/i18n';
 import { cn } from '@/lib/utils';
@@ -22,12 +26,15 @@ const MAX_HEIGHT = 200;
 // Prevent focus on page load and cause the page to scroll
 const FOCUS_DELAY = 250;
 
-export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
+export function WritingInput({
+  onSubmit,
+  noBorder,
+  noSwitchMode,
+}: {
   onSubmit: (message: string) => Promise<() => void>;
   noBorder?: boolean;
   noSwitchMode?: boolean;
 }) {
-
   const { t } = useTranslation();
 
   const [, setFocused] = useState(false);
@@ -50,14 +57,14 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if(assistantType === undefined) {
+    if (assistantType === undefined) {
       setMessage('');
     }
   }, [assistantType]);
 
   const adjustHeight = useCallback(() => {
     const textarea = textareaRef.current;
-    if(!textarea) return;
+    if (!textarea) return;
 
     // reset height
     textarea.style.height = 'auto';
@@ -67,13 +74,13 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
     textarea.style.height = `${newHeight}px`;
 
     // toggle overflowY
-    textarea.style.overflowY = textarea.scrollHeight > MAX_HEIGHT ? 'auto' : 'hidden';
+    textarea.style.overflowY =
+      textarea.scrollHeight > MAX_HEIGHT ? 'auto' : 'hidden';
 
     // adjust container height
-    if(containerRef.current) {
+    if (containerRef.current) {
       containerRef.current.style.height = `${newHeight + (responseMode === ChatInputMode.FormatResponse ? 54 + 24 : 30 + 16)}px`; // 32px padding
     }
-
   }, [responseMode]);
 
   const handleInput = () => {
@@ -86,21 +93,21 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if(e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       void handleSubmit();
     }
   };
 
-  const handleSubmit = async() => {
-    if(!message.trim()) {
+  const handleSubmit = async () => {
+    if (!message.trim()) {
       toast({
         variant: 'destructive',
         description: `${t('errors.emptyMessage')}`,
       });
       return;
     }
-    if(isFetching || isApplying) {
+    if (isFetching || isApplying) {
       toast({
         variant: 'destructive',
         description: `${t('errors.wait')}`,
@@ -113,7 +120,7 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
     try {
       await onSubmit(message);
       // eslint-disable-next-line
-    } catch(e: any) {
+    } catch (e: any) {
       toast({
         variant: 'destructive',
         description: e.message,
@@ -123,7 +130,7 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
 
   useEffect(() => {
     const handleResize = () => {
-      if(message) {
+      if (message) {
         adjustHeight();
       }
     };
@@ -140,13 +147,16 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
     setTimeout(() => {
       const rect = textareaRef.current?.getBoundingClientRect();
       const containerRect = scrollContainer?.getBoundingClientRect();
-      if(!rect || !containerRect) return;
+      if (!rect || !containerRect) return;
 
-      const inViewport = rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
-      const bottomInView = rect.top < containerRect.top && rect.bottom > containerRect.top;
-      const topInView = rect.bottom > containerRect.bottom && rect.top < containerRect.bottom;
+      const inViewport =
+        rect.top >= containerRect.top && rect.bottom <= containerRect.bottom;
+      const bottomInView =
+        rect.top < containerRect.top && rect.bottom > containerRect.top;
+      const topInView =
+        rect.bottom > containerRect.bottom && rect.top < containerRect.bottom;
 
-      if(inViewport || bottomInView || topInView) {
+      if (inViewport || bottomInView || topInView) {
         textareaRef.current?.focus();
         return;
       }
@@ -157,7 +167,7 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
       });
     }, FOCUS_DELAY);
   }, [scrollContainer]);
-  
+
   useEffect(() => {
     adjustHeight();
   }, [adjustHeight, currentPromptId]);
@@ -175,10 +185,21 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
     [setResponseMode, updateCurrentPromptId],
   );
 
-  const formatTooltip = responseMode === ChatInputMode.FormatResponse ? t('input.button.auto') : t('input.button.format');
-  const FormatIcon = responseMode === ChatInputMode.FormatResponse ? AutoTextIcon : ImageTextIcon;
+  const formatTooltip =
+    responseMode === ChatInputMode.FormatResponse
+      ? t('input.button.auto')
+      : t('input.button.format');
+  const FormatIcon =
+    responseMode === ChatInputMode.FormatResponse
+      ? AutoTextIcon
+      : ImageTextIcon;
   return (
-    <div className={cn('writer-anchor flex w-full flex-col', noBorder ? '' : 'pb-[150px]')}>
+    <div
+      className={cn(
+        'writer-anchor flex w-full flex-col',
+        noBorder ? '' : 'pb-[150px]',
+      )}
+    >
       <div
         ref={containerRef}
         style={{
@@ -190,9 +211,10 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
         className={cn(
           noBorder ? '' : 'shadow-menu',
           'border bg-input-background w-full relative justify-between gap-1 flex flex-col border-border py-1 px-2 focus:border-primary rounded-[12px]',
-          noBorder ? 'ring-0' : 'ring-[0.5px] ring-input')}
+          noBorder ? 'ring-0' : 'ring-[0.5px] ring-input',
+        )}
       >
-        {responseMode === ChatInputMode.FormatResponse &&
+        {responseMode === ChatInputMode.FormatResponse && (
           <FormatGroup
             setOutputLayout={(newOutLayout) => {
               setResponseFormat({
@@ -208,7 +230,8 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
             }}
             outputContent={responseFormat.output_content}
             outputLayout={responseFormat.output_layout}
-          />}
+          />
+        )}
         <Textarea
           value={message}
           onChange={handleChange}
@@ -223,23 +246,29 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
             setFocused(false);
           }}
           rows={1}
-          className={'resize-none select-text writer-input !text-sm caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none'}
+          className={
+            'resize-none select-text writer-input !text-sm caret-primary min-h-[32px] !py-1 !px-1.5 !border-none !shadow-none w-full !ring-0 h-full !outline-none'
+          }
         />
 
         <div className={'flex justify-between items-center gap-4'}>
           <div className='flex items-center gap-1'>
-            {!noSwitchMode ?
+            {!noSwitchMode ? (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    onMouseDown={e => {
+                    onMouseDown={(e) => {
                       e.preventDefault();
                     }}
                     variant={'ghost'}
                     size={'icon'}
                     className={'w-7 h-7'}
                     onClick={() => {
-                      setResponseMode(responseMode === ChatInputMode.FormatResponse ? ChatInputMode.Auto : ChatInputMode.FormatResponse);
+                      setResponseMode(
+                        responseMode === ChatInputMode.FormatResponse
+                          ? ChatInputMode.Auto
+                          : ChatInputMode.FormatResponse,
+                      );
                     }}
                   >
                     <FormatIcon
@@ -250,14 +279,14 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
                     />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent
-                  align={'center'}
-                  side={'right'}
-                >
+                <TooltipContent align={'center'} side={'right'}>
                   {formatTooltip}
                 </TooltipContent>
-              </Tooltip> : <div />}
-            
+              </Tooltip>
+            ) : (
+              <div />
+            )}
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -275,39 +304,46 @@ export function WritingInput({ onSubmit, noBorder, noSwitchMode }: {
                 {t('customPrompt.browsePrompts')}
               </TooltipContent>
             </Tooltip>
-  
-            <PromptModal onUsePrompt={handleUsePrompt} />
+
+            <PromptModal
+              onUsePrompt={handleUsePrompt}
+              returnFocus={() => {
+                setFocused(true);
+                setTimeout(() => {
+                  textareaRef.current?.focus();
+                }, 200);
+              }}
+            />
           </div>
-          
+
           <div className={'flex gap-1 items-center'}>
             <ViewTree />
             {!hasAIAnswer() && <WritingMore input={message} />}
 
-           <Button
+            <Button
               onClick={handleSubmit}
               size={'icon'}
               variant={'link'}
               className={'w-7 h-7 text-fill-theme-thick !p-0.5'}
               disabled={!message.trim() || isFetching}
-              onMouseDown={e => {
+              onMouseDown={(e) => {
                 e.preventDefault();
               }}
             >
-              {isFetching ? <LoadingDots /> : <SendIcon
-                style={{
-                  width: 24,
-                  height: 24,
-                }}
-              />}
-  
+              {isFetching ? (
+                <LoadingDots />
+              ) : (
+                <SendIcon
+                  style={{
+                    width: 24,
+                    height: 24,
+                  }}
+                />
+              )}
             </Button>
-
           </div>
-
         </div>
       </div>
     </div>
-
   );
 }
-

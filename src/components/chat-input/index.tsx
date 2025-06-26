@@ -153,10 +153,6 @@ export function ChatInput() {
       updateCurrentPromptId(prompt.id);
       setResponseMode(ChatInputMode.Auto);
       setMessage(prompt.content);
-      if (textareaRef) {
-        textareaRef.current?.focus();
-        setFocused(true);
-      }
     },
     [setResponseMode, updateCurrentPromptId],
   );
@@ -261,7 +257,15 @@ export function ChatInput() {
               </TooltipContent>
             </Tooltip>
 
-            <PromptModal onUsePrompt={handleUsePrompt} />
+            <PromptModal
+              onUsePrompt={handleUsePrompt}
+              returnFocus={() => {
+                setFocused(true);
+                setTimeout(() => {
+                  textareaRef.current?.focus();
+                }, 200);
+              }}
+            />
           </div>
 
           <div className={'flex items-center gap-2'}>

@@ -1,22 +1,22 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { useTranslation } from '@/i18n';
-import { cn } from '@/lib/utils';
 import { usePromptModal } from '@/provider/prompt-modal-provider';
 import { AiPrompt, AiPromptCategory } from '@/types/prompt';
 import { SearchIcon } from 'lucide-react';
-import { forwardRef, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import { PromptCard } from './prompt-card';
 import { PromptPreview } from './prompt-preview';
 import CloseCircle from '@/assets/icons/close_circle.svg?react';
 import { PromptCategory } from './prompt-category';
+import { SearchInput } from '@/components/ui/search-input';
 
 export const PromptModal = forwardRef<
   HTMLDivElement,
   {
     onUsePrompt: (prompt: AiPrompt) => void;
+    returnFocus: () => void;
   }
->(({ onUsePrompt }, ref) => {
+>(({ onUsePrompt, returnFocus }, ref) => {
   const { isOpen, closeModal, prompts } = usePromptModal();
 
   const { t } = useTranslation();
@@ -28,8 +28,10 @@ export const PromptModal = forwardRef<
   const [selectedPreviewPromptId, setSelectedPreviewPromptId] = useState<
     string | null
   >(null);
-  const [focused, setFocused] = useState(false);
   const [filter, setFilter] = useState('');
+
+  const isScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
 
   const visiblePrompts = useMemo(() => {
     return prompts.filter((prompt) => {
@@ -68,12 +70,37 @@ export const PromptModal = forwardRef<
     }
   }, [selectedPreviewPromptId, visiblePrompts]);
 
+  const handleHoverPromptCard = useCallback(
+    (id: string) => {
+      if (isScrollingRef.current) return;
+
+      setSelectedPreviewPromptId(id);
+    },
+    [setSelectedPreviewPromptId],
+  );
+
+  const handleScroll = useCallback(() => {
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    isScrollingRef.current = true;
+
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 100);
+  }, []);
+
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
         if (!open) {
           setFilter('');
+          if (visiblePrompts.length > 0) {
+            setSelectedPreviewPromptId(visiblePrompts[0].id);
+          }
+          returnFocus();
           closeModal();
         }
       }}
@@ -100,50 +127,42 @@ export const PromptModal = forwardRef<
               setSelectedCategory={setSelectedCategory}
             />
           </div>
-          <div className='w-[33%] flex flex-col'>
-            <div className='px-3'>
-              <div
-                className={cn(
-                  'flex gap-2 items-center',
-                  `border border-border py-[10px] px-2 rounded-[10px]`,
-                  focused ? 'ring-ring ring-1 border-primary' : '',
-                )}
+          <div
+            onScroll={handleScroll}
+            className='w-[33%] flex flex-col gap-3 overflow-y-auto min-h-0 px-3 pb-3'
+          >
+            <div className='bg-background-primary sticky top-0 z-10'>
+              <SearchInput
+                value={filter}
+                onChange={(value) => setFilter(value)}
+                className='h-10 py-[10px] px-2 rounded-[10px]'
               >
-                <Input
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-                  autoFocus
-                  type='text'
-                  placeholder={t('search.label')}
-                  className={'!p-0 !h-6 !ring-0 !border-none !shadow-none'}
-                />
-                <CloseCircle
-                  className={'w-5 h-5 cursor-pointer text-icon-tertiary'}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => setFilter('')}
-                />
-              </div>
+                {filter && (
+                  <CloseCircle
+                    className={'w-5 h-5 cursor-pointer text-icon-tertiary'}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setFilter('')}
+                  />
+                )}
+              </SearchInput>
             </div>
             {visiblePrompts.length > 0 ? (
-              <div className='flex-1 flex flex-col gap-3 overflow-y-scroll min-h-0 p-3'>
-                {visiblePrompts.map((prompt) => (
-                  <PromptCard
-                    key={prompt.id}
-                    prompt={prompt}
-                    isSelected={selectedPreviewPromptId === prompt.id}
-                    onPreview={() => {
-                      setSelectedPreviewPromptId(prompt.id);
-                    }}
-                    onUsePrompt={() => {
-                      onUsePrompt(prompt);
-                      setFilter('');
-                      closeModal();
-                    }}
-                  />
-                ))}
-              </div>
+              visiblePrompts.map((prompt) => (
+                <PromptCard
+                  key={prompt.id}
+                  prompt={prompt}
+                  isSelected={selectedPreviewPromptId === prompt.id}
+                  onPreview={() => {
+                    handleHoverPromptCard(prompt.id);
+                  }}
+                  onUsePrompt={() => {
+                    onUsePrompt(prompt);
+                    setFilter('');
+                    returnFocus();
+                    closeModal();
+                  }}
+                />
+              ))
             ) : (
               <div className='flex-1 flex flex-col items-center justify-center min-h-0'>
                 <SearchIcon size={24} className={'text-icon-secondary'} />
@@ -154,13 +173,14 @@ export const PromptModal = forwardRef<
             )}
           </div>
 
-          <div className='w-[50%] flex flex-col gap-1 px-3'>
+          <div className='w-[50%] flex flex-col px-3 overflow-y-auto'>
             {selectedPrompt && (
               <PromptPreview
                 prompt={selectedPrompt}
                 onUsePrompt={() => {
                   onUsePrompt(selectedPrompt);
                   setFilter('');
+                  returnFocus();
                   closeModal();
                 }}
               />

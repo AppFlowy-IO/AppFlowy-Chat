@@ -6,35 +6,43 @@ import { useState } from 'react';
 
 interface SearchInputProps {
   value: string;
+  className?: string;
   onChange: (value: string) => void;
+  children?: React.ReactNode;
 }
 
 export function SearchInput({
   value,
+  className,
   onChange,
+  children,
 }: SearchInputProps) {
   const [focused, setFocused] = useState(false);
   const { t } = useTranslation();
 
   return (
     <div
-      className={cn('flex gap-2 items-center', `border border-border py-1 px-3 rounded-[8px]`, focused ? 'ring-ring ring-1 border-primary' : '')}
+      className={cn(
+        'flex gap-2 items-center',
+        'h-8 py-1.5 px-2 rounded-[8px] border-[1.5px]',
+        focused ? 'border-border-theme-thick' : 'border-border-primary',
+        className,
+      )}
     >
-      <SearchIcon
-        size={20}
-        className={'text-muted-foreground'}
-      />
+      <SearchIcon size={20} className={'shrink-0 text-icon-secondary'} />
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         autoFocus
-        type="text"
+        type='text'
         placeholder={t('search.label')}
-        className={'!p-0 !h-6 !ring-0 !border-none !shadow-none'}
+        className={
+          '!p-0 !h-fit !ring-0 !border-none !shadow-none rounded-none text-sm text-text-primary'
+        }
       />
+      {children}
     </div>
   );
 }
-
