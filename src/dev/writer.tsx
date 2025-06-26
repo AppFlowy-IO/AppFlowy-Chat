@@ -15,7 +15,7 @@ export function AIWriter() {
     undefined,
   );
 
-  if (!chatId) return null;
+  if (!chatId || !workspaceId) return null;
 
   return (
     <div
@@ -26,7 +26,7 @@ export function AIWriter() {
       }}
       className='w-full h-full overflow-y-auto overflow-hidden flex items-center justify-center'
     >
-      <PromptModalProvider>
+      <PromptModalProvider workspaceId={workspaceId}>
         <AIAssistantProvider
           viewId={chatId}
           request={request}

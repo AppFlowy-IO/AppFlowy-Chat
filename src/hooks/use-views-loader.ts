@@ -30,6 +30,18 @@ export function useViewsLoader() {
     }
   }, [requestInstance]);
 
+  const fetchAllViews = useCallback(async() => {
+    try {
+      setViewsLoading(true);
+      const view = await requestInstance.fetchViews(true);
+      setViewsLoading(false);
+      return view;
+      // eslint-disable-next-line
+    } catch(e: any) {
+      // do not show toast for no views
+    }
+  }, [requestInstance]);
+
   const insertContentToView = useCallback(async(viewId: string, data: EditorData) => {
     try {
       await requestInstance.insertContentToView(viewId, data);
@@ -64,6 +76,7 @@ export function useViewsLoader() {
   return {
     getView,
     fetchViews,
+    fetchAllViews,
     insertContentToView,
     createViewWithContent,
     viewsLoading,

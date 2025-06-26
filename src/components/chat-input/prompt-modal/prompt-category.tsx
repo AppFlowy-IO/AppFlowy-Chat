@@ -60,21 +60,21 @@ export function PromptCategory({
         >
           {t('customPrompt.featured')}
         </Button>
-        {/* <Button
-            variant={'ghost'}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => {
-              setIsCustomSelected(true);
-              setIsFeaturedSelected(false);
-              setSelectedCategory(null);
-            }}
-            className={cn(
-              'flex justify-start',
-              isCustomSelected ? '!bg-fill-theme-select' : '',
-            )}
-          >
-            {t('customPrompt.custom')}
-          </Button> */}
+        <Button
+          variant={'ghost'}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => {
+            setIsCustomSelected(true);
+            setIsFeaturedSelected(false);
+            setSelectedCategory(null);
+          }}
+          className={cn(
+            'flex justify-start',
+            isCustomSelected ? '!bg-fill-theme-select' : '',
+          )}
+        >
+          {t('customPrompt.custom')}
+        </Button>
         <Separator className='mt-2' />
       </div>
       <Button

@@ -36,13 +36,14 @@ function AIChat() {
     void fetchCurrentUser();
   }, [requestInstance]);
 
-  if(!requestInstance || !chatId) {
+  if (!requestInstance || !chatId || !workspaceId) {
     return null;
   }
   return (
     <div className={'flex transform w-full justify-center'}>
       <div className={'max-w-full w-[988px] px-24'}>
         <Chat
+          workspaceId={workspaceId}
           requestInstance={requestInstance}
           chatId={chatId}
           selectionMode={selectionMode}
