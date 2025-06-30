@@ -25,7 +25,11 @@ function Main(props: ChatProps) {
             <EditorProvider>
               <SelectionModeProvider>
                 <ResponseFormatProvider>
-                  <PromptModalProvider>
+                  <PromptModalProvider
+                    workspaceId={props.workspaceId}
+                    loadDatabasePrompts={props.loadDatabasePrompts}
+                    testDatabasePromptConfig={props.testDatabasePromptConfig}
+                  >
                     <MessagesHandlerProvider>
                       <div className={'w-full relative h-full flex flex-col'}>
                         <ChatMessages currentUser={currentUser} />
