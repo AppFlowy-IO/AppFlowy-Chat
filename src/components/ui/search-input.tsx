@@ -30,6 +30,7 @@ export function SearchInput({
       )}
     >
       <SearchIcon size={20} className={'shrink-0 text-icon-secondary'} />
+
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -39,7 +40,7 @@ export function SearchInput({
         type='text'
         placeholder={t('search.label')}
         className={
-          '!p-0 !h-fit !ring-0 !border-none !shadow-none rounded-none text-sm text-text-primary'
+          '!p-0 !h-fit !ring-0 !border-none !shadow-none rounded-none text-sm text-text-primary caret-fill-theme-thick'
         }
       />
       {children}
