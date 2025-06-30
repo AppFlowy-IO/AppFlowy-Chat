@@ -5,15 +5,14 @@ import { ChatProps } from '@/types';
 import { Toaster } from '@/components/ui/toaster';
 import '@/styles/index.scss';
 
+export * from '@/provider/prompt-modal-provider';
+
 initI18n();
 const i18n = getI18n();
 
 export function Chat(props: ChatProps) {
   return (
-    <div
-      id={'appflowy-chat'}
-      className={'w-full h-full overflow-hidden'}
-    >
+    <div id={'appflowy-chat'} className={'w-full h-full overflow-hidden'}>
       <ChatI18nContext.Provider value={i18n}>
         <TooltipProvider>
           <Main {...props} />
@@ -21,7 +20,6 @@ export function Chat(props: ChatProps) {
         <Toaster />
       </ChatI18nContext.Provider>
     </div>
-
   );
 }
 

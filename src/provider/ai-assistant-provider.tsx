@@ -17,6 +17,7 @@ import { ApplyingState, WriterContext } from '@/writer/context';
 import { EditorData } from '@appflowyinc/editor';
 import { findLast } from 'lodash-es';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { usePromptModal } from './prompt-modal-provider';
 
 initI18n();
 
@@ -65,6 +66,8 @@ export const AIAssistantProvider = ({
   const isApplying = applyingState === ApplyingState.applying;
   const cancelRef = useRef<(() => void) | undefined>();
   const initialScrollTopRef = useRef<number | null>(null);
+
+  const { currentPromptId, updateCurrentPromptId } = usePromptModal();
 
   useEffect(() => {
     if(!assistantType) {
@@ -135,6 +138,7 @@ export const AIAssistantProvider = ({
         format: responseMode === ChatInputMode.FormatResponse ? responseFormat : undefined,
         ragIds,
         completionHistory: completionHistoryRef.current,
+        promptId: currentPromptId || undefined,
       }, handleMessageChange);
 
       completionHistoryRef.current.push({
@@ -151,11 +155,12 @@ export const AIAssistantProvider = ({
       setApplyingState(ApplyingState.failed);
     } finally {
       setFetching(false);
+      updateCurrentPromptId(null);
     }
 
     return () => undefined;
 
-  }, [handleMessageChange, ragIds, request, responseFormat, responseMode]);
+  }, [currentPromptId, handleMessageChange, ragIds, request, responseFormat, responseMode, updateCurrentPromptId]);
 
   const improveWriting = useCallback(async(content: string) => {
     return fetchRequest(AIAssistantType.ImproveWriting, content);

@@ -10,7 +10,7 @@ export type GetChatMessagesPayload = Partial<{
   offset: number;
   after: number;
   before: number;
-}>
+}>;
 
 export interface RepeatedChatMessage {
   messages: ChatMessage[];
@@ -88,6 +88,7 @@ export interface ChatMessageMetadata {
 export interface SendQuestionPayload {
   content: string;
   message_type: MessageType;
+  prompt_id?: string;
 }
 
 export enum ChatInputMode {

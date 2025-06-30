@@ -38,7 +38,8 @@ export class WriterRequest {
     assistantType: AIAssistantType;
     format?: ResponseFormat;
     ragIds: string[];
-    completionHistory: CompletionResult[]
+    completionHistory: CompletionResult[];
+    promptId?: string;
   }, onMessage: (text: string, comment: string, done?: boolean) => void) => {
     const baseUrl = this.axiosInstance.defaults.baseURL;
     const url = `${baseUrl}/api/ai/${this.workspaceId}/v2/complete/stream`;
@@ -70,6 +71,7 @@ export class WriterRequest {
           workspace_id: this.workspaceId,
           rag_ids: payload.ragIds.length === 0 ? [this.viewId] : payload.ragIds,
           completion_history: payload.completionHistory,
+          prompt_id: payload.promptId,
         },
       }),
     });

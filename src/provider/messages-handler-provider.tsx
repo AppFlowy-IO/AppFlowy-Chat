@@ -15,6 +15,7 @@ import {
   ResponseFormat,
 } from '@/types';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { usePromptModal } from './prompt-modal-provider';
 
 interface MessagesHandlerContextTypes {
   fetchMessages: (payload?: GetChatMessagesPayload) => Promise<RepeatedChatMessage>;
@@ -47,6 +48,8 @@ function useMessagesHandler() {
   const {
     setResponseFormatWithId,
   } = useResponseFormatContext();
+
+  const { currentPromptId } = usePromptModal();
 
   const {
     toast,
@@ -127,9 +130,12 @@ function useMessagesHandler() {
       }, 0);
       registerAnimation(fakeMessageId);
 
+      const promptId = currentPromptId || undefined;
+
       const question = await requestInstance.submitQuestion({
         content: message,
         message_type: MessageType.User,
+        prompt_id: promptId,
       });
 
       const answerId = question.reply_message_id || (question.message_id + 1);
@@ -176,7 +182,7 @@ function useMessagesHandler() {
     } finally {
       setQuestionSending(false);
     }
-  }, [insertMessage, currentUser?.uuid, registerAnimation, requestInstance, removeMessages, registerFetchSuggestions, createAssistantMessage, messageIds, toast]);
+  }, [currentUser?.uuid, insertMessage, registerAnimation, currentPromptId, requestInstance, removeMessages, registerFetchSuggestions, createAssistantMessage, messageIds, toast]);
 
   const saveAnswer = useCallback(
     async(

@@ -1,4 +1,5 @@
 import { WriterCard } from '@/dev/writer-card';
+import { PromptModalProvider } from '@/provider/prompt-modal-provider';
 import { WriterRequest } from '@/request';
 import { AIAssistantProvider } from '@/writer';
 import { useMemo, useState } from 'react';
@@ -10,26 +11,30 @@ export function AIWriter() {
     return new WriterRequest(workspaceId, chatId);
   }, [chatId, workspaceId]);
 
-  const [container, setContainer] = useState<HTMLDivElement | undefined>(undefined);
+  const [container, setContainer] = useState<HTMLDivElement | undefined>(
+    undefined,
+  );
 
-  if(!chatId) return null;
+  if (!chatId) return null;
 
   return (
     <div
-      ref={el => {
-        if(el && !container) {
+      ref={(el) => {
+        if (el && !container) {
           setContainer(el);
         }
       }}
-      className="w-full h-full overflow-y-auto overflow-hidden flex items-center justify-center"
+      className='w-full h-full overflow-y-auto overflow-hidden flex items-center justify-center'
     >
-      <AIAssistantProvider
-        viewId={chatId}
-        request={request}
-        scrollContainer={container}
-      >
-        <WriterCard />
-      </AIAssistantProvider>
+      <PromptModalProvider>
+        <AIAssistantProvider
+          viewId={chatId}
+          request={request}
+          scrollContainer={container}
+        >
+          <WriterCard />
+        </AIAssistantProvider>
+      </PromptModalProvider>
     </div>
   );
 }

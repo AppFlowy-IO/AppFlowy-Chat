@@ -31,6 +31,7 @@ export function ContextPlaceholder() {
         />
       </EditorProvider>}
     </AIAssistant>
+    
     <Toaster />
   </div>;
 }

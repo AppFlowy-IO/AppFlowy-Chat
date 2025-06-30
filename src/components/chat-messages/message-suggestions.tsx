@@ -54,11 +54,7 @@ export function MessageSuggestions({ suggestions }: MessageSuggestionsProps) {
               key={index}
               className={'w-full justify-start overflow-hidden h-fit p-2'}
               onClick={() => handleClick(suggestion.content)}
-              startIcon={
-                <span className={'text-primary'}>
-                  <ChatIcon />
-                </span>
-              }
+              startIcon={<ChatIcon className='w-5 h-5 text-fill-theme-thick' />}
               variant={'ghost'}
             >
               <span className={'text-wrap !text-foreground/85 text-start'}>{suggestion.content}</span>

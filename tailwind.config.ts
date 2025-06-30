@@ -1,7 +1,7 @@
+import newColors from './tailwind/new-colors.cjs';
+
 export default {
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   implements: '#appflowy-chat',
   darkMode: ['class'],
   theme: {
@@ -13,7 +13,11 @@ export default {
       },
 
       colors: {
-        background: 'hsl(var(--background))',
+        ...newColors,
+        background: {
+          DEFAULT: 'hsl(var(--background))',
+          ...newColors['background'],
+        },
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',
@@ -53,8 +57,14 @@ export default {
         success: {
           DEFAULT: 'hsl(var(--success))',
         },
-        icon: 'hsl(var(--icon))',
-        border: 'hsl(var(--border))',
+        icon: {
+          DEFAULT: 'hsl(var(--icon))',
+          ...newColors['icon'],
+        },
+        border: {
+          DEFAULT: 'hsl(var(--border))',
+          ...newColors['border'],
+        },
         input: {
           DEFAULT: 'hsl(var(--input))',
           background: 'var(--input-background)',
@@ -67,8 +77,8 @@ export default {
       },
       boxShadow: {
         DEFAULT: 'var(--shadows-sm)',
-        'menu': 'var(--shadows-sm)',
-        'toast': 'var(--shadows-md)',
+        menu: 'var(--shadows-sm)',
+        toast: 'var(--shadows-md)',
       },
     },
   },

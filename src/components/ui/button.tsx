@@ -1,69 +1,106 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex select-none items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap  disabled:pointer-events-none  [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-border-error-thick aria-invalid:border-border-error-thick-hover aria-readonly:cursor-not-allowed',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground shadow hover:bg-primary/90',
+          'bg-fill-theme-thick text-text-on-fill hover:bg-fill-theme-thick-hover disabled:bg-fill-content-hover disabled:text-text-tertiary',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
+          'bg-fill-error-thick text-text-on-fill hover:bg-fill-error-thick-hover disabled:bg-fill-content-hover disabled:text-text-tertiary',
         outline:
-          'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
-        secondary:
-          'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
-        ghost: 'hover:bg-accent text-secondary-foreground hover:text-accent-foreground',
-        link: 'text-primary disabled:text-button-disabled underline-offset-4 hover:underline',
-      },
-      color: {
-        default: '',
-        primary: '!text-primary',
-        secondary: '!text-secondary-foreground',
+          'border border-border-primary bg-fill-content text-text-primary hover:bg-fill-content-hover hover:border-border-primary-hover disabled:text-text-tertiary',
+        'destructive-outline':
+          'bg-fill-content text-text-error hover:bg-fill-error-select hover:text-text-error-hover border border-border-error-thick hover:border-border-error-thick-hover disabled:text-text-tertiary disabled:border-border-primary',
+        ghost:
+          'hover:bg-fill-content-hover text-text-primary disabled:bg-fill-content disabled:text-text-tertiary',
+        link: 'hover:bg-fill-content text-text-action hover:text-text-action-hover !h-fit',
+        loading: 'opacity-50 cursor-not-allowed',
       },
       size: {
-        default: 'h-8 px-2 rounded-[8px]',
-        sm: 'h-8 rounded-md px-2 text-xs',
-        lg: 'h-10 rounded-md px-8',
-        icon: 'p-1 min-w-6 min-h-6 rounded-md',
+        sm: 'h-7 text-sm px-3 rounded-300 gap-2 font-normal',
+        default: 'h-8 text-sm px-3 rounded-300 gap-2 font-normal',
+        lg: 'h-10 rounded-400 text-sm px-4 gap-2 font-medium',
+        xl: 'h-14 rounded-500 px-4 text-xl gap-2 font-medium',
+        'icon-sm':
+          'w-6 h-6 rounded-300 p-0.5 text-icon-primary disabled:text-icon-tertiary',
+        icon: 'w-7 h-7 rounded-300 p-1 text-icon-primary disabled:text-icon-tertiary',
+        'icon-lg':
+          'w-8 h-8 rounded-300 p-2 text-icon-primary disabled:text-icon-tertiary',
+        'icon-xl':
+          'w-10 h-10 rounded-400 p-[10px] text-icon-primary disabled:text-icon-tertiary',
+      },
+      loading: {
+        true: 'opacity-70 cursor-not-allowed',
+        false: '',
+      },
+      danger: {
+        true: 'hover:text-text-error',
+        false: '',
       },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
-      color: 'default',
+      loading: false,
+      danger: false,
     },
   },
 );
 
-export interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-  color?: 'default' | 'primary' | 'secondary';
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, color, startIcon, endIcon, ...props }, ref) => {
+const Button = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<'button'> &
+    VariantProps<typeof buttonVariants> & {
+      asChild?: boolean;
+      startIcon?: React.ReactNode;
+    }
+>(
+  (
+    {
+      className,
+      variant,
+      size,
+      loading,
+      asChild = false,
+      startIcon,
+      children,
+      danger,
+      ...props
+    },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : 'button';
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className, color }))}
         ref={ref}
+        data-slot='button'
+        className={cn(
+          buttonVariants({ variant, size, className, loading, danger }),
+        )}
+        onClick={(e) => {
+          if (loading) {
+            e.stopPropagation();
+            return;
+          }
+
+          if (props.onClick) {
+            props.onClick(e);
+          }
+        }}
         {...props}
       >
         {startIcon}
-        {props.children}
-        {endIcon}
+        {children}
       </Comp>
     );
   },
 );
-Button.displayName = 'Button';
 
 export { Button, buttonVariants };
