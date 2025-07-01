@@ -43,7 +43,7 @@ export function PromptCategory({
   }, [t]);
 
   return (
-    <div className='flex flex-col pr-3 overflow-auto justify-between'>
+    <div className='flex flex-col pr-3 appflowy-scrollbar overflow-auto justify-between'>
       <div className='sticky top-0 z-10 bg-background-primary mb-2 flex flex-col'>
         <Button
           variant={'ghost'}

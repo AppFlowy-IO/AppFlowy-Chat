@@ -180,7 +180,7 @@ export const PromptModal = forwardRef<
             <>
               <div
                 onScroll={handleScroll}
-                className='w-[33%] flex flex-col gap-3 overflow-y-auto min-h-0 px-3 pb-3'
+                className='w-[33%] flex flex-col gap-3 appflowy-scrollbar overflow-y-auto min-h-0 px-3 pb-3'
               >
                 <div className='bg-background-primary sticky top-0 z-10 flex flex-col gap-3'>
                   {isCustomSelected && databaseConfig && (
@@ -242,7 +242,7 @@ export const PromptModal = forwardRef<
                 )}
               </div>
 
-              <div className='w-[50%] flex flex-col px-3 overflow-y-auto'>
+              <div className='w-[50%] flex flex-col px-3 appflowy-scrollbar overflow-y-auto'>
                 {selectedPrompt && (
                   <PromptPreview
                     prompt={selectedPrompt}
