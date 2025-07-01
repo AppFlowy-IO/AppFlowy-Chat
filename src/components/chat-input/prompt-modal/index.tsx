@@ -57,7 +57,7 @@ export const PromptModal = forwardRef<
         (!isFeaturedSelected &&
           !isCustomSelected &&
           selectedCatecory === null) ||
-        selectedCatecory === prompt.category;
+        (selectedCatecory && prompt.category.includes(selectedCatecory));
 
       if (!matchesCategory) return false;
 

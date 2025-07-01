@@ -123,23 +123,24 @@ export const parsePromptData = (
   rawData: RawPromptData[],
   translations?: Map<AiPromptCategory, string>,
 ): AiPrompt[] => {
-  return rawData.map((raw) => {
-    const category: AiPromptCategory = (() => {
-      if (!raw.category) {
+  return rawData.flatMap((raw) => {
+    const parseCategory = (categoryStr: string): AiPromptCategory => {
+      const trimmedCategory = categoryStr.trim();
+      if (!trimmedCategory) {
         return AiPromptCategory.Others;
       }
 
       const categoryValues = Object.values(AiPromptCategory);
 
-      if ((categoryValues as string[]).includes(raw.category)) {
-        return raw.category as AiPromptCategory;
+      if ((categoryValues as string[]).includes(trimmedCategory)) {
+        return trimmedCategory as AiPromptCategory;
       }
 
       if (translations) {
         const matchingCategory = categoryValues.find(
           (cat) =>
             translations.get(cat)?.toLowerCase() ===
-            raw.category?.toLowerCase(),
+            trimmedCategory.toLowerCase(),
         );
         if (matchingCategory) {
           return matchingCategory;
@@ -147,12 +148,16 @@ export const parsePromptData = (
       }
 
       return AiPromptCategory.Others;
-    })();
+    };
+
+    const categories = raw.category
+      ? raw.category.split(',').map(parseCategory)
+      : [AiPromptCategory.Others];
 
     return {
       id: raw.id,
       name: raw.name,
-      category: category,
+      category: categories,
       content: raw.content,
       example: raw.example ?? '',
       isFeatured: raw.isFeatured ?? false,

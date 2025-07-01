@@ -156,20 +156,20 @@ export function PromptDatabaseModal({
               <FieldSelector
                 title={t('customPrompt.title')}
                 selectedFieldId={currentDatabaseConfig?.titleFieldId || null}
-                fields={currentFields}
+                fields={currentFields.filter((f) => !f.isSelect)}
                 isDisabled={true}
                 onFieldChange={() => {}}
               />
               <FieldSelector
                 title={t('customPrompt.content')}
                 selectedFieldId={currentDatabaseConfig?.contentFieldId || null}
-                fields={currentFields}
+                fields={currentFields.filter((f) => !f.isSelect)}
                 onFieldChange={handleChangeContentId}
               />
               <FieldSelector
                 title={t('customPrompt.example')}
                 selectedFieldId={currentDatabaseConfig?.exampleFieldId || null}
-                fields={currentFields}
+                fields={currentFields.filter((f) => !f.isSelect)}
                 onFieldChange={handleChangeExampleId}
                 isOptional={true}
               />
