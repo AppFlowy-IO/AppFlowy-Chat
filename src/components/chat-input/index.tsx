@@ -131,10 +131,6 @@ export function ChatInput() {
     return () => window.removeEventListener('resize', handleResize);
   }, [adjustHeight, message]);
 
-  useEffect(() => {
-    adjustHeight();
-  }, [adjustHeight]);
-
   const formatTooltip =
     responseMode === ChatInputMode.FormatResponse
       ? t('input.button.auto')
@@ -146,7 +142,7 @@ export function ChatInput() {
 
   useEffect(() => {
     adjustHeight();
-  }, [adjustHeight, currentPromptId]);
+  }, [adjustHeight, currentPromptId, message]);
 
   const handleUsePrompt = useCallback(
     (prompt: AiPrompt) => {
