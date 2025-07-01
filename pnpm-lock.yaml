@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@appflowyinc/editor':
-    specifier: ^0.1.7
-    version: 0.1.7(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0)
+    specifier: ^0.1.13
+    version: 0.1.13(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0)
   '@jest/globals':
     specifier: ^29.7.0
     version: 29.7.0
@@ -199,8 +199,8 @@ packages:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
-  /@appflowyinc/editor@0.1.7(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0):
-    resolution: {integrity: sha512-0NtiXtW6KuFFROZN97MRfPyPGh9gCKNXRDOmCi5nePJgLTd7mjzPokRfvjCal3Q5UrcowXqkZacKkfMUhEAlxg==}
+  /@appflowyinc/editor@0.1.13(@types/react-dom@18.3.1)(@types/react@18.3.12)(i18next-resources-to-backend@1.2.1)(i18next@22.4.10)(react-dom@18.3.1)(react-i18next@14.1.0)(react@18.3.1)(slate-history@0.110.3)(slate-react@0.112.1)(slate@0.112.0):
+    resolution: {integrity: sha512-iMN+BgNF9bAXjrpqstakC4q/vsW4A37INBlATyEoC04dsMHvbKlZL8k/eA9DjHU6MEk+BijSpbN6oUTKlxIpdA==}
     peerDependencies:
       i18next: ^22.4.10
       i18next-resources-to-backend: ^1.2.1
@@ -215,7 +215,7 @@ packages:
       '@radix-ui/react-popover': 1.1.14(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
       '@radix-ui/react-select': 2.1.4(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
       '@radix-ui/react-separator': 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
-      '@radix-ui/react-slot': 1.1.2(@types/react@18.3.12)(react@18.3.1)
+      '@radix-ui/react-slot': 1.2.3(@types/react@18.3.12)(react@18.3.1)
       '@radix-ui/react-switch': 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
       '@radix-ui/react-tooltip': 1.1.6(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1)(react@18.3.1)
       class-variance-authority: 0.7.1

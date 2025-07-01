@@ -35,7 +35,7 @@
     "analyze": "ANALYZE_MODE=true vite build"
   },
   "peerDependencies": {
-    "@appflowyinc/editor": "^0.1.7",
+    "@appflowyinc/editor": "^0.1.13",
     "axios": "^1.7.9",
     "dompurify": "^3.2.4",
     "i18next": "^22.4.10",
@@ -98,5 +98,6 @@
     "vite-plugin-dts": "^4.3.0",
     "vite-plugin-remove-console": "^2.2.0",
     "vite-plugin-svgr": "^4.3.0"
-  }
+  },
+  "packageManager": "pnpm@8.11.0+sha1.01bf39424f1008f29012bbae851d2acb8a20a0d0"
 }
