@@ -24,16 +24,16 @@ function Main(props: ChatProps) {
         <MessageAnimationProvider>
           <SuggestionsProvider>
             <EditorProvider>
-              <SelectionModeProvider>
-                <ResponseFormatProvider>
-                  <ViewLoaderProvider
-                    getView={(viewId: string, forceRefresh?: boolean) =>
-                      props.requestInstance.getView(viewId, forceRefresh)
-                    }
-                    fetchViews={(forceRefresh?: boolean) =>
-                      props.requestInstance.fetchViews(forceRefresh)
-                    }
-                  >
+              <ViewLoaderProvider
+                getView={(viewId: string, forceRefresh?: boolean) =>
+                  props.requestInstance.getView(viewId, forceRefresh)
+                }
+                fetchViews={(forceRefresh?: boolean) =>
+                  props.requestInstance.fetchViews(forceRefresh)
+                }
+              >
+                <SelectionModeProvider>
+                  <ResponseFormatProvider>
                     <PromptModalProvider
                       workspaceId={props.workspaceId}
                       loadDatabasePrompts={props.loadDatabasePrompts}
@@ -55,9 +55,9 @@ function Main(props: ChatProps) {
                         </div>
                       </MessagesHandlerProvider>
                     </PromptModalProvider>
-                  </ViewLoaderProvider>
-                </ResponseFormatProvider>
-              </SelectionModeProvider>
+                  </ResponseFormatProvider>
+                </SelectionModeProvider>
+              </ViewLoaderProvider>
             </EditorProvider>
           </SuggestionsProvider>
         </MessageAnimationProvider>
