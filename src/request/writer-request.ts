@@ -164,6 +164,22 @@ export class WriterRequest {
 
     return { cancel, streamPromise };
   };
+  
+  async getView(viewId: string) {
+    const url = `/api/workspace/${this.workspaceId}/folder?depth=1&root_view_id=${viewId}`;
+
+    const res = await this.axiosInstance.get<{
+      code: number;
+      data: View;
+      message: string;
+    }>(url);
+
+    if(res?.data.code === 0) {
+      return res.data.data;
+    }
+
+    return Promise.reject(res?.data);
+  }
 
   fetchViews = async() => {
     const url = `/api/workspace/${this.workspaceId}/folder?depth=10`;

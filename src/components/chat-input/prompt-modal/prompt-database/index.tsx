@@ -7,7 +7,6 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useViewsLoader } from '@/hooks/use-views-loader';
 import { useTranslation } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { usePromptModal } from '@/provider/prompt-modal-provider';
@@ -16,6 +15,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { PromptDatabaseViews } from './prompt-database-views';
 import CloseCircle from '@/assets/icons/close_circle.svg?react';
 import { InvalidDatabaseDialog } from './invalid-database-dialog';
+import { useViewLoader } from '@/provider/view-loader-provider';
 
 export function PromptDatabaseModal({
   isOpen,
@@ -24,7 +24,7 @@ export function PromptDatabaseModal({
   isOpen: boolean;
   closeModal: () => void;
 }) {
-  const { getView } = useViewsLoader();
+  const { getView } = useViewLoader();
 
   const { t } = useTranslation();
 

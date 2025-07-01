@@ -13,6 +13,7 @@ import { SelectionModeProvider } from '@/provider/selection-mode-provider';
 import { SuggestionsProvider } from '@/provider/suggestions-provider';
 import { ChatProps } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ViewLoaderProvider } from '@/provider/view-loader-provider';
 
 function Main(props: ChatProps) {
   const { currentUser, selectionMode } = props;
@@ -25,27 +26,36 @@ function Main(props: ChatProps) {
             <EditorProvider>
               <SelectionModeProvider>
                 <ResponseFormatProvider>
-                  <PromptModalProvider
-                    workspaceId={props.workspaceId}
-                    loadDatabasePrompts={props.loadDatabasePrompts}
-                    testDatabasePromptConfig={props.testDatabasePromptConfig}
+                  <ViewLoaderProvider
+                    getView={(viewId: string, forceRefresh?: boolean) =>
+                      props.requestInstance.getView(viewId, forceRefresh)
+                    }
+                    fetchViews={(forceRefresh?: boolean) =>
+                      props.requestInstance.fetchViews(forceRefresh)
+                    }
                   >
-                    <MessagesHandlerProvider>
-                      <div className={'w-full relative h-full flex flex-col'}>
-                        <ChatMessages currentUser={currentUser} />
-                        <motion.div
-                          layout
-                          className={cn(
-                            'w-full relative flex pb-6 justify-center max-sm:hidden',
-                          )}
-                        >
-                          <AnimatePresence mode='wait'>
-                            {!selectionMode && <ChatInput />}
-                          </AnimatePresence>
-                        </motion.div>
-                      </div>
-                    </MessagesHandlerProvider>
-                  </PromptModalProvider>
+                    <PromptModalProvider
+                      workspaceId={props.workspaceId}
+                      loadDatabasePrompts={props.loadDatabasePrompts}
+                      testDatabasePromptConfig={props.testDatabasePromptConfig}
+                    >
+                      <MessagesHandlerProvider>
+                        <div className={'w-full relative h-full flex flex-col'}>
+                          <ChatMessages currentUser={currentUser} />
+                          <motion.div
+                            layout
+                            className={cn(
+                              'w-full relative flex pb-6 justify-center max-sm:hidden',
+                            )}
+                          >
+                            <AnimatePresence mode='wait'>
+                              {!selectionMode && <ChatInput />}
+                            </AnimatePresence>
+                          </motion.div>
+                        </div>
+                      </MessagesHandlerProvider>
+                    </PromptModalProvider>
+                  </ViewLoaderProvider>
                 </ResponseFormatProvider>
               </SelectionModeProvider>
             </EditorProvider>

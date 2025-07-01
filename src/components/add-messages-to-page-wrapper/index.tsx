@@ -5,31 +5,29 @@ import { SearchInput } from '@/components/ui/search-input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
-import { useViewsLoader } from '@/hooks/use-views-loader';
+import { useViewContentInserter } from '@/hooks/use-view-content-inserter';
 import { useTranslation } from '@/i18n';
 import { useEditorContext } from '@/provider/editor-provider';
 import { ChatMessage } from '@/types';
 import { useCallback, useState } from 'react';
+import { useViewLoader } from '@/chat';
 
 export function AddMessageToPageWrapper({ onFinished, messages, children }: {
   messages: ChatMessage[];
   children?: React.ReactNode;
   onFinished?: () => void;
 }) {
-
   const {
     openingViewId,
     chatId,
   } = useChatContext();
-
+  
+  const { getView } = useViewLoader();
+  const { getEditor } = useEditorContext();
   const {
-    getEditor,
-  } = useEditorContext();
-  const {
-    getView,
     createViewWithContent,
     insertContentToView,
-  } = useViewsLoader();
+  } = useViewContentInserter();
 
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');

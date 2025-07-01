@@ -18,7 +18,7 @@ import { PromptCategory } from './prompt-category';
 import { SearchInput } from '@/components/ui/search-input';
 import { Button } from '@/components/ui/button';
 import { PromptDatabaseModal } from './prompt-database';
-import { useViewsLoader } from '@/hooks/use-views-loader';
+import { useViewLoader } from '@/provider/view-loader-provider';
 
 export const PromptModal = forwardRef<
   HTMLDivElement,
@@ -30,7 +30,7 @@ export const PromptModal = forwardRef<
   const { isOpen, closeModal, prompts, reloadDatabasePrompts, databaseConfig } =
     usePromptModal();
 
-  const { getView } = useViewsLoader();
+  const { getView } = useViewLoader();
 
   const { t } = useTranslation();
 

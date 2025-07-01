@@ -1,6 +1,6 @@
+import { useViewLoader } from '@/chat';
 import LoadingDots from '@/components/ui/loading-dots';
 import SpaceItem from '@/components/view/space-item';
-import { useViewsLoader } from '@/hooks/use-views-loader';
 import { useTranslation } from '@/i18n';
 import { hasDatabaseViewChild, searchDatabaseViews } from '@/lib/views';
 import { View } from '@/types';
@@ -16,7 +16,7 @@ export function SpaceList({
 }) {
   const { t } = useTranslation();
 
-  const { fetchAllViews, viewsLoading } = useViewsLoader();
+  const { fetchViews, viewsLoading } = useViewLoader();
 
   const [folder, setFolder] = useState<View | null>(null);
 
@@ -32,11 +32,11 @@ export function SpaceList({
 
   useEffect(() => {
     void (async () => {
-      const data = await fetchAllViews();
+      const data = await fetchViews((v) => v);
       if (!data) return;
       setFolder(data);
     })();
-  }, [fetchAllViews]);
+  }, [fetchViews, filterDatabaseViews]);
 
   const filteredSpaces = useMemo(() => {
     const spaces = folder?.children.filter((view) => view.extra?.is_space);

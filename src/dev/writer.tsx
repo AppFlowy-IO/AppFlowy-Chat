@@ -4,6 +4,7 @@ import { WriterRequest } from '@/request';
 import { AIAssistantProvider } from '@/writer';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { ViewLoaderProvider } from '..';
 
 export function AIWriter() {
   const { workspaceId, chatId } = useParams();
@@ -26,15 +27,20 @@ export function AIWriter() {
       }}
       className='w-full h-full overflow-y-auto overflow-hidden flex items-center justify-center'
     >
-      <PromptModalProvider workspaceId={workspaceId}>
-        <AIAssistantProvider
-          viewId={chatId}
-          request={request}
-          scrollContainer={container}
-        >
-          <WriterCard />
-        </AIAssistantProvider>
-      </PromptModalProvider>
+      <ViewLoaderProvider
+        getView={request.getView}
+        fetchViews={request.fetchViews}
+      >
+        <PromptModalProvider workspaceId={workspaceId}>
+          <AIAssistantProvider
+            viewId={chatId}
+            request={request}
+            scrollContainer={container}
+          >
+            <WriterCard />
+          </AIAssistantProvider>
+        </PromptModalProvider>
+      </ViewLoaderProvider>
     </div>
   );
 }
