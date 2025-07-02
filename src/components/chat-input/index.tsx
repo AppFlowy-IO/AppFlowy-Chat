@@ -43,8 +43,12 @@ export function ChatInput() {
   } = useMessagesHandlerContext();
   const { responseFormat, responseMode, setResponseFormat, setResponseMode } =
     useResponseFormatContext();
-  const { openModal, currentPromptId, updateCurrentPromptId } =
-    usePromptModal();
+  const {
+    openModal,
+    currentPromptId,
+    updateCurrentPromptId,
+    reloadDatabasePrompts,
+  } = usePromptModal();
 
   const { chatId } = useChatContext();
 
@@ -243,7 +247,10 @@ export function ChatInput() {
                   }}
                   variant={'ghost'}
                   className={'h-7 text-xs'}
-                  onClick={openModal}
+                  onClick={() => {
+                    reloadDatabasePrompts();
+                    openModal();
+                  }}
                 >
                   {t('customPrompt.browsePrompts')}
                 </Button>

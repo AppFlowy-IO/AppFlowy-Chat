@@ -27,8 +27,14 @@ export const PromptModal = forwardRef<
     returnFocus: () => void;
   }
 >(({ onUsePrompt, returnFocus }, ref) => {
-  const { isOpen, closeModal, prompts, reloadDatabasePrompts, databaseConfig } =
-    usePromptModal();
+  const {
+    isOpen,
+    openModal,
+    closeModal,
+    prompts,
+    reloadDatabasePrompts,
+    databaseConfig,
+  } = usePromptModal();
 
   const { getView } = useViewLoader();
 
@@ -148,6 +154,7 @@ export const PromptModal = forwardRef<
           returnFocus();
           closeModal();
         } else {
+          openModal();
           reloadDatabasePrompts();
         }
       }}

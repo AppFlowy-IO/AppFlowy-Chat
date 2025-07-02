@@ -98,6 +98,5 @@
     "vite-plugin-dts": "^4.3.0",
     "vite-plugin-remove-console": "^2.2.0",
     "vite-plugin-svgr": "^4.3.0"
-  },
-  "packageManager": "pnpm@8.11.0+sha1.01bf39424f1008f29012bbae851d2acb8a20a0d0"
+  }
 }
