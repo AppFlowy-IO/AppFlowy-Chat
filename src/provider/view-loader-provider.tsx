@@ -64,8 +64,7 @@ export const ViewLoaderProvider = ({
   const getViewImpl = useCallback(
     async (viewId: string, forceRefresh = true) => {
       try {
-        const view = await getView(viewId, forceRefresh);
-        return view;
+        return await getView(viewId, forceRefresh);
         // eslint-disable-next-line
       } catch (e: any) {
         toast({

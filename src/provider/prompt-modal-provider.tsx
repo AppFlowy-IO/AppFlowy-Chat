@@ -115,7 +115,8 @@ export const PromptModalProvider = ({
     const config = JSON.parse(savedConfig) as PromptDatabaseConfiguration;
 
     try {
-      const { rawDatabasePrompts, fields } = await loadDatabasePrompts(config);
+      const { rawDatabasePrompts, fields: loadedFields } =
+        await loadDatabasePrompts(config);
 
       const categories = new Map(
         Object.values(AiPromptCategory).map((category) => [
@@ -137,7 +138,7 @@ export const PromptModalProvider = ({
       ];
 
       setCurrentDatabaseConfig(config);
-      setFields(fields);
+      setFields(loadedFields);
     } catch (err) {
       console.error(
         'Failed to load custom prompts using database config:',

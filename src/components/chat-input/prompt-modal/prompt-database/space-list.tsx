@@ -39,10 +39,13 @@ export function SpaceList({
   }, [fetchViews, filterDatabaseViews]);
 
   const filteredSpaces = useMemo(() => {
-    const spaces = folder?.children.filter((view) => view.extra?.is_space);
-    const filteredViews = spaces ? filterDatabaseViews(spaces) : [];
-    return searchDatabaseViews(filteredViews || [], searchValue);
-  }, [filterDatabaseViews, folder?.children, searchValue]);
+    if (!folder || !folder.children) return [];
+
+    const spaces = folder.children.filter((view) => view.extra?.is_space);
+    const filteredViews = filterDatabaseViews(spaces);
+
+    return searchDatabaseViews(filteredViews, searchValue);
+  }, [filterDatabaseViews, folder, searchValue]);
 
   if (viewsLoading) {
     return (
