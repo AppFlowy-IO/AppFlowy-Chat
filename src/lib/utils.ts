@@ -1,7 +1,7 @@
 import { EditorData, EditorNode } from '@appflowyinc/editor';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { AiPrompt, AiPromptCategory } from '@/types/prompt';
+import { AiPrompt, AiPromptCategory, RawPromptData } from '@/types/prompt';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -119,28 +119,45 @@ export function convertToPageData(data: EditorData) {
   return data.map(traverse);
 }
 
-interface RawPromptData {
-  id: string;
-  name: string;
-  category?: string;
-  content: string;
-  example?: string;
-  isFeatured?: boolean;
-  isCustom?: boolean;
-}
+export const parsePromptData = (
+  rawData: RawPromptData[],
+  translations?: Map<AiPromptCategory, string>,
+): AiPrompt[] => {
+  return rawData.flatMap((raw) => {
+    const parseCategory = (categoryStr: string): AiPromptCategory => {
+      const trimmedCategory = categoryStr.trim();
+      if (!trimmedCategory) {
+        return AiPromptCategory.Others;
+      }
 
-export const parsePromptData = (rawData: RawPromptData[]): AiPrompt[] => {
-  return rawData.map((raw) => {
-    const category: AiPromptCategory =
-      raw.category &&
-      (Object.values(AiPromptCategory) as string[]).includes(raw.category)
-        ? (raw.category as AiPromptCategory)
-        : AiPromptCategory.Others;
+      const categoryValues = Object.values(AiPromptCategory);
+
+      if ((categoryValues as string[]).includes(trimmedCategory)) {
+        return trimmedCategory as AiPromptCategory;
+      }
+
+      if (translations) {
+        const matchingCategory = categoryValues.find(
+          (cat) =>
+            translations.get(cat)?.toLowerCase() ===
+            trimmedCategory.toLowerCase(),
+        );
+        if (matchingCategory) {
+          return matchingCategory;
+        }
+      }
+
+      return AiPromptCategory.Others;
+    };
+
+    const categories = raw.category
+      ? raw.category.split(',').map(parseCategory)
+      : [AiPromptCategory.Others];
 
     return {
       id: raw.id,
       name: raw.name,
-      category: category,
+      category: categories,
       content: raw.content,
       example: raw.example ?? '',
       isFeatured: raw.isFeatured ?? false,

@@ -43,8 +43,12 @@ export function ChatInput() {
   } = useMessagesHandlerContext();
   const { responseFormat, responseMode, setResponseFormat, setResponseMode } =
     useResponseFormatContext();
-  const { openModal, currentPromptId, updateCurrentPromptId } =
-    usePromptModal();
+  const {
+    openModal,
+    currentPromptId,
+    updateCurrentPromptId,
+    reloadDatabasePrompts,
+  } = usePromptModal();
 
   const { chatId } = useChatContext();
 
@@ -131,10 +135,6 @@ export function ChatInput() {
     return () => window.removeEventListener('resize', handleResize);
   }, [adjustHeight, message]);
 
-  useEffect(() => {
-    adjustHeight();
-  }, [adjustHeight]);
-
   const formatTooltip =
     responseMode === ChatInputMode.FormatResponse
       ? t('input.button.auto')
@@ -146,7 +146,7 @@ export function ChatInput() {
 
   useEffect(() => {
     adjustHeight();
-  }, [adjustHeight, currentPromptId]);
+  }, [adjustHeight, currentPromptId, message]);
 
   const handleUsePrompt = useCallback(
     (prompt: AiPrompt) => {
@@ -247,7 +247,10 @@ export function ChatInput() {
                   }}
                   variant={'ghost'}
                   className={'h-7 text-xs'}
-                  onClick={openModal}
+                  onClick={() => {
+                    reloadDatabasePrompts();
+                    openModal();
+                  }}
                 >
                   {t('customPrompt.browsePrompts')}
                 </Button>

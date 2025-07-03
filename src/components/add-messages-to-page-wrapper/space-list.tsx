@@ -3,12 +3,12 @@ import { Button } from '@/components/ui/button';
 import LoadingDots from '@/components/ui/loading-dots';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import SpaceItem from '@/components/view/space-item';
-import { useViewsLoader } from '@/hooks/use-views-loader';
 import { useTranslation } from '@/i18n';
 import { searchViews } from '@/lib/views';
 import { View } from '@/types';
 import { useEffect, useMemo, useState } from 'react';
 import { PlusIcon } from 'lucide-react';
+import { useViewLoader } from '@/chat';
 
 export function SpaceList({
   searchValue,
@@ -24,7 +24,7 @@ export function SpaceList({
   const {
     fetchViews,
     viewsLoading,
-  } = useViewsLoader();
+  } = useViewLoader();
 
   const [folder, setFolder] = useState<View | null>(null);
 

@@ -18,6 +18,7 @@ import { EditorData } from '@appflowyinc/editor';
 import { findLast } from 'lodash-es';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { usePromptModal } from './prompt-modal-provider';
+import { ViewLoaderProvider } from './view-loader-provider';
 
 initI18n();
 
@@ -347,11 +348,16 @@ export const AIAssistantProvider = ({
 
       <ChatI18nContext.Provider value={i18n}>
         <TooltipProvider>
-          {children}
-          <ConfirmDiscard
-            open={openDiscard}
-            onClose={() => setOpenDiscard(false)}
-          />
+          <ViewLoaderProvider
+            getView={(viewId: string) => request.getView(viewId)}
+            fetchViews={() => request.fetchViews()}
+          >
+            {children}
+            <ConfirmDiscard
+              open={openDiscard}
+              onClose={() => setOpenDiscard(false)}
+            />
+          </ViewLoaderProvider>
         </TooltipProvider>
       </ChatI18nContext.Provider>
     </WriterContext.Provider>

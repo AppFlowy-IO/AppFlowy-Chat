@@ -1,6 +1,9 @@
+import BoardIcon from '@/assets/icons/board.svg?react';
+import CalendarIcon from '@/assets/icons/calendar.svg?react';
 import DocIcon from '@/assets/icons/doc.svg?react';
+import GridIcon from '@/assets/icons/grid.svg?react';
 import { cn, getIcon, renderColor } from '@/lib/utils';
-import { View, ViewIconType } from '@/types';
+import { View, ViewIconType, ViewLayout } from '@/types';
 import DOMPurify from 'dompurify';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -46,13 +49,17 @@ function PageIcon({ view }: {
     /></span>;
   }, [iconColor, iconSvg]);
 
-  if(!icon || !icon.value) {
-    return <DocIcon
-      style={{
-        width: 16,
-        height: 16,
-      }}
-    />;
+  if (!icon || !icon.value) {
+    switch (view.layout) {
+      case ViewLayout.Board:
+        return <BoardIcon className='h-5 w-5' />;
+      case ViewLayout.Calendar:
+        return <CalendarIcon className='h-5 w-5' />;
+      case ViewLayout.Grid:
+        return <GridIcon className='h-5 w-5' />;
+      default:
+        return <DocIcon className='h-4 w-4' />;
+    }
   }
 
   if(isEmoji) {

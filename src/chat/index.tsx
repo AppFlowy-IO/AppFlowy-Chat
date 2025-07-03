@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import '@/styles/index.scss';
 
 export * from '@/provider/prompt-modal-provider';
+export * from '@/provider/view-loader-provider';
 
 initI18n();
 const i18n = getI18n();

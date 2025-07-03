@@ -26,9 +26,26 @@ export enum AiPromptCategory {
 export interface AiPrompt {
   id: string;
   name: string;
-  category: AiPromptCategory;
+  category: AiPromptCategory[];
   content: string;
   example: string;
   isFeatured: boolean;
   isCustom: boolean;
+}
+
+export interface RawPromptData {
+  id: string;
+  name: string;
+  category?: string;
+  content: string;
+  example?: string;
+  isFeatured?: boolean;
+  isCustom?: boolean;
+}
+
+export interface PromptDatabaseField {
+  id: string;
+  name: string;
+  isPrimary: boolean;
+  isSelect: boolean;
 }

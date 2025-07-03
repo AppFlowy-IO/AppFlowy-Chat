@@ -1,12 +1,12 @@
 import { useChatContext } from '@/chat/context';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useViewsLoader } from '@/hooks/use-views-loader';
 import { useTranslation } from '@/i18n';
 import { ChatMessageMetadata, View } from '@/types';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import DocumentIcon from '@/assets/icons/doc.svg?react';
+import { useViewLoader } from '@/chat';
 
 function MessageSources({
   sources,
@@ -15,7 +15,7 @@ function MessageSources({
 }) {
   const {
     getView,
-  } = useViewsLoader();
+  } = useViewLoader();
   const {
     onOpenView,
   } = useChatContext();

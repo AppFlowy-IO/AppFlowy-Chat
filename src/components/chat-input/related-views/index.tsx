@@ -7,12 +7,12 @@ import DocIcon from '@/assets/icons/doc.svg?react';
 import { Separator } from '@/components/ui/separator';
 import { useChatSettingsLoader } from '@/hooks/use-chat-settings-loader';
 import { useCheckboxTree } from '@/hooks/use-checkbox-tree';
-import { useViewsLoader } from '@/hooks/use-views-loader';
 import { searchViews } from '@/lib/views';
 import { View } from '@/types';
 import { ChevronDown } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import debounce from 'lodash-es/debounce';
+import { useViewLoader } from '@/chat';
 
 export function RelatedViews() {
 
@@ -35,7 +35,7 @@ export function RelatedViews() {
   const {
     fetchViews,
     viewsLoading,
-  } = useViewsLoader();
+  } = useViewLoader();
 
   const [folder, setFolder] = useState<View | null>(null);
 
