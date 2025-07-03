@@ -58,6 +58,7 @@ export class WriterRequest {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
+        'ai-model': 'Auto',
       },
       body: JSON.stringify({
         text: payload.inputText,
