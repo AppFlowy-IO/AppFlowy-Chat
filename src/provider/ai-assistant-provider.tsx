@@ -308,6 +308,16 @@ export const AIAssistantProvider = ({
     return completionHistoryRef.current.some((item) => item.role === CompletionRole.AI);
   }, []);
 
+  const initialContent = useCallback(() => {
+    if (completionHistoryRef.current.length > 0) {
+      const initial = completionHistoryRef.current[0];
+      if (initial.role === CompletionRole.Human) {
+        return initial.content;
+      }
+    }
+    return '';
+  }, []);
+
   return (
     <WriterContext.Provider
       value={{
@@ -343,6 +353,7 @@ export const AIAssistantProvider = ({
         error,
         scrollContainer,
         hasAIAnswer,
+        initialContent,
       }}
     >
 
