@@ -138,7 +138,14 @@
       "work": "Work",
       "podcastProduction": "Podcast Production",
       "copyWriting": "Copy Writing",
-      "customerSuccess": "Customer Success"
+      "customerSuccess": "Customer Success",
+      "button": {
+        "cancel": "Cancel",
+        "done": "Done",
+        "change": "Change",
+        "ok": "OK"
+      },
+      "optional": "(optional)"
     }
   }
 }

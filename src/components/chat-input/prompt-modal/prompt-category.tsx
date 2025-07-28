@@ -43,7 +43,7 @@ export function PromptCategory({
   }, [t]);
 
   return (
-    <div className='flex flex-col pr-3 overflow-auto justify-between'>
+    <div className='flex flex-col pr-3 appflowy-scrollbar overflow-auto justify-between'>
       <div className='sticky top-0 z-10 bg-background-primary mb-2 flex flex-col'>
         <Button
           variant={'ghost'}
@@ -60,21 +60,21 @@ export function PromptCategory({
         >
           {t('customPrompt.featured')}
         </Button>
-        {/* <Button
-            variant={'ghost'}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => {
-              setIsCustomSelected(true);
-              setIsFeaturedSelected(false);
-              setSelectedCategory(null);
-            }}
-            className={cn(
-              'flex justify-start',
-              isCustomSelected ? '!bg-fill-theme-select' : '',
-            )}
-          >
-            {t('customPrompt.custom')}
-          </Button> */}
+        <Button
+          variant={'ghost'}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => {
+            setIsCustomSelected(true);
+            setIsFeaturedSelected(false);
+            setSelectedCategory(null);
+          }}
+          className={cn(
+            'flex justify-start',
+            isCustomSelected ? '!bg-fill-theme-select' : '',
+          )}
+        >
+          {t('customPrompt.custom')}
+        </Button>
         <Separator className='mt-2' />
       </div>
       <Button
