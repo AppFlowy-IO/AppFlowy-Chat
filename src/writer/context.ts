@@ -43,6 +43,7 @@ export interface WriterContextTypes {
   responseFormat: ResponseFormat;
   setResponseFormat: (format: ResponseFormat) => void;
   hasAIAnswer: () => boolean;
+  initialContent: () => string | undefined;
   isGlobalDocument?: boolean;
   error: {
     code: number;
